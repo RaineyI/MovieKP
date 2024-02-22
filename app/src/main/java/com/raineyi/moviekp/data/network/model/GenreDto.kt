@@ -1,9 +1,9 @@
-package com.raineyi.moviekp.data.model
+package com.raineyi.moviekp.data.network.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class Genre (
+data class GenreDto (
     @SerializedName("genre")
     @Expose
     val genre: String? = null

@@ -1,7 +1,5 @@
-package com.raineyi.moviekp.domain
+package com.raineyi.moviekp.domain.entities
 
-import com.raineyi.moviekp.data.model.Country
-import com.raineyi.moviekp.data.model.Genre
 
 data class Movie(
     val id: Int? = null,

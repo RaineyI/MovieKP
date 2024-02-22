@@ -1,9 +1,9 @@
-package com.raineyi.moviekp.data.model
+package com.raineyi.moviekp.data.network.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class Movie (
+data class MovieDto (
 
     @SerializedName("filmId")
     @Expose
@@ -19,11 +19,11 @@ data class Movie (
 
     @SerializedName("countries")
     @Expose
-    val countries: List<Country>? = null,
+    val countries: List<CountryDto>? = null,
 
     @SerializedName("genres")
     @Expose
-    val genres: List<Genre>? = null,
+    val genres: List<GenreDto>? = null,
 
     @SerializedName("posterUrl")
     @Expose

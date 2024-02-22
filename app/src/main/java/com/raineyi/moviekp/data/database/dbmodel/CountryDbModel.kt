@@ -1,10 +1,8 @@
-package com.raineyi.moviekp.data.model
+package com.raineyi.moviekp.data.database.dbmodel
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class Country(
-    @SerializedName("country")
-    @Expose
+data class CountryDbModel(
     val country: String? = null
 )
