@@ -15,7 +15,7 @@ interface ApiService {
         "X-API-KEY: $API_KEY",
         "Content-Type: application/json"
     )
-    fun getMoviesResponse(
+    fun getMovieResponse(
         @Query(QUERY_PARAM_TYPE) type: String = "TOP_100_POPULAR_FILMS",
         @Query(QUERY_PARAM_PAGE) page: Int = 1
     ): Single<MovieResponseDto>
