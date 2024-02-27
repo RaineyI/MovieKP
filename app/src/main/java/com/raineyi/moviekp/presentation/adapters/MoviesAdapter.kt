@@ -9,11 +9,7 @@ import com.raineyi.moviekp.databinding.MovieItemBinding
 
 class MoviesAdapter : ListAdapter<MovieDto, MovieViewHolder>(MovieItemDiffCallback()) {
 
-//    private lateinit var OnReachEndListener: OnReachEndListener
-
     var onReachEndListener: (() -> Unit)? = null
-
-    //    private var onMovieClickListener : ((Movie) -> Unit)? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val view = MovieItemBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -36,15 +32,5 @@ class MoviesAdapter : ListAdapter<MovieDto, MovieViewHolder>(MovieItemDiffCallba
         if (position == currentList.size - 1) {
             onReachEndListener?.invoke()
         }
-//
-//        holder.itemView.setOnClickListener {
-//            onMovieClickListener?.invoke(movieItem)
-//        }
     }
-
-
-//    internal interface OnReachEndListener {
-//        fun onReachEnd()
-//    }
-
 }

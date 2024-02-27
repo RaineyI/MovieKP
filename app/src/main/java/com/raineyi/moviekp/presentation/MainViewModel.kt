@@ -1,68 +1,44 @@
 package com.raineyi.moviekp.presentation
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.raineyi.moviekp.data.network.ApiFactory
 import com.raineyi.moviekp.data.network.model.MovieDto
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val compositeDisposable = CompositeDisposable()
 
     var currentPage = 1
 
     private var _listOfMovies = MutableLiveData<List<MovieDto>>()
-    val listOfMovies: LiveData<List<MovieDto>> = _listOfMovies
+    val listOfMovies: LiveData<List<MovieDto>>
+        get() = _listOfMovies
 
-    init {
-        loadMovies(currentPage)
-    }
+    fun getMovies() {
+        viewModelScope.launch {
+            val movieResponse = ApiFactory.apiService.getMovieResponse(page = currentPage)
+            val movies = movieResponse.blockingGet().movies
 
-    fun loadMovies(page: Int) {
-        val disposable = ApiFactory.apiService.getMovieResponse(page = page)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                currentPage++
-                //TODO() исправить !! Подгрузка новых страниц
-                if (it.movies != null) {
-                    _listOfMovies.value = it.movies!!
+            val loadedMovies = _listOfMovies.value?.toMutableList()
+            if (loadedMovies != null) {
+                movies?.let {
+                  loadedMovies.addAll(it)
+                    loadedMovies.let {
+                        _listOfMovies.value = it
+                    }
                 }
-//                val currentMovies = _listOfMovies.value?.toMutableList()
-//                if (currentMovies != null) {
-//                    it.let { currentMovies.addAll(it) }
-//                    _listOfMovies.value = currentMovies
-//                } else {
-//                    _listOfMovies.value = it
-//                }
-//                currentPage = page
-            }, {
-                Log.d("TEST_API", it.message.toString())
-            })
-
-        compositeDisposable.add(disposable)
+            } else {
+                movies?.let {
+                    _listOfMovies.value = it
+                }
+            }
+        }
     }
-
-
-    override fun onCleared() {
-        super.onCleared()
-        compositeDisposable.dispose()
+    fun loadNextPage() {
+        currentPage++
+        getMovies()
     }
 }
-
-
-//val disposable = ApiFactory.apiService.getDescriptionResponse(1115471)
-//    .subscribeOn(Schedulers.io())
-//    .observeOn(AndroidSchedulers.mainThread())
-//    .subscribe({
-//        Log.d("TEST_API", it.toString())
-//    },{
-//        Log.d("TEST_API", it.message.toString())
-//    })
-//compositeDisposable.add(disposable)
