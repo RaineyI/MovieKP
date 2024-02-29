@@ -8,11 +8,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.raineyi.moviekp.data.network.ApiFactory
 import com.raineyi.moviekp.data.network.model.MovieDto
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-    var page = 1
+    private var page = 1
 
     private var _listOfMovies = MutableLiveData<List<MovieDto>>()
     val listOfMovies: LiveData<List<MovieDto>> = _listOfMovies
@@ -20,17 +21,22 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var _isLoading = MutableLiveData<Boolean>(false)
     val isLoading: LiveData<Boolean> = _isLoading
 
-    fun getMovies() {
+    init {
+        loadMovies()
+    }
+
+    fun loadMovies() {
         val loading = isLoading.value
         if(loading != null && loading) {
             return
         }
         viewModelScope.launch {
+            _isLoading.value = true
+            delay(100)
             try {
-                _isLoading.value = true
                 val movieResponse = ApiFactory.apiService.getMovieResponse(page = page)
                 val movies = movieResponse.blockingGet().movies
-                //TODO: blockingGet() && let + let
+                //TODO: blockingGet() !!! && let + let && delay()
                 val loadedMovies = _listOfMovies.value?.toMutableList()
                 if (loadedMovies != null) {
                     movies?.let {
@@ -44,16 +50,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         _listOfMovies.value = it
                     }
                 }
+                Log.d("TEST_API", "Loaded page: $page")
+                page++
             } catch (e: Exception) {
                 Log.d("TEST_API", e.message.toString())
             } finally {
                 _isLoading.value = false
             }
         }
-    }
-
-    fun loadNextPage() {
-        page++
-        getMovies()
     }
 }

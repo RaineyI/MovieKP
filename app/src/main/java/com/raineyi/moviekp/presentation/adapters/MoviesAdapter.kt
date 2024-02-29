@@ -1,6 +1,5 @@
 package com.raineyi.moviekp.presentation.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
@@ -11,6 +10,9 @@ import com.raineyi.moviekp.databinding.MovieItemBinding
 class MoviesAdapter(private val onLoadMoreListener: OnLoadMoreListener) :
     ListAdapter<MovieDto, MovieViewHolder>(MovieItemDiffCallback()) {
 
+    //TODO: onLoadMoreListener
+    var onMovieLongClickListener: ((MovieDto) -> Unit)? = null
+    var onMovieClickListener: ((MovieDto) -> Unit)? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val view = MovieItemBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -22,6 +24,7 @@ class MoviesAdapter(private val onLoadMoreListener: OnLoadMoreListener) :
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val movieItem = getItem(position)
+        val binding = holder.binding
         Glide.with(holder.poster)
             .load(movieItem.posterUrl)
             .into(holder.poster)
@@ -30,8 +33,17 @@ class MoviesAdapter(private val onLoadMoreListener: OnLoadMoreListener) :
         holder.genre.text = movieGenres.toString()
         holder.year.text = "(${movieItem.year.toString()})"
 
-        if (position >= currentList.size - 1) {
+        if (position >= currentList.size - 10) {
             onLoadMoreListener.onLoadMore()
+        }
+
+        binding.root.setOnLongClickListener {
+            onMovieLongClickListener?.invoke(movieItem)
+            true
+        }
+
+        binding.root.setOnClickListener {
+            onMovieClickListener?.invoke(movieItem)
         }
     }
 

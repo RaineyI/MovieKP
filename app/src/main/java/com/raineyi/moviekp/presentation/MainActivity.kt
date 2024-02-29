@@ -24,13 +24,12 @@ class MainActivity : AppCompatActivity() {
 
         moviesAdapter = MoviesAdapter(object : MoviesAdapter.OnLoadMoreListener {
             override fun onLoadMore() {
-                viewModel.loadNextPage()
+                viewModel.loadMovies()
             }
         })
         binding.rvMovieList.adapter = moviesAdapter
 
         viewModel.listOfMovies.observe(this) {
-            Log.d("TEST_API", it.toString())
             moviesAdapter.submitList(it)
         }
 
@@ -42,6 +41,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.getMovies()
+        moviesAdapter.onMovieClickListener = {
+            startActivity(MovieDetailsActivity.newIntentMovieDetailsActivity(this))
+        }
     }
 }

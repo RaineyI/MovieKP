@@ -1,5 +1,7 @@
 package com.raineyi.moviekp.presentation
 
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.raineyi.moviekp.R
@@ -8,5 +10,12 @@ class MovieDetailsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_details)
+    }
+
+    companion object {
+        fun newIntentMovieDetailsActivity(context: Context): Intent {
+            val intent = Intent(context, MovieDetailsActivity::class.java)
+            return intent
+        }
     }
 }
