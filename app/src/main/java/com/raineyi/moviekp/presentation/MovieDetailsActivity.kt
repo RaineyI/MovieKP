@@ -10,6 +10,10 @@ class MovieDetailsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_details)
+
+//        supportFragmentManager.beginTransaction()
+//            .add(R.id.movie_details_container, MovieDetailsFragment.newInstance())
+//            .commit()
     }
 
     companion object {

@@ -4,7 +4,6 @@
     android:id="@+id/movie_details_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:name="com.raineyi.moviekp.presentation.MovieDetailsFragment"
     tools:context=".presentation.MovieDetailsActivity"
-    tools:layout="@layout/fragment_movie_details">
-
-</androidx.fragment.app.FragmentContainerView>
+    tools:layout="@layout/fragment_movie_details"/>
