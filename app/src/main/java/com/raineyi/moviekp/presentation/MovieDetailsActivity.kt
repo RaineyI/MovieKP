@@ -11,8 +11,14 @@ class MovieDetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_details)
 
+        if(savedInstanceState == null) {
+            launchFragment()
+        }
+    }
+
+    private fun launchFragment(){
         supportFragmentManager.beginTransaction()
-            .add(R.id.movie_details_container, MovieDetailsFragment.newInstance("value"))
+            .replace(R.id.movie_details_container, MovieDetailsFragment.newInstance("value"))
             .commit()
     }
 
