@@ -6,16 +6,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.raineyi.moviekp.R
+import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.databinding.FragmentMovieDetailsBinding
+import java.lang.RuntimeException
 
 class MovieDetailsFragment : Fragment() {
-//
+
+    private var value: String = ""
+
 //    private var _binding: FragmentMovieDetailsBinding? = null
 //    private val binding: FragmentMovieDetailsBinding = _binding ?:
 //        throw RuntimeException("FragmentMovieDetailsBinding == null")
 
 //    private lateinit var viewModel: MovieFragmentViewModel
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        parseParam()
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -27,9 +36,25 @@ class MovieDetailsFragment : Fragment() {
     }
 
 
-//    companion object {
-//        fun newInstance(): MovieDetailsFragment {
-//            return MovieDetailsFragment()
-//        }
-//    }
+
+    private fun parseParam() {
+        val args = requireArguments()
+        if(!args.containsKey(KEY)) {
+            throw RuntimeException("Param movie is absent")
+        }
+        val movie = args.getString(KEY)
+    }
+    companion object {
+
+        private const val KEY = "key"
+
+        //movie: MovieDto
+        fun newInstance(value: String): MovieDetailsFragment {
+            return MovieDetailsFragment().apply {
+                arguments = Bundle().apply {
+                    putString(KEY, value)
+                }
+            }
+        }
+    }
 }
