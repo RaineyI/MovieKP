@@ -24,8 +24,7 @@ class MovieDetailsActivity : AppCompatActivity() {
 
     companion object {
         fun newIntentMovieDetailsActivity(context: Context): Intent {
-            val intent = Intent(context, MovieDetailsActivity::class.java)
-            return intent
+            return Intent(context, MovieDetailsActivity::class.java)
         }
     }
 }

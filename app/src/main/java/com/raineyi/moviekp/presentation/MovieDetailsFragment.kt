@@ -14,9 +14,9 @@ class MovieDetailsFragment : Fragment() {
 
     private var value: String = ""
 
-//    private var _binding: FragmentMovieDetailsBinding? = null
-//    private val binding: FragmentMovieDetailsBinding = _binding ?:
-//        throw RuntimeException("FragmentMovieDetailsBinding == null")
+    private var _binding: FragmentMovieDetailsBinding? = null
+    private val binding: FragmentMovieDetailsBinding
+        get() = _binding ?: throw RuntimeException("FragmentMovieDetailsBinding == null")
 
 //    private lateinit var viewModel: MovieFragmentViewModel
 
@@ -29,10 +29,9 @@ class MovieDetailsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_movie_details, container, false)
-//        _binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
-//        return binding.root
+    ): View {
+        _binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
 
@@ -43,6 +42,11 @@ class MovieDetailsFragment : Fragment() {
             throw RuntimeException("Param movie is absent")
         }
         val movie = args.getString(KEY)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
     companion object {
 

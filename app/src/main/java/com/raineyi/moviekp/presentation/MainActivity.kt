@@ -1,7 +1,6 @@
 package com.raineyi.moviekp.presentation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentContainerView
@@ -47,20 +46,23 @@ class MainActivity : AppCompatActivity() {
         }
 
         moviesAdapter.onMovieClickListener = {
-
             if(isOnePaneMode()) {
                 startActivity(MovieDetailsActivity.newIntentMovieDetailsActivity(this))
             } else {
-                supportFragmentManager.popBackStack()
-                supportFragmentManager.beginTransaction()
-                    .add(R.id.movie_details_container, MovieDetailsFragment.newInstance("value"))
-                    .addToBackStack(null)
-                    .commit()
+                launchFragment()
             }
         }
     }
 
-    fun isOnePaneMode(): Boolean {
+    private fun launchFragment(){
+        supportFragmentManager.popBackStack()
+        supportFragmentManager.beginTransaction()
+            .add(R.id.movie_details_container, MovieDetailsFragment.newInstance("value"))
+            .addToBackStack(null)
+            .commit()
+    }
+
+    private fun isOnePaneMode(): Boolean {
         return movieDetailsContainer == null
     }
 }
