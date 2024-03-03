@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.ViewModelProvider
 import com.raineyi.moviekp.R
+import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.databinding.ActivityMainBinding
 import com.raineyi.moviekp.presentation.adapters.MoviesAdapter
 
@@ -19,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private lateinit var moviesAdapter: MoviesAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -45,19 +47,19 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        moviesAdapter.onMovieClickListener = {
+        moviesAdapter.onMovieClickListener = {movie ->
             if(isOnePaneMode()) {
-                startActivity(MovieDetailsActivity.newIntentMovieDetailsActivity(this))
+                startActivity(MovieDetailsActivity.newIntentMovieDetailsActivity(this, movie))
             } else {
-                launchFragment()
+                launchFragment(movie)
             }
         }
     }
 
-    private fun launchFragment(){
+    private fun launchFragment(movie: MovieDto){
         supportFragmentManager.popBackStack()
         supportFragmentManager.beginTransaction()
-            .add(R.id.movie_details_container, MovieDetailsFragment.newInstance("value"))
+            .add(R.id.movie_details_container, MovieDetailsFragment.newInstance(movie))
             .addToBackStack(null)
             .commit()
     }

@@ -32,7 +32,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
         viewModelScope.launch {
             _isLoading.value = true
-            delay(100)
+//            delay(100)
             try {
                 val movieResponse = ApiFactory.apiService.getMovieResponse(page = page)
                 val movies = movieResponse.blockingGet().movies
