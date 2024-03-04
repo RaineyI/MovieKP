@@ -1,9 +1,12 @@
 package com.raineyi.moviekp.presentation.adapters
 
+
+import android.provider.Settings.Global.getString
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.bumptech.glide.Glide
+import com.raineyi.moviekp.R
 import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.databinding.MovieItemBinding
 
@@ -31,6 +34,11 @@ class MoviesAdapter(private val onLoadMoreListener: OnLoadMoreListener) :
         holder.name.text = movieItem.name
         val movieGenres = movieItem.genres?.get(0)?.genre?.replaceFirstChar { it.uppercase() }
         holder.genre.text = movieGenres.toString()
+//        val year = String.format(getString(R.string.year), movieItem.year.toString())
+//        holder.year.text = String.format(
+//            getString(R.string.year),
+//            movieItem.year.toString()
+//        )
         holder.year.text = "(${movieItem.year.toString()})"
 
         if (position >= currentList.size - 10) {

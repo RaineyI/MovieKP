@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.raineyi.moviekp.R
 import com.raineyi.moviekp.data.network.model.MovieDto
-import java.lang.RuntimeException
 
 class MovieDetailsActivity : AppCompatActivity() {
 
@@ -24,10 +23,10 @@ class MovieDetailsActivity : AppCompatActivity() {
     private fun parseParam() {
         when {
             Build.VERSION.SDK_INT >= 33 -> intent.getParcelableExtra(
-                KEY_MOVIE,
+                EXTRA_MOVIE,
                 MovieDto::class.java
             )
-            else -> intent.getParcelableExtra<MovieDto>(KEY_MOVIE)
+            else -> intent.getParcelableExtra<MovieDto>(EXTRA_MOVIE)
         }?.let {
             movie = it
         }
@@ -41,10 +40,10 @@ class MovieDetailsActivity : AppCompatActivity() {
 
     companion object {
 
-        private const val KEY_MOVIE = "movie_key"
+        private const val EXTRA_MOVIE = "extra movie"
         fun newIntentMovieDetailsActivity(context: Context, movie: MovieDto): Intent {
             val intent = Intent(context, MovieDetailsActivity::class.java)
-            intent.putExtra(KEY_MOVIE, movie)
+            intent.putExtra(EXTRA_MOVIE, movie)
             return intent
         }
     }

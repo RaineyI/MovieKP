@@ -16,10 +16,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var page = 1
 
     private var _listOfMovies = MutableLiveData<List<MovieDto>>()
-    val listOfMovies: LiveData<List<MovieDto>> = _listOfMovies
+    val listOfMovies: LiveData<List<MovieDto>>
+        get() = _listOfMovies
 
     private var _isLoading = MutableLiveData<Boolean>(false)
-    val isLoading: LiveData<Boolean> = _isLoading
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
 
     init {
         loadMovies()

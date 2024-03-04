@@ -2,13 +2,12 @@ package com.raineyi.moviekp.presentation
 
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.raineyi.moviekp.R
 import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.databinding.FragmentMovieDetailsBinding
 import java.lang.RuntimeException
@@ -21,14 +20,18 @@ class MovieDetailsFragment : Fragment() {
     private val binding: FragmentMovieDetailsBinding
         get() = _binding ?: throw RuntimeException("FragmentMovieDetailsBinding == null")
 
-//    private lateinit var viewModel: MovieFragmentViewModel
-
     private lateinit var movie: MovieDto
 
+    private val viewModelFactory by lazy {
+        MovieDetailsViewModelFactory(requireActivity().application, movie)
+    }
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[MovieDetailsViewModel::class.java]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        parseParam()
+        parseArgs()
     }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,9 +40,6 @@ class MovieDetailsFragment : Fragment() {
     ): View {
         _binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
         return binding.root
-
-
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,23 +54,30 @@ class MovieDetailsFragment : Fragment() {
         Glide.with(this)
             .load(movie.posterUrl)
             .into(binding.imBanner)
+
         binding.tvName.text = movie.name.toString()
-        //       binding.tvDescription.text =
-        binding.tvGenre.text =  movie.genres?.get(0)?.genre?.replaceFirstChar { it.uppercase() }
+
+        viewModel.description.observe(viewLifecycleOwner) {
+            binding.tvDescription.text = it.description.toString()
+        }
+//        val genres = movie.genres.toString()
+//        Log.d("TEST_VIEWS", genres)
+        binding.tvGenre.text = movie.genres?.get(0)?.genre?.replaceFirstChar { it.uppercase() }
+
         binding.tvCountry.text = movie.countries?.get(0)?.country?.replaceFirstChar { it.uppercase() }
     }
 
-    private fun parseParam() {
+    private fun parseArgs() {
         val args = requireArguments()
-        if(!args.containsKey(KEY_MOVIE)) {
+        if(!args.containsKey(EXTRA_MOVIE)) {
             throw RuntimeException("Param movie is absent")
         }
         when {
             SDK_INT >= 33 -> args.getParcelable(
-                KEY_MOVIE,
+                EXTRA_MOVIE,
                 MovieDto::class.java
             )
-            else -> args.getParcelable<MovieDto>(KEY_MOVIE)
+            else -> args.getParcelable<MovieDto>(EXTRA_MOVIE)
         }?.let {
             movie = it
         }
@@ -81,12 +88,12 @@ class MovieDetailsFragment : Fragment() {
         _binding = null
     }
     companion object {
-        private const val KEY_MOVIE = "movie_key"
+        private const val EXTRA_MOVIE = "extra movie"
 
         fun newInstance(movie: MovieDto): MovieDetailsFragment {
             return MovieDetailsFragment().apply {
                 arguments = Bundle().apply {
-                    putParcelable(KEY_MOVIE, movie)
+                    putParcelable(EXTRA_MOVIE, movie)
                 }
             }
         }
