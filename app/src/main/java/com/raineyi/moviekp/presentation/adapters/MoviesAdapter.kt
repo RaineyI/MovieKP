@@ -11,7 +11,7 @@ import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.databinding.MovieItemBinding
 
 class MoviesAdapter(private val onLoadMoreListener: OnLoadMoreListener) :
-    ListAdapter<MovieDto, MovieViewHolder>(MovieItemDiffCallback()) {
+    ListAdapter<MovieDto, MovieViewHolder>(com.raineyi.moviekp.presentation.adapters.MovieItemDiffCallback()) {
 
     //TODO: onLoadMoreListener
     var onMovieLongClickListener: ((MovieDto) -> Unit)? = null
@@ -22,7 +22,7 @@ class MoviesAdapter(private val onLoadMoreListener: OnLoadMoreListener) :
             parent,
             false
         )
-        return MovieViewHolder(view)
+        return com.raineyi.moviekp.presentation.adapters.MovieViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {

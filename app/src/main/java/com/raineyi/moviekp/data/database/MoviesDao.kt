@@ -4,30 +4,30 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
-import com.raineyi.moviekp.data.network.model.MovieDto
 import androidx.room.Query
-import com.raineyi.moviekp.data.network.model.DescriptionDto
+import com.raineyi.moviekp.data.database.dbmodel.DescriptionDbModel
+import com.raineyi.moviekp.data.database.dbmodel.MovieDbModel
 
 @Dao
 interface MoviesDao {
     @Query("SELECT * FROM favourite_movies")
-    suspend fun getFavouriteMovies() : LiveData<List<MovieDto>>
+    fun getFavouriteMovies() : LiveData<List<MovieDbModel>>
 
     @Query("SELECT * FROM favourite_movies WHERE movieId == :movieId LIMIT 1")
-    fun getFavouriteMovie(movieId: Int) : LiveData<MovieDto>
+    fun getFavouriteMovie(movieId: Int) : LiveData<MovieDbModel>
 
     @Query("SELECT * FROM movie_description WHERE movieId == :movieId LIMIT 1")
-    fun getFavouriteMovieDescription(movieId: Int) : LiveData<DescriptionDto>
+    fun getFavouriteMovieDescription(movieId: Int) : LiveData<DescriptionDbModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addMovie(movie: MovieDto)
+    fun addMovieToDb(movie: MovieDbModel)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addDescription(description: DescriptionDto)
+    fun addDescription(description: DescriptionDbModel)
 
     @Query("DELETE FROM favourite_movies WHERE movieId == :movieId")
-    suspend fun removeMovie(movieId: Int)
+    fun removeMovie(movieId: Int)
 
     @Query("DELETE FROM movie_description WHERE movieId == :movieId")
-    suspend fun removeMovieDescription(movieId: Int)
+    fun removeMovieDescription(movieId: Int)
 }

@@ -54,6 +54,12 @@ class MainActivity : AppCompatActivity() {
                 launchFragment(movie)
             }
         }
+
+//        moviesAdapter.onMovieLongClickListener = {movie ->
+//            val movieDao = MovieDatabase.getInstance(this).MoviesDao()
+//            movieDao.addMovieToDb(movie)
+//
+//        }
     }
 
     private fun launchFragment(movie: MovieDto){

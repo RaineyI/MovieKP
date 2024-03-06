@@ -5,15 +5,13 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-@Entity(tableName = "movie_description")
 data class DescriptionDto(
 
-    @PrimaryKey
     @SerializedName("filmId")
     @Expose
-    val movieId: Int? = null,
+    val movieId: Int,
 
     @SerializedName("description")
     @Expose
-    val description: String? = null
+    val description: String,
 )

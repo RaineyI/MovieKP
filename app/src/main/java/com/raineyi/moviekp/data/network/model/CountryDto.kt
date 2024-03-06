@@ -9,5 +9,5 @@ import kotlinx.parcelize.Parcelize
 data class CountryDto(
     @SerializedName("country")
     @Expose
-    val country: String? = null
+    var country: String
 ) : Parcelable

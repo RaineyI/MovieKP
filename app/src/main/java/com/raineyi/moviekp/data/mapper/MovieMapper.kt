@@ -15,9 +15,9 @@ class MovieMapper {
             movieId = dto.movieId,
             name = dto.name,
             year = dto.year,
+            posterUrl = dto.posterUrl,
             countries = mapCountryListDtoToCountryListDb(dto.countries),
-            genres = mapGenreDtoListToGenreDbModelList(dto.genres),
-            posterUrl = dto.posterUrl
+            genres = mapGenreDtoListToGenreDbModelList(dto.genres)
         )
     }
 
@@ -27,8 +27,8 @@ class MovieMapper {
         )
     }
 
-    private fun mapCountryListDtoToCountryListDb(countryList: List<CountryDto>?) =
-        countryList?.map {
+    private fun mapCountryListDtoToCountryListDb(countryList: List<CountryDto>) =
+        countryList.map {
             mapCountryDtoToDbModel(it)
         }
 
@@ -39,7 +39,7 @@ class MovieMapper {
         )
     }
 
-    private fun mapGenreDtoListToGenreDbModelList(genreList: List<GenreDto>?) = genreList?.map {
+    private fun mapGenreDtoListToGenreDbModelList(genreList: List<GenreDto>) = genreList.map {
         mapGenreDtoToGenreDbModel(it)
     }
 }
