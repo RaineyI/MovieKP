@@ -8,5 +8,7 @@ interface MovieRepository {
 
     fun getMovieList(): LiveData<List<Movie>>
 
+    fun getMovie(): LiveData<Movie>
+
     fun getDescription(movieId: Int): LiveData<Description>
 }
