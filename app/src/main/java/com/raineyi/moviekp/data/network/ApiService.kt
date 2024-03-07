@@ -15,19 +15,19 @@ interface ApiService {
         "X-API-KEY: $API_KEY",
         "Content-Type: application/json"
     )
-    fun getMovieResponse(
+    suspend fun getMovieResponse(
         @Query(QUERY_PARAM_TYPE) type: String = "TOP_100_POPULAR_FILMS",
         @Query(QUERY_PARAM_PAGE) page: Int = 1
-    ): Single<MovieResponseDto>
+    ): MovieResponseDto
 
     @GET("films/{movieId}")
     @Headers(
         "X-API-KEY: $API_KEY",
         "Content-Type: application/json"
     )
-    fun getDescription(
+    suspend fun getDescription(
         @Path(QUERY_PARAM_MOVIE_ID) movieId: Int
-    ): Single<DescriptionDto>
+    ): DescriptionDto
 
     companion object {
         private const val API_KEY = "e30ffed0-76ab-4dd6-b41f-4c9da2b2735b"

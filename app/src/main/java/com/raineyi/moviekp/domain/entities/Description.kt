@@ -1,5 +1,6 @@
 package com.raineyi.moviekp.domain.entities
 
 data class Description (
-    val description: String? = null
+    val movieId: Int,
+    val description: String
 )

@@ -37,8 +37,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 //            delay(100)
             try {
                 val movieResponse = ApiFactory.apiService.getMovieResponse(page = page)
-                val movies = movieResponse.blockingGet().movies
-                //TODO: blockingGet() !!! && let + let && delay()
+                val movies = movieResponse.movies
+                //TODO:  let + let && delay()
                 val loadedMovies = _listOfMovies.value?.toMutableList()
                 if (loadedMovies != null) {
                     movies?.let {
