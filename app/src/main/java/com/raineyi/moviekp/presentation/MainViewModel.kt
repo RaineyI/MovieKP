@@ -6,14 +6,15 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.raineyi.moviekp.data.database.MovieDatabase
 import com.raineyi.moviekp.data.network.ApiFactory
 import com.raineyi.moviekp.data.network.model.MovieDto
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private var page = 1
+    private val movieDao = MovieDatabase.getInstance(application).moviesDao()
 
     private var _listOfMovies = MutableLiveData<List<MovieDto>>()
     val listOfMovies: LiveData<List<MovieDto>>
@@ -22,6 +23,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var _isLoading = MutableLiveData<Boolean>(false)
     val isLoading: LiveData<Boolean>
         get() = _isLoading
+
+//    private var _listOfFavouriteMovie = MutableLiveData<List<MovieDto>>()
+//    val listOfFavouriteMovie: LiveData<List<MovieDto>>
+//        get() = _listOfFavouriteMovie
 
     init {
         loadMovies()
