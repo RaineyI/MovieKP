@@ -42,12 +42,13 @@ class MovieRepositoryImpl(
         }
     }
 
-    override suspend fun loadMovies(page: Int) {
-        val movieRespoppnse = ApiFactory.apiService.getMovieResponse(page = page)
+    override suspend fun loadMovies(page: Int): List<Movie>? {
+        val movieResponseDto = ApiFactory.apiService.getMovieResponse(page = page)
+        return movieResponseDto.movies?.map { mapper.mapDtoToMovie(it) }
+        }
 
-    }
-
-    override suspend fun loadDescription(movieId: Int){
-        val movieDescription = ApiFactory.apiService.getDescription(movieId)
+    override suspend fun loadDescription(movieId: Int): Description{
+        val descriptionDto = ApiFactory.apiService.getDescription(movieId)
+        return descriptionMapper.mapDtoToDescription(descriptionDto)
     }
 }

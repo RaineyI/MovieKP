@@ -12,7 +12,7 @@ interface MovieRepository {
 
     fun getDescription(movieId: Int): LiveData<Description>
 
-    suspend fun loadMovies(page: Int)
+    suspend fun loadMovies(page: Int): List<Movie>?
 
-    suspend fun loadDescription(movieId: Int)
+    suspend fun loadDescription(movieId: Int): Description
 }

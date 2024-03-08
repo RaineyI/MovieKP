@@ -27,9 +27,9 @@ class MovieDetailsViewModel(
     private fun loadDescription() {
         viewModelScope.launch {
             try {
-                movie.movieId?.let {
+                movie.movieId.let {
                     val loadingDescription = ApiFactory.apiService.getDescription(it)
-                    _description.value = loadingDescription.blockingGet()
+                    _description.value = loadingDescription
                 }
             }catch (e: Exception) {
                 Log.d("TEST_API", e.message.toString())

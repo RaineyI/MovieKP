@@ -47,7 +47,8 @@ class MovieMapper {
     }
 
 
-    fun mapDtoToMovie(dto: MovieDto): Movie {
+    fun mapDtoToMovie(dto: MovieDto): Movie{
+
         return Movie(
             movieId = dto.movieId,
             name = dto.name,
@@ -79,6 +80,8 @@ class MovieMapper {
     private fun mapGenreDtoListToGenreList(genreList: List<GenreDto>) = genreList.map {
         mapGenreDtoToGenre(it)
     }
+
+
 
     fun mapDbModelToMovie(dbModel: MovieDbModel): Movie {
 
