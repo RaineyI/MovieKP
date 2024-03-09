@@ -55,11 +55,22 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-//        moviesAdapter.onMovieLongClickListener = {movie ->
-//            val movieDao = MovieDatabase.getInstance(this).MoviesDao()
-//            movieDao.addMovieToDb(movie)
-//
-//        }
+
+
+        moviesAdapter.onMovieLongClickListener = {
+
+            viewModel.getFavouriteMovie(it.movieId).observe(this@MainActivity) {movieDbModel ->
+                if(movieDbModel == null) {
+                    viewModel.insertMovie(it)
+//                    viewModel.insertMovieDescription(it.movieId)
+                } else {
+                    viewModel.removeMovie(it.movieId)
+//                    viewModel.removeMovieDescription(it.movieId)
+                }
+            }
+//TODO: База данных постоянно обновляется, тк обсервер следит за статусом movie. Как вариант, ввести новое поле и задавать ему знаечние favourite true/false
+
+        }
     }
 
     private fun launchFragment(movie: MovieDto){

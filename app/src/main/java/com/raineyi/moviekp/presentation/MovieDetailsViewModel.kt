@@ -7,9 +7,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.raineyi.moviekp.data.database.MovieDatabase
+import com.raineyi.moviekp.data.database.dbmodel.MovieDbModel
 import com.raineyi.moviekp.data.network.ApiFactory
 import com.raineyi.moviekp.data.network.model.DescriptionDto
 import com.raineyi.moviekp.data.network.model.MovieDto
+import com.raineyi.moviekp.domain.entities.Movie
 import kotlinx.coroutines.launch
 
 class MovieDetailsViewModel(
@@ -23,12 +25,13 @@ class MovieDetailsViewModel(
     val description: LiveData<DescriptionDto>
         get() = _description
 
-//    private var _getFavouriteMovie = MutableLiveData<LiveData<MovieDto>>()
-//    val getFavouriteMovie: LiveData<List<MovieDto>>
-//        get() = _getFavouriteMovie
 
     init {
         loadDescription()
+    }
+
+    fun getFavouriteMovie(movieId: Int): LiveData<MovieDbModel> {
+        return movieDao.getFavouriteMovie(movieId)
     }
 
     private fun loadDescription() {
@@ -38,7 +41,7 @@ class MovieDetailsViewModel(
                     val loadingDescription = ApiFactory.apiService.getDescription(it)
                     _description.value = loadingDescription
                 }
-            }catch (e: Exception) {
+            } catch (e: Exception) {
                 Log.d("TEST_API", e.message.toString())
             }
         }

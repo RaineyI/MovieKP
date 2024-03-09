@@ -48,6 +48,12 @@ class MovieDetailsFragment : Fragment() {
         binding.backArrow.setOnClickListener{
             activity?.onBackPressedDispatcher?.onBackPressed()
         }
+
+//        viewModel.getFavouriteMovie(movie.movieId).observe(viewLifecycleOwner) {
+//            if(it == null) {
+//
+//            }
+//        }
     }
 
     private fun settingUpViews() {

@@ -7,6 +7,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.raineyi.moviekp.data.database.MovieDatabase
+import com.raineyi.moviekp.data.database.dbmodel.MovieDbModel
+import com.raineyi.moviekp.data.mapper.DescriptionMapper
+import com.raineyi.moviekp.data.mapper.MovieMapper
 import com.raineyi.moviekp.data.network.ApiFactory
 import com.raineyi.moviekp.data.network.model.MovieDto
 import kotlinx.coroutines.launch
@@ -20,7 +23,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val listOfMovies: LiveData<List<MovieDto>>
         get() = _listOfMovies
 
-    private var _isLoading = MutableLiveData<Boolean>(false)
+    private var _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean>
         get() = _isLoading
 
@@ -32,9 +35,42 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         loadMovies()
     }
 
+    fun getFavouriteMovie(movieId: Int): LiveData<MovieDbModel> {
+        return movieDao.getFavouriteMovie(movieId)
+    }
+
+    fun insertMovie(movieDto: MovieDto) {
+        viewModelScope.launch {
+            val mapper = MovieMapper()
+            movieDao.addMovieToDb(mapper.mapDtoToDbModel(movieDto))
+            //TODO: Обработка неуспешного сохранения в DB
+        }
+    }
+
+    fun removeMovie(movieId: Int) {
+        viewModelScope.launch {
+            movieDao.removeMovie(movieId)
+        }
+    }
+
+    fun insertMovieDescription(movieId: Int) {
+        viewModelScope.launch {
+            val mapper = DescriptionMapper()
+            val description = ApiFactory.apiService.getDescription(movieId)
+            movieDao.addDescription(mapper.mapDtoToDbModel(description))
+            //TODO: Обработка неуспешного сохранения в DB
+        }
+    }
+
+    fun removeMovieDescription(movieId: Int) {
+        viewModelScope.launch {
+            movieDao.removeMovieDescription(movieId)
+        }
+    }
+
     fun loadMovies() {
         val loading = isLoading.value
-        if(loading != null && loading) {
+        if (loading != null && loading) {
             return
         }
         viewModelScope.launch {

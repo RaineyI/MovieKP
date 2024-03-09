@@ -9,21 +9,21 @@ class DataConverter {
 
     @TypeConverter
     fun fromCountriesList(countries: List<CountryDbModel>?): String? {
-        return countries?.joinToString(separator = "<#>") { it.country }
+        return countries?.joinToString(separator = ", ") { it.country }
     }
 
     @TypeConverter
     fun toCountryList(countries: String?): List<CountryDbModel>? {
-        return countries?.split("<#>")?.map { CountryDbModel(it) }
+        return countries?.split(", ")?.map { CountryDbModel(it) }
     }
 
     @TypeConverter
     fun fromGenreList(genres: List<GenreDbModel>?): String? {
-        return genres?.joinToString(separator = "<#>") { it.genre }
+        return genres?.joinToString(separator = ", ") { it.genre }
     }
 
     @TypeConverter
     fun toGenreList(genres: String?): List<GenreDbModel>? {
-        return genres?.split("<#>")?.map { GenreDbModel(it) }
+        return genres?.split(", ")?.map { GenreDbModel(it) }
     }
 }
