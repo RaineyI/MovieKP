@@ -66,11 +66,10 @@ class MovieDetailsFragment : Fragment() {
         viewModel.description.observe(viewLifecycleOwner) {
             binding.tvDescription.text = it.description.toString()
         }
-//        val genres = movie.genres.toString()
-//        Log.d("TEST_VIEWS", genres)
-        binding.tvGenre.text = movie.genres?.get(0)?.genre?.replaceFirstChar { it.uppercase() }
-
-        binding.tvCountry.text = movie.countries?.get(0)?.country?.replaceFirstChar { it.uppercase() }
+        binding.tvGenres.text = movie.genres.joinToString(", ") { it.genre }
+            .replaceFirstChar { it.uppercase() }
+        binding.tvCountry.text = movie.countries.joinToString(", ") { it.country }
+            .replaceFirstChar { it.uppercase() }
     }
 
     private fun parseArgs() {

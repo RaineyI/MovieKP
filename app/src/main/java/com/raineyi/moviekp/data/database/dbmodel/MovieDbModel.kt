@@ -12,5 +12,6 @@ data class MovieDbModel(
     val year: Int,
     val countries: List<CountryDbModel>,
     val genres: List<GenreDbModel>,
-    val posterUrl: String
+    val posterUrl: String,
+    var isFavourite: Boolean = false
 )

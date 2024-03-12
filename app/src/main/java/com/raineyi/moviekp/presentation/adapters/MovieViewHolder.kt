@@ -7,7 +7,6 @@ class MovieViewHolder(val binding : MovieItemBinding) : RecyclerView.ViewHolder(
 
     val poster = binding.imPoster
     val name = binding.tvName
-    val genre = binding.tvGenre
-    val year = binding.tvYear
+    val genresAndYear = binding.tvGenresAndYear
     val star = binding.imStar
 }

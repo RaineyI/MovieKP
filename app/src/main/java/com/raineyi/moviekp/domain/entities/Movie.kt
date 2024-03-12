@@ -7,5 +7,6 @@ data class Movie(
     val year: Int?,
     val countries: List<Country>?,
     val genres: List<Genre>?,
-    val posterUrl: String?
+    val posterUrl: String?,
+    var isFavourite: Boolean = false
 )

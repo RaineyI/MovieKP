@@ -27,40 +27,25 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         movieDetailsContainer = findViewById(R.id.movie_details_container)
+        setupRecyclerView()
+        observeIsLoading()
+    }
 
-        moviesAdapter = MoviesAdapter(object : MoviesAdapter.OnLoadMoreListener {
-            override fun onLoadMore() {
-                viewModel.loadMovies()
-            }
-        })
-        binding.rvMovieList.adapter = moviesAdapter
-
-        viewModel.listOfMovies.observe(this) {
-            moviesAdapter.submitList(it)
-        }
-
+    private fun observeIsLoading() {
         viewModel.isLoading.observe(this) {
-            if(it) {
+            if (it) {
                 binding.progressBarLoading.visibility = View.VISIBLE
             } else {
                 binding.progressBarLoading.visibility = View.GONE
             }
         }
+    }
 
-        moviesAdapter.onMovieClickListener = {movie ->
-            if(isOnePaneMode()) {
-                startActivity(MovieDetailsActivity.newIntentMovieDetailsActivity(this, movie))
-            } else {
-                launchFragment(movie)
-            }
-        }
-
-
-
+    private fun setupLongClickListener() {
         moviesAdapter.onMovieLongClickListener = {
 
-            viewModel.getFavouriteMovie(it.movieId).observe(this@MainActivity) {movieDbModel ->
-                if(movieDbModel == null) {
+            viewModel.getFavouriteMovie(it.movieId).observe(this@MainActivity) { movieDbModel ->
+                if (movieDbModel == null) {
                     viewModel.insertMovie(it)
 //                    viewModel.insertMovieDescription(it.movieId)
                 } else {
@@ -68,12 +53,12 @@ class MainActivity : AppCompatActivity() {
 //                    viewModel.removeMovieDescription(it.movieId)
                 }
             }
-//TODO: База данных постоянно обновляется, тк обсервер следит за статусом movie. Как вариант, ввести новое поле и задавать ему знаечние favourite true/false
-
+//TODO: База данных постоянно обновляется, тк обсервер следит за статусом movie.
+            // Как вариант, ввести новое поле и задавать ему знаечние favourite true/false
         }
     }
 
-    private fun launchFragment(movie: MovieDto){
+    private fun launchFragment(movie: MovieDto) {
         supportFragmentManager.popBackStack()
         supportFragmentManager.beginTransaction()
             .add(R.id.movie_details_container, MovieDetailsFragment.newInstance(movie))
@@ -83,5 +68,28 @@ class MainActivity : AppCompatActivity() {
 
     private fun isOnePaneMode(): Boolean {
         return movieDetailsContainer == null
+    }
+    private fun setupClickListener() {
+        moviesAdapter.onMovieClickListener = { movie ->
+            if (isOnePaneMode()) {
+                startActivity(MovieDetailsActivity.newIntentMovieDetailsActivity(this, movie))
+            } else {
+                launchFragment(movie)
+            }
+        }
+    }
+
+    private fun setupRecyclerView() {
+        moviesAdapter = MoviesAdapter(object : MoviesAdapter.OnLoadMoreListener {
+            override fun onLoadMore() {
+                viewModel.loadMovies()
+            }
+        })
+        binding.rvMovieList.adapter = moviesAdapter
+        viewModel.listOfMovies.observe(this) {
+            moviesAdapter.submitList(it)
+        }
+        setupClickListener()
+        setupLongClickListener()
     }
 }

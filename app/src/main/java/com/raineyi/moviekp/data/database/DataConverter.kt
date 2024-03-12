@@ -9,7 +9,7 @@ class DataConverter {
 
     @TypeConverter
     fun fromCountriesList(countries: List<CountryDbModel>?): String? {
-        return countries?.joinToString(separator = ", ") { it.country }
+        return countries?.joinToString(", ") { it.country }
     }
 
     @TypeConverter
@@ -19,7 +19,7 @@ class DataConverter {
 
     @TypeConverter
     fun fromGenreList(genres: List<GenreDbModel>?): String? {
-        return genres?.joinToString(separator = ", ") { it.genre }
+        return genres?.joinToString(", ") { it.genre }
     }
 
     @TypeConverter

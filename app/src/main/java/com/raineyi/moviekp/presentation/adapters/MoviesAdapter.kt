@@ -1,6 +1,8 @@
 package com.raineyi.moviekp.presentation.adapters
 
 
+import android.content.res.Resources
+import android.graphics.BitmapFactory
 import android.provider.Settings.Global.getString
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,9 +11,10 @@ import com.bumptech.glide.Glide
 import com.raineyi.moviekp.R
 import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.databinding.MovieItemBinding
+import kotlinx.coroutines.withContext
 
 class MoviesAdapter(private val onLoadMoreListener: OnLoadMoreListener) :
-    ListAdapter<MovieDto, MovieViewHolder>(com.raineyi.moviekp.presentation.adapters.MovieItemDiffCallback()) {
+    ListAdapter<MovieDto, MovieViewHolder>(MovieItemDiffCallback()) {
 
     //TODO: onLoadMoreListener
     var onMovieLongClickListener: ((MovieDto) -> Unit)? = null
@@ -22,7 +25,7 @@ class MoviesAdapter(private val onLoadMoreListener: OnLoadMoreListener) :
             parent,
             false
         )
-        return com.raineyi.moviekp.presentation.adapters.MovieViewHolder(view)
+        return MovieViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
@@ -32,14 +35,18 @@ class MoviesAdapter(private val onLoadMoreListener: OnLoadMoreListener) :
             .load(movieItem.posterUrl)
             .into(holder.poster)
         holder.name.text = movieItem.name
-        val movieGenres = movieItem.genres?.get(0)?.genre?.replaceFirstChar { it.uppercase() }
-        holder.genre.text = movieGenres.toString()
-//        val year = String.format(getString(R.string.year), movieItem.year.toString())
-//        holder.year.text = String.format(
-//            getString(R.string.year),
-//            movieItem.year.toString()
-//        )
-        holder.year.text = "(${movieItem.year.toString()})"
+        val genres = movieItem.genres.joinToString(", ") {it.genre}
+        holder.genresAndYear.text = String.format(
+            holder.itemView.context.getString(R.string.genres_and_year),
+            genres.replaceFirstChar { it.uppercase() },
+            movieItem.year.toString()
+        )
+
+        if(movieItem.isFavourite) {
+            holder.star.setImageResource(R.drawable.im_star)
+        } else {
+            holder.star.setImageResource(R.drawable.im_grey_star)
+        }
 
         if (position >= currentList.size - 10) {
             onLoadMoreListener.onLoadMore()

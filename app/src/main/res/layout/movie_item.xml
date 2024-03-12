@@ -46,49 +46,38 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/tv_genre"
+            app:layout_constraintBottom_toTopOf="@+id/tv_genres_and_year"
             app:layout_constraintStart_toEndOf="@id/cardView"
             app:layout_constraintTop_toTopOf="parent    "
             app:layout_constraintVertical_chainStyle="spread"
             tool:text="Movie title" />
 
         <TextView
-            android:id="@+id/tv_genre"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_genres_and_year"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
             android:alpha="0.6"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:text="@string/genres_and_year"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/cardView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tv_name"
             app:layout_constraintTop_toBottomOf="@+id/tv_name"
-            tool:text="Genre" />
-
-        <TextView
-            android:id="@+id/tv_year"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
-            android:alpha="0.6"
-            android:text="@string/year"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_genre"
-            app:layout_constraintTop_toBottomOf="@+id/tv_name"
-            tool:text="(2016)" />
+            tool:text="Genres (2016)" />
 
         <ImageView
             android:id="@+id/im_star"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/favorites"
-            android:src="@drawable/im_grey_star"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_name" />
+            app:layout_constraintTop_toTopOf="@+id/tv_name"
+            tool:src="@drawable/im_grey_star" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

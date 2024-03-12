@@ -37,5 +37,7 @@ data class MovieDto (
 
     @SerializedName("posterUrl")
     @Expose
-    val posterUrl: String
+    val posterUrl: String,
+
+    var isFavourite: Boolean = false
 ) : Parcelable
