@@ -42,20 +42,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupLongClickListener() {
-        moviesAdapter.onMovieLongClickListener = {
-
-            viewModel.getFavouriteMovie(it.movieId).observe(this@MainActivity) { movieDbModel ->
-                if (movieDbModel == null) {
-                    viewModel.insertMovie(it)
-//                    viewModel.insertMovieDescription(it.movieId)
-                } else {
-                    viewModel.removeMovie(it.movieId)
-//                    viewModel.removeMovieDescription(it.movieId)
-                }
+        moviesAdapter.onMovieLongClickListener = { movie ->
+            if (movie.isFavourite) {
+                viewModel.removeMovie(movie)
+                viewModel.removeMovieDescription(movie.movieId)
+            } else {
+                viewModel.insertMovie(movie)
+                viewModel.insertMovieDescription(movie)
             }
-//TODO: База данных постоянно обновляется, тк обсервер следит за статусом movie.
-            // Как вариант, ввести новое поле и задавать ему знаечние favourite true/false
+//            viewModel.getFavouriteMovie(movie.movieId).observe(this) {
+//                if (it == null) {
+//
+//                } else {
+//
+//                }
+//            }
         }
+
     }
 
     private fun launchFragment(movie: MovieDto) {
@@ -69,6 +72,7 @@ class MainActivity : AppCompatActivity() {
     private fun isOnePaneMode(): Boolean {
         return movieDetailsContainer == null
     }
+
     private fun setupClickListener() {
         moviesAdapter.onMovieClickListener = { movie ->
             if (isOnePaneMode()) {
@@ -86,6 +90,14 @@ class MainActivity : AppCompatActivity() {
             }
         })
         binding.rvMovieList.adapter = moviesAdapter
+//            recycledViewPool.setMaxRecycledViews(
+//                MoviesAdapter.VIEW_TYPE_FAVOURITE,
+//                MoviesAdapter.MAX_POOL_SIZE
+//            )
+//            recycledViewPool.setMaxRecycledViews(
+//                MoviesAdapter.VIEW_TYPE_NETWORK,
+//                MoviesAdapter.MAX_POOL_SIZE
+//            )
         viewModel.listOfMovies.observe(this) {
             moviesAdapter.submitList(it)
         }

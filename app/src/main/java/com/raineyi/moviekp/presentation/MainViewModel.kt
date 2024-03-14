@@ -35,36 +35,53 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         loadMovies()
     }
 
+//    fun changeEnableState(shopItem: ShopItem) {
+//        val newItem = shopItem.copy(enable = !shopItem.enable)
+//        editShopItemUseCase.editShopItem(newItem)
+//    }
+
+
+
     fun getFavouriteMovie(movieId: Int): LiveData<MovieDbModel> {
         return movieDao.getFavouriteMovie(movieId)
     }
 
     fun insertMovie(movieDto: MovieDto) {
+        movieDto.isFavourite = true
         viewModelScope.launch {
             val mapper = MovieMapper()
-            movieDao.addMovieToDb(mapper.mapDtoToDbModel(movieDto))
-            //TODO: Обработка неуспешного сохранения в DB
+            try {
+                movieDao.insertMovieToDb(mapper.mapDtoToDbModel(movieDto))
+            } catch (e: Exception) {throw RuntimeException("Can't insert movie: ${e.message}")}
         }
     }
 
-    fun removeMovie(movieId: Int) {
+    fun removeMovie(movieDto: MovieDto) {
+        movieDto.isFavourite = false
         viewModelScope.launch {
-            movieDao.removeMovie(movieId)
+            try {
+                movieDao.removeMovie(movieDto.movieId)
+            } catch (e: Exception) {throw RuntimeException("Can't remove movie: ${e.message}")}
         }
     }
 
-    fun insertMovieDescription(movieId: Int) {
+    fun insertMovieDescription(movie: MovieDto) {
         viewModelScope.launch {
-            val mapper = DescriptionMapper()
-            val description = ApiFactory.apiService.getDescription(movieId)
-            movieDao.addDescription(mapper.mapDtoToDbModel(description))
-            //TODO: Обработка неуспешного сохранения в DB
+            try {
+                val mapper = DescriptionMapper()
+                val description = ApiFactory.apiService.getDescription(movie.movieId)
+                description.movieId = movie.movieId
+                movieDao.insertDescription(mapper.mapDtoToDbModel(description))
+            } catch (e: Exception) {throw RuntimeException("Can't insert description: ${e.message}")}
         }
     }
 
     fun removeMovieDescription(movieId: Int) {
         viewModelScope.launch {
-            movieDao.removeMovieDescription(movieId)
+            try {
+                movieDao.removeMovieDescription(movieId)
+                movieDao.removeMovieDescription(0)
+            } catch (e: Exception) {throw RuntimeException("Can't removed description: ${e.message}")}
         }
     }
 

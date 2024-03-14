@@ -20,7 +20,9 @@ class MovieMapper {
             year = dto.year,
             posterUrl = dto.posterUrl,
             countries = mapCountryListDtoToCountryListDb(dto.countries),
-            genres = mapGenreDtoListToGenreDbModelList(dto.genres)
+            genres = mapGenreDtoListToGenreDbModelList(dto.genres),
+            isFavourite = dto.isFavourite
+
         )
     }
 
@@ -55,7 +57,9 @@ class MovieMapper {
             year = dto.year,
             posterUrl = dto.posterUrl,
             countries = mapCountryListDtoToCountryList(dto.countries),
-            genres = mapGenreDtoListToGenreList(dto.genres)
+            genres = mapGenreDtoListToGenreList(dto.genres),
+            isFavourite = dto.isFavourite
+
         )
     }
 
@@ -91,7 +95,8 @@ class MovieMapper {
             year = dbModel.year,
             posterUrl = dbModel.posterUrl,
             countries = mapCountryListDbModelToCountryList(dbModel.countries),
-            genres = mapGenreDbModelListToGenreList(dbModel.genres)
+            genres = mapGenreDbModelListToGenreList(dbModel.genres),
+            isFavourite = dbModel.isFavourite
         )
     }
 

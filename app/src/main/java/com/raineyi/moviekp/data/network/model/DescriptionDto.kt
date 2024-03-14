@@ -9,7 +9,7 @@ data class DescriptionDto(
 
     @SerializedName("filmId")
     @Expose
-    val movieId: Int,
+    var movieId: Int,
 
     @SerializedName("description")
     @Expose

@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName
 data class DescriptionDbModel(
 
     @PrimaryKey
-    val movieId: Int,
+    var movieId: Int,
 
     val description: String
 )

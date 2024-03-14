@@ -20,10 +20,10 @@ interface MoviesDao {
     fun getFavouriteMovieDescription(movieId: Int) : LiveData<DescriptionDbModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addMovieToDb(movie: MovieDbModel)
+    suspend fun insertMovieToDb(movie: MovieDbModel)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addDescription(description: DescriptionDbModel)
+    suspend fun insertDescription(description: DescriptionDbModel)
 
     @Query("DELETE FROM favourite_movies WHERE movieId == :movieId")
     suspend fun removeMovie(movieId: Int)
