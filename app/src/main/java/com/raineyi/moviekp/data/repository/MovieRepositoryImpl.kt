@@ -19,6 +19,11 @@ class MovieRepositoryImpl(
     private val mapper = MovieMapper()
     private val descriptionMapper = DescriptionMapper()
     private val apiService = ApiFactory.apiService
+    override fun insertMovieToDb(movie: Movie) {
+        val oldMovie = getMovie(movie.movieId)
+//...
+    }
+
     override fun getMovieList(): LiveData<List<Movie>> {
         val movieList = moviesDao.getFavouriteMoviesList()
         return movieList.map {

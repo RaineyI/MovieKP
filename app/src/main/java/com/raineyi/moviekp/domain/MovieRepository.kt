@@ -6,6 +6,7 @@ import com.raineyi.moviekp.domain.entities.Movie
 
 interface MovieRepository {
 
+    fun insertMovieToDb(movie: Movie)
     fun getMovieList(): LiveData<List<Movie>>
 
     fun getMovie(movieId: Int): LiveData<Movie>

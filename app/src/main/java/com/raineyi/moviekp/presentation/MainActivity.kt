@@ -14,12 +14,13 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private var movieDetailsContainer: FragmentContainerView? = null
+    private var movieListContainer: FragmentContainerView? = null
 
-    private val viewModel: MainViewModel by lazy {
-        ViewModelProvider(this)[MainViewModel::class.java]
-    }
+//    private val viewModel: PopularMoviesViewModel by lazy {
+//        ViewModelProvider(this)[PopularMoviesViewModel::class.java]
+//    }
 
-    private lateinit var moviesAdapter: MoviesAdapter
+//    private lateinit var moviesAdapter: MoviesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,35 +74,35 @@ class MainActivity : AppCompatActivity() {
         return movieDetailsContainer == null
     }
 
-    private fun setupClickListener() {
-        moviesAdapter.onMovieClickListener = { movie ->
-            if (isOnePaneMode()) {
-                startActivity(MovieDetailsActivity.newIntentMovieDetailsActivity(this, movie))
-            } else {
-                launchFragment(movie)
-            }
-        }
-    }
+//    private fun setupClickListener() {
+//        moviesAdapter.onMovieClickListener = { movie ->
+//            if (isOnePaneMode()) {
+//                startActivity(MovieDetailsActivity.newIntentMovieDetailsActivity(this, movie))
+//            } else {
+//                launchFragment(movie)
+//            }
+//        }
+//    }
 
-    private fun setupRecyclerView() {
-        moviesAdapter = MoviesAdapter(object : MoviesAdapter.OnLoadMoreListener {
-            override fun onLoadMore() {
-                viewModel.loadMovies()
-            }
-        })
-        binding.rvMovieList.adapter = moviesAdapter
-//            recycledViewPool.setMaxRecycledViews(
-//                MoviesAdapter.VIEW_TYPE_FAVOURITE,
-//                MoviesAdapter.MAX_POOL_SIZE
-//            )
-//            recycledViewPool.setMaxRecycledViews(
-//                MoviesAdapter.VIEW_TYPE_NETWORK,
-//                MoviesAdapter.MAX_POOL_SIZE
-//            )
-        viewModel.listOfMovies.observe(this) {
-            moviesAdapter.submitList(it)
-        }
-        setupClickListener()
-        setupLongClickListener()
-    }
+//    private fun setupRecyclerView() {
+//        moviesAdapter = MoviesAdapter(object : MoviesAdapter.OnLoadMoreListener {
+//            override fun onLoadMore() {
+//                viewModel.loadMovies()
+//            }
+//        })
+//        binding.rvMovieList.adapter = moviesAdapter
+////            recycledViewPool.setMaxRecycledViews(
+////                MoviesAdapter.VIEW_TYPE_FAVOURITE,
+////                MoviesAdapter.MAX_POOL_SIZE
+////            )
+////            recycledViewPool.setMaxRecycledViews(
+////                MoviesAdapter.VIEW_TYPE_NETWORK,
+////                MoviesAdapter.MAX_POOL_SIZE
+////            )
+//        viewModel.listOfMovies.observe(this) {
+//            moviesAdapter.submitList(it)
+//        }
+//        setupClickListener()
+//        setupLongClickListener()
+//    }
 }

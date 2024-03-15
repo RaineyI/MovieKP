@@ -14,7 +14,7 @@ import com.raineyi.moviekp.data.network.ApiFactory
 import com.raineyi.moviekp.data.network.model.MovieDto
 import kotlinx.coroutines.launch
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
+class PopularMoviesViewModel(application: Application) : AndroidViewModel(application) {
 
     private var page = 1
     private val movieDao = MovieDatabase.getInstance(application).moviesDao()
