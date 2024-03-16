@@ -3,7 +3,10 @@ package com.raineyi.moviekp.presentation
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentContainerView
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.raineyi.moviekp.R
 import com.raineyi.moviekp.data.network.model.MovieDto
@@ -15,6 +18,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var movieDetailsContainer: FragmentContainerView? = null
     private var movieListContainer: FragmentContainerView? = null
+//    private var _isOnePaneMode = MutableLiveData<Boolean>()
+//    val isOnePaneMode: LiveData<Boolean>
+//        get() = _isOnePaneMode
 
 //    private val viewModel: PopularMoviesViewModel by lazy {
 //        ViewModelProvider(this)[PopularMoviesViewModel::class.java]
@@ -26,51 +32,80 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         movieDetailsContainer = findViewById(R.id.movie_details_container)
-        setupRecyclerView()
-        observeIsLoading()
+        launchFragmentPopular()
+        setupClickListeners()
+//        _isOnePaneMode.value = isOnePaneMode()
+//        setupRecyclerView()
+//        observeIsLoading()
     }
 
-    private fun observeIsLoading() {
-        viewModel.isLoading.observe(this) {
-            if (it) {
-                binding.progressBarLoading.visibility = View.VISIBLE
-            } else {
-                binding.progressBarLoading.visibility = View.GONE
-            }
-        }
-    }
-
-    private fun setupLongClickListener() {
-        moviesAdapter.onMovieLongClickListener = { movie ->
-            if (movie.isFavourite) {
-                viewModel.removeMovie(movie)
-                viewModel.removeMovieDescription(movie.movieId)
-            } else {
-                viewModel.insertMovie(movie)
-                viewModel.insertMovieDescription(movie)
-            }
-//            viewModel.getFavouriteMovie(movie.movieId).observe(this) {
-//                if (it == null) {
-//
-//                } else {
-//
-//                }
-//            }
-        }
-
-    }
-
-    private fun launchFragment(movie: MovieDto) {
-        supportFragmentManager.popBackStack()
+    private fun launchFragmentPopular() {
         supportFragmentManager.beginTransaction()
-            .add(R.id.movie_details_container, MovieDetailsFragment.newInstance(movie))
-            .addToBackStack(null)
+            .replace(R.id.movie_list_container, PopularMoviesFragment.newInstance())
             .commit()
     }
 
-    private fun isOnePaneMode(): Boolean {
+    private fun launchFragmentFavourite() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.movie_list_container, FavouriteMoviesFragment.newInstance())
+            .commit()
+    }
+
+    private fun setupClickListeners() {
+        binding.btPopular.setOnClickListener {
+            launchFragmentPopular()
+            binding.btFavorites.setBackgroundColor(ContextCompat.getColor(this, R.color.light_blue))
+            binding.btPopular.setBackgroundColor(ContextCompat.getColor(this, R.color.blue))
+        }
+
+        binding.btFavorites.setOnClickListener {
+            launchFragmentFavourite()
+            binding.btFavorites.setBackgroundColor(ContextCompat.getColor(this, R.color.blue))
+            binding.btPopular.setBackgroundColor(ContextCompat.getColor(this, R.color.light_blue))
+        }
+    }
+
+
+//    private fun observeIsLoading() {
+//        viewModel.isLoading.observe(this) {
+//            if (it) {
+//                binding.progressBarLoading.visibility = View.VISIBLE
+//            } else {
+//                binding.progressBarLoading.visibility = View.GONE
+//            }
+//        }
+//    }
+
+//    private fun setupLongClickListener() {
+//        moviesAdapter.onMovieLongClickListener = { movie ->
+//            if (movie.isFavourite) {
+//                viewModel.removeMovie(movie)
+//                viewModel.removeMovieDescription(movie.movieId)
+//            } else {
+//                viewModel.insertMovie(movie)
+//                viewModel.insertMovieDescription(movie)
+//            }
+////            viewModel.getFavouriteMovie(movie.movieId).observe(this) {
+////                if (it == null) {
+////
+////                } else {
+////
+////                }
+////            }
+//        }
+//
+//    }
+
+//    private fun launchFragment(movie: MovieDto) {
+//        supportFragmentManager.popBackStack()
+//        supportFragmentManager.beginTransaction()
+//            .add(R.id.movie_details_container, MovieDetailsFragment.newInstance(movie))
+//            .addToBackStack(null)
+//            .commit()
+//    }
+
+    fun isOnePaneMode(): Boolean {
         return movieDetailsContainer == null
     }
 
