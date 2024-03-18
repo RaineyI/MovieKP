@@ -35,18 +35,25 @@ class MainActivity : AppCompatActivity() {
         movieDetailsContainer = findViewById(R.id.movie_details_container)
         launchFragmentPopular()
         setupClickListeners()
+        checkFragmentDetails()
 //        _isOnePaneMode.value = isOnePaneMode()
 //        setupRecyclerView()
 //        observeIsLoading()
     }
 
+    private fun checkFragmentDetails() {
+
+    }
+
     private fun launchFragmentPopular() {
+        supportFragmentManager.popBackStack()
         supportFragmentManager.beginTransaction()
             .replace(R.id.movie_list_container, PopularMoviesFragment.newInstance())
             .commit()
     }
 
     private fun launchFragmentFavourite() {
+        supportFragmentManager.popBackStack()
         supportFragmentManager.beginTransaction()
             .replace(R.id.movie_list_container, FavouriteMoviesFragment.newInstance())
             .commit()
@@ -56,13 +63,17 @@ class MainActivity : AppCompatActivity() {
         binding.btPopular.setOnClickListener {
             launchFragmentPopular()
             binding.btFavorites.setBackgroundColor(ContextCompat.getColor(this, R.color.light_blue))
+            binding.btFavorites.setTextColor(ContextCompat.getColor(this, R.color.blue))
             binding.btPopular.setBackgroundColor(ContextCompat.getColor(this, R.color.blue))
+            binding.btPopular.setTextColor(ContextCompat.getColor(this, R.color.white))
         }
 
         binding.btFavorites.setOnClickListener {
             launchFragmentFavourite()
             binding.btFavorites.setBackgroundColor(ContextCompat.getColor(this, R.color.blue))
+            binding.btFavorites.setTextColor(ContextCompat.getColor(this, R.color.white))
             binding.btPopular.setBackgroundColor(ContextCompat.getColor(this, R.color.light_blue))
+            binding.btPopular.setTextColor(ContextCompat.getColor(this, R.color.blue))
         }
     }
 
@@ -105,9 +116,9 @@ class MainActivity : AppCompatActivity() {
 //            .commit()
 //    }
 
-    fun isOnePaneMode(): Boolean {
-        return movieDetailsContainer == null
-    }
+//    fun isOnePaneMode(): Boolean {
+//        return movieDetailsContainer == null
+//    }
 
 //    private fun setupClickListener() {
 //        moviesAdapter.onMovieClickListener = { movie ->

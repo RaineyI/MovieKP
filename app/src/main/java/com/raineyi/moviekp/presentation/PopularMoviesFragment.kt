@@ -68,20 +68,28 @@ class PopularMoviesFragment : Fragment() {
         }
     }
 
+    private fun isOnePaneMode(): Boolean {
+        val containerDetails = requireActivity().findViewById<View>(R.id.movie_details_container)
+        return containerDetails == null
+    }
 
-    private fun launchSecondFragment(movie: MovieDto) {
+
+    private fun launchDetailsFragment(movie: MovieDto) {
+//        val container = if(isOnePaneMode()) {
+//            R.id.movie_details_container
+//        } else {
+//            R.id.movie_list_container
+//        }
         requireActivity().supportFragmentManager.popBackStack()
         requireActivity().supportFragmentManager.beginTransaction()
-            .add(R.id.movie_details_container, MovieDetailsFragment.newInstance(movie))
+            .replace(R.id.movie_details_container, MovieDetailsFragment.newInstance(movie))
             .addToBackStack(null)
             .commit()
     }
 
     private fun setupClickListener() {
         moviesAdapter.onMovieClickListener = { movie ->
-
-//TODO: Как узнать какой поворот экрана?
-            if (activity.) {
+            if (isOnePaneMode()) {
                 startActivity(
                     MovieDetailsActivity.newIntentMovieDetailsActivity(
                         requireContext(),
@@ -89,7 +97,7 @@ class PopularMoviesFragment : Fragment() {
                     )
                 )
             } else {
-                launchSecondFragment(movie)
+                launchDetailsFragment(movie)
             }
         }
     }
@@ -101,14 +109,6 @@ class PopularMoviesFragment : Fragment() {
             }
         })
         binding.rvMovieList.adapter = moviesAdapter
-//            recycledViewPool.setMaxRecycledViews(
-//                MoviesAdapter.VIEW_TYPE_FAVOURITE,
-//                MoviesAdapter.MAX_POOL_SIZE
-//            )
-//            recycledViewPool.setMaxRecycledViews(
-//                MoviesAdapter.VIEW_TYPE_NETWORK,
-//                MoviesAdapter.MAX_POOL_SIZE
-//            )
         viewModel.listOfMovies.observe(viewLifecycleOwner) {
             moviesAdapter.submitList(it)
         }

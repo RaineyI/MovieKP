@@ -39,7 +39,6 @@ class MovieDetailsActivity : AppCompatActivity() {
     }
 
     companion object {
-
         private const val EXTRA_MOVIE = "extra movie"
         fun newIntentMovieDetailsActivity(context: Context, movie: MovieDto): Intent {
             val intent = Intent(context, MovieDetailsActivity::class.java)
