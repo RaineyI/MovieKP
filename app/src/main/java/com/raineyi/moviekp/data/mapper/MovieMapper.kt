@@ -49,7 +49,7 @@ class MovieMapper {
     }
 
 
-    fun mapDtoToMovie(dto: MovieDto): Movie{
+    fun mapDtoToMovie(dto: MovieDto): Movie {
 
         return Movie(
             movieId = dto.movieId,
@@ -86,7 +86,6 @@ class MovieMapper {
     }
 
 
-
     fun mapDbModelToMovie(dbModel: MovieDbModel): Movie {
 
         return Movie(
@@ -120,5 +119,39 @@ class MovieMapper {
 
     private fun mapGenreDbModelListToGenreList(genreList: List<GenreDbModel>) = genreList.map {
         mapGenreDbModelToGenre(it)
+    }
+
+    fun mapDbModelToMovieDto(dbModel: MovieDbModel): MovieDto {
+        return MovieDto(
+            movieId = dbModel.movieId,
+            name = dbModel.name,
+            year = dbModel.year,
+            posterUrl = dbModel.posterUrl,
+            countries = mapCountryListDbModelToCountryListDto(dbModel.countries),
+            genres = mapGenreDbModelListToGenreListDto(dbModel.genres),
+            isFavourite = dbModel.isFavourite
+        )
+    }
+
+    private fun mapCountryDbModelToCountryDto(country: CountryDbModel): CountryDto {
+        return CountryDto(
+            country = country.country
+        )
+    }
+
+    private fun mapCountryListDbModelToCountryListDto(countryList: List<CountryDbModel>) =
+        countryList.map {
+            mapCountryDbModelToCountryDto(it)
+        }
+
+
+    private fun mapGenreDbModelToGenreDto(genre: GenreDbModel): GenreDto {
+        return GenreDto(
+            genre = genre.genre
+        )
+    }
+
+    private fun mapGenreDbModelListToGenreListDto(genreList: List<GenreDbModel>) = genreList.map {
+        mapGenreDbModelToGenreDto(it)
     }
 }

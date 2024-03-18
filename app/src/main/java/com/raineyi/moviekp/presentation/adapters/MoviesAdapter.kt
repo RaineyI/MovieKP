@@ -15,10 +15,12 @@ import com.raineyi.moviekp.databinding.MovieFavouriteItemBinding
 import com.raineyi.moviekp.databinding.MovieItemBinding
 import kotlinx.coroutines.withContext
 
-class MoviesAdapter(private val onLoadMoreListener: OnLoadMoreListener) :
+//private val onLoadMoreListener: OnLoadMoreListener
+class MoviesAdapter() :
     ListAdapter<MovieDto, MovieViewHolder>(MovieItemDiffCallback()) {
 
     //TODO: onLoadMoreListener
+    var onLoadMoreListener: (() -> Unit)? = null
     var onMovieLongClickListener: ((MovieDto) -> Unit)? = null
     var onMovieClickListener: ((MovieDto) -> Unit)? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
@@ -53,20 +55,20 @@ class MoviesAdapter(private val onLoadMoreListener: OnLoadMoreListener) :
         binding.tvName
 
         Glide.with(holder.poster)
-                    .load(movieItem.posterUrl)
-                    .into(binding.imPoster)
-                holder.name.text = movieItem.name
-                val genres = movieItem.genres.joinToString(", ") { it.genre }
-                holder.genresAndYear.text = String.format(
-                    holder.itemView.context.getString(R.string.genres_and_year),
-                    genres.replaceFirstChar { it.uppercase() },
-                    movieItem.year.toString()
-                )
-                if(movieItem.isFavourite) {
-                    holder.star.visibility = View.VISIBLE
-                } else {
-                    holder.star.visibility = View.GONE
-                }
+            .load(movieItem.posterUrl)
+            .into(binding.imPoster)
+        holder.name.text = movieItem.name
+        val genres = movieItem.genres.joinToString(", ") { it.genre }
+        holder.genresAndYear.text = String.format(
+            holder.itemView.context.getString(R.string.genres_and_year),
+            genres.replaceFirstChar { it.uppercase() },
+            movieItem.year.toString()
+        )
+        if (movieItem.isFavourite) {
+            holder.star.visibility = View.VISIBLE
+        } else {
+            holder.star.visibility = View.GONE
+        }
 
 //        when (binding) {
 //            is MovieFavouriteItemBinding -> {
@@ -97,7 +99,7 @@ class MoviesAdapter(private val onLoadMoreListener: OnLoadMoreListener) :
 
 
         if (position >= currentList.size - 10) {
-            onLoadMoreListener.onLoadMore()
+            onLoadMoreListener?.invoke()
         }
 
         binding.root.setOnLongClickListener {
@@ -119,9 +121,9 @@ class MoviesAdapter(private val onLoadMoreListener: OnLoadMoreListener) :
 //        }
 //    }
 
-    interface OnLoadMoreListener {
-        fun onLoadMore()
-    }
+//    interface OnLoadMoreListener {
+//        fun onLoadMore()
+//    }
 
 //    companion object {
 //        const val VIEW_TYPE_NETWORK = 0

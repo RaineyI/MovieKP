@@ -31,5 +31,5 @@ abstract class MovieDatabase : RoomDatabase() {
             }
         }
     }
-    abstract fun moviesDao(): MoviesDao
+    abstract fun moviesDao(): MovieDao
 }

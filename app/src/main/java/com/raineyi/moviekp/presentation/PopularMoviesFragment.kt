@@ -1,16 +1,15 @@
 package com.raineyi.moviekp.presentation
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.raineyi.moviekp.R
 import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.databinding.FragmentPopularMoviesBinding
 import com.raineyi.moviekp.presentation.adapters.MoviesAdapter
-import java.lang.RuntimeException
 
 class PopularMoviesFragment : Fragment() {
 
@@ -53,18 +52,12 @@ class PopularMoviesFragment : Fragment() {
         moviesAdapter.onMovieLongClickListener = { movie ->
             if (movie.isFavourite) {
                 viewModel.removeMovie(movie)
-                viewModel.removeMovieDescription(movie.movieId)
+//                viewModel.removeMovieDescription(movie.movieId)
             } else {
                 viewModel.insertMovie(movie)
-                viewModel.insertMovieDescription(movie)
+//                viewModel.insertMovieDescription(movie)
             }
-//            viewModel.getFavouriteMovie(movie.movieId).observe(this) {
-//                if (it == null) {
-//
-//                } else {
-//
-//                }
-//            }
+            //TODO: Если нет описания, вылетает с ошибкой.
         }
     }
 
@@ -103,11 +96,10 @@ class PopularMoviesFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        moviesAdapter = MoviesAdapter(object : MoviesAdapter.OnLoadMoreListener {
-            override fun onLoadMore() {
-                viewModel.loadMovies()
-            }
-        })
+        moviesAdapter = MoviesAdapter()
+        moviesAdapter.onLoadMoreListener = {
+            viewModel.loadMovies()
+        }
         binding.rvMovieList.adapter = moviesAdapter
         viewModel.listOfMovies.observe(viewLifecycleOwner) {
             moviesAdapter.submitList(it)

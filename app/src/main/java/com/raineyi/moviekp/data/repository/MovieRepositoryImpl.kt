@@ -25,7 +25,7 @@ class MovieRepositoryImpl(
     }
 
     override fun getMovieList(): LiveData<List<Movie>> {
-        val movieList = moviesDao.getFavouriteMoviesList()
+        val movieList = moviesDao.getAllFavouriteMovies()
         return movieList.map {
             it.map { movieDbModel ->
                 mapper.mapDbModelToMovie(movieDbModel)
