@@ -6,6 +6,51 @@
     android:layout_height="match_parent"
     tools:context=".presentation.MainActivity">
 
+    <ImageView
+        android:id="@+id/imError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_network_error"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/tvError"
+        app:layout_constraintEnd_toEndOf="@+id/movie_list_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/tvError"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:gravity="center"
+        android:text="@string/network_error_text"
+        android:textColor="@color/blue"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/btRetry"
+        app:layout_constraintEnd_toEndOf="@+id/movie_list_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imError"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/btRetry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/blue"
+        android:text="@string/retry"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/movie_list_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvError"
+        tools:visibility="visible" />
+
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/movie_list_container"
         android:layout_width="0dp"
@@ -14,8 +59,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/guideline_middle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout="@layout/fragment_popular_movies" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/bt_popular"

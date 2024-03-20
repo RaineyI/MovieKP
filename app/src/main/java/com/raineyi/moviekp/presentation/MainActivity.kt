@@ -1,6 +1,11 @@
 package com.raineyi.moviekp.presentation
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -16,33 +21,61 @@ import com.raineyi.moviekp.presentation.adapters.MoviesAdapter
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private var movieDetailsContainer: FragmentContainerView? = null
-    private var movieListContainer: FragmentContainerView? = null
-//    private var _isOnePaneMode = MutableLiveData<Boolean>()
-//    val isOnePaneMode: LiveData<Boolean>
-//        get() = _isOnePaneMode
-
-//    private val viewModel: PopularMoviesViewModel by lazy {
-//        ViewModelProvider(this)[PopularMoviesViewModel::class.java]
-//    }
-
-//    private lateinit var moviesAdapter: MoviesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        movieDetailsContainer = findViewById(R.id.movie_details_container)
-        launchFragmentPopular()
+        if(isNetworkAvailable(this)) {
+            launchFragmentPopular()
+        } else {
+            showError()
+        }
         setupClickListeners()
-        checkFragmentDetails()
-//        _isOnePaneMode.value = isOnePaneMode()
-//        setupRecyclerView()
-//        observeIsLoading()
     }
 
-    private fun checkFragmentDetails() {
 
+    private fun hideError() {
+        binding.imError.visibility = View.GONE
+        binding.tvError.visibility = View.GONE
+        binding.btRetry.visibility = View.GONE
+        binding.btPopular.visibility = View.VISIBLE
+    }
+
+    private fun showError() {
+        binding.imError.visibility = View.VISIBLE
+        binding.tvError.visibility = View.VISIBLE
+        binding.btRetry.visibility = View.VISIBLE
+        binding.btRetry.setOnClickListener {
+            if(isNetworkAvailable(this)) {
+                launchFragmentPopular()
+            } else {
+                showError()
+            }
+        }
+        binding.btPopular.visibility = View.GONE
+    }
+
+    private fun isNetworkAvailable(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (connectivityManager != null) {
+            val capabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+                    return true
+                }
+            }
+        }
+        return false
     }
 
     private fun launchFragmentPopular() {
@@ -50,6 +83,7 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.movie_list_container, PopularMoviesFragment.newInstance())
             .commit()
+        hideError()
     }
 
     private fun launchFragmentFavourite() {
@@ -57,11 +91,17 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.movie_list_container, FavouriteMoviesFragment.newInstance())
             .commit()
+        hideError()
     }
 
     private fun setupClickListeners() {
         binding.btPopular.setOnClickListener {
-            launchFragmentPopular()
+            if(isNetworkAvailable(this)) {
+                launchFragmentPopular()
+            } else {
+                binding.movieListContainer.removeAllViews()
+                showError()
+            }
             binding.btFavorites.setBackgroundColor(ContextCompat.getColor(this, R.color.light_blue))
             binding.btFavorites.setTextColor(ContextCompat.getColor(this, R.color.blue))
             binding.btPopular.setBackgroundColor(ContextCompat.getColor(this, R.color.blue))
@@ -76,79 +116,4 @@ class MainActivity : AppCompatActivity() {
             binding.btPopular.setTextColor(ContextCompat.getColor(this, R.color.blue))
         }
     }
-
-
-//    private fun observeIsLoading() {
-//        viewModel.isLoading.observe(this) {
-//            if (it) {
-//                binding.progressBarLoading.visibility = View.VISIBLE
-//            } else {
-//                binding.progressBarLoading.visibility = View.GONE
-//            }
-//        }
-//    }
-
-//    private fun setupLongClickListener() {
-//        moviesAdapter.onMovieLongClickListener = { movie ->
-//            if (movie.isFavourite) {
-//                viewModel.removeMovie(movie)
-//                viewModel.removeMovieDescription(movie.movieId)
-//            } else {
-//                viewModel.insertMovie(movie)
-//                viewModel.insertMovieDescription(movie)
-//            }
-////            viewModel.getFavouriteMovie(movie.movieId).observe(this) {
-////                if (it == null) {
-////
-////                } else {
-////
-////                }
-////            }
-//        }
-//
-//    }
-
-//    private fun launchFragment(movie: MovieDto) {
-//        supportFragmentManager.popBackStack()
-//        supportFragmentManager.beginTransaction()
-//            .add(R.id.movie_details_container, MovieDetailsFragment.newInstance(movie))
-//            .addToBackStack(null)
-//            .commit()
-//    }
-
-//    fun isOnePaneMode(): Boolean {
-//        return movieDetailsContainer == null
-//    }
-
-//    private fun setupClickListener() {
-//        moviesAdapter.onMovieClickListener = { movie ->
-//            if (isOnePaneMode()) {
-//                startActivity(MovieDetailsActivity.newIntentMovieDetailsActivity(this, movie))
-//            } else {
-//                launchFragment(movie)
-//            }
-//        }
-//    }
-
-//    private fun setupRecyclerView() {
-//        moviesAdapter = MoviesAdapter(object : MoviesAdapter.OnLoadMoreListener {
-//            override fun onLoadMore() {
-//                viewModel.loadMovies()
-//            }
-//        })
-//        binding.rvMovieList.adapter = moviesAdapter
-////            recycledViewPool.setMaxRecycledViews(
-////                MoviesAdapter.VIEW_TYPE_FAVOURITE,
-////                MoviesAdapter.MAX_POOL_SIZE
-////            )
-////            recycledViewPool.setMaxRecycledViews(
-////                MoviesAdapter.VIEW_TYPE_NETWORK,
-////                MoviesAdapter.MAX_POOL_SIZE
-////            )
-//        viewModel.listOfMovies.observe(this) {
-//            moviesAdapter.submitList(it)
-//        }
-//        setupClickListener()
-//        setupLongClickListener()
-//    }
 }
