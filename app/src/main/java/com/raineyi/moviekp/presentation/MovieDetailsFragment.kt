@@ -2,15 +2,14 @@ package com.raineyi.moviekp.presentation
 
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.databinding.FragmentMovieDetailsBinding
-import java.lang.RuntimeException
 
 class MovieDetailsFragment : Fragment() {
 
@@ -33,6 +32,7 @@ class MovieDetailsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         parseArgs()
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -45,7 +45,7 @@ class MovieDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         settingUpViews()
-        binding.backArrow.setOnClickListener{
+        binding.backArrow.setOnClickListener {
             activity?.onBackPressedDispatcher?.onBackPressed()
         }
 
@@ -74,7 +74,7 @@ class MovieDetailsFragment : Fragment() {
 
     private fun parseArgs() {
         val args = requireArguments()
-        if(!args.containsKey(EXTRA_MOVIE)) {
+        if (!args.containsKey(EXTRA_MOVIE)) {
             throw RuntimeException("Param movie is absent")
         }
         when {
@@ -82,6 +82,7 @@ class MovieDetailsFragment : Fragment() {
                 EXTRA_MOVIE,
                 MovieDto::class.java
             )
+
             else -> args.getParcelable<MovieDto>(EXTRA_MOVIE)
         }?.let {
             movie = it
@@ -92,6 +93,7 @@ class MovieDetailsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
     companion object {
         private const val EXTRA_MOVIE = "extra movie"
 

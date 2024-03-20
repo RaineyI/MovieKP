@@ -41,14 +41,18 @@ class PopularMoviesViewModel(application: Application) : AndroidViewModel(applic
             val mapper = MovieMapper()
             try {
                 movieDao.insertMovieToDb(mapper.mapDtoToDbModel(movieDto))
-            } catch (e: Exception) {throw RuntimeException("Can't insert movie: ${e.message}")}
+            } catch (e: Exception) {
+                throw RuntimeException("Can't insert movie: ${e.message}")
+            }
 
             try {
                 val descriptionMapper = DescriptionMapper()
                 val description = ApiFactory.apiService.getDescription(movieDto.movieId)
                 description.movieId = movieDto.movieId
                 movieDao.insertDescription(descriptionMapper.mapDtoToDbModel(description))
-            } catch (e: Exception) {throw RuntimeException("Can't insert description: ${e.message}")}
+            } catch (e: Exception) {
+                throw RuntimeException("Can't insert description: ${e.message}")
+            }
         }
     }
 
@@ -57,11 +61,15 @@ class PopularMoviesViewModel(application: Application) : AndroidViewModel(applic
         viewModelScope.launch {
             try {
                 movieDao.removeMovie(movieDto.movieId)
-            } catch (e: Exception) {throw RuntimeException("Can't remove movie: ${e.message}")}
+            } catch (e: Exception) {
+                throw RuntimeException("Can't remove movie: ${e.message}")
+            }
 
             try {
                 movieDao.removeMovieDescription(movieDto.movieId)
-            } catch (e: Exception) {throw RuntimeException("Can't removed description: ${e.message}")}
+            } catch (e: Exception) {
+                throw RuntimeException("Can't removed description: ${e.message}")
+            }
         }
     }
 

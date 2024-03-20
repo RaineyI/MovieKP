@@ -1,9 +1,6 @@
 package com.raineyi.moviekp.presentation.adapters
 
 
-import android.content.res.Resources
-import android.graphics.BitmapFactory
-import android.provider.Settings.Global.getString
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.bumptech.glide.Glide
 import com.raineyi.moviekp.R
 import com.raineyi.moviekp.data.network.model.MovieDto
-import com.raineyi.moviekp.databinding.MovieFavouriteItemBinding
 import com.raineyi.moviekp.databinding.MovieItemBinding
-import kotlinx.coroutines.withContext
 
 //private val onLoadMoreListener: OnLoadMoreListener
 class MoviesAdapter() :

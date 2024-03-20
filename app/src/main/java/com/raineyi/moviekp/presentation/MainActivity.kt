@@ -3,20 +3,13 @@ package com.raineyi.moviekp.presentation
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentContainerView
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
 import com.raineyi.moviekp.R
-import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.databinding.ActivityMainBinding
-import com.raineyi.moviekp.presentation.adapters.MoviesAdapter
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        if(isNetworkAvailable(this)) {
+        if (isNetworkAvailable(this)) {
             launchFragmentPopular()
         } else {
             showError()
@@ -47,10 +40,8 @@ class MainActivity : AppCompatActivity() {
         binding.tvError.visibility = View.VISIBLE
         binding.btRetry.visibility = View.VISIBLE
         binding.btRetry.setOnClickListener {
-            if(isNetworkAvailable(this)) {
+            if (isNetworkAvailable(this)) {
                 launchFragmentPopular()
-            } else {
-                showError()
             }
         }
         binding.btPopular.visibility = View.GONE
@@ -96,7 +87,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupClickListeners() {
         binding.btPopular.setOnClickListener {
-            if(isNetworkAvailable(this)) {
+            if (isNetworkAvailable(this)) {
                 launchFragmentPopular()
             } else {
                 binding.movieListContainer.removeAllViews()
