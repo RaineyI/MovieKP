@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.raineyi.moviekp.data.database.MovieDatabase
+import com.raineyi.moviekp.data.database.dbmodel.DescriptionDbModel
 import com.raineyi.moviekp.data.mapper.MovieMapper
 import com.raineyi.moviekp.data.network.model.MovieDto
 import kotlinx.coroutines.launch
@@ -42,12 +43,20 @@ class FavouriteMoviesViewModel(application: Application) : AndroidViewModel(appl
         viewModelScope.launch {
             try {
                 movieDao.removeMovie(movieDto.movieId)
-            } catch (e: Exception) {throw RuntimeException("Can't remove movie: ${e.message}")}
+            } catch (e: Exception) {
+                throw RuntimeException("Can't remove movie: ${e.message}")
+            }
 
             try {
                 movieDao.removeMovieDescription(movieDto.movieId)
-            } catch (e: Exception) {throw RuntimeException("Can't removed description: ${e.message}")}
+            } catch (e: Exception) {
+                throw RuntimeException("Can't removed description: ${e.message}")
+            }
         }
+    }
+
+    fun getDbDescription(movieId: Int): LiveData<DescriptionDbModel> {
+        return movieDao.getFavouriteMovieDescription(movieId)
     }
 
 //    fun insertMovieDescription(movie: MovieDto) {

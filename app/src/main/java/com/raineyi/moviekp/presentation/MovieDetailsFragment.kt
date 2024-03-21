@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.raineyi.moviekp.data.network.model.DescriptionDto
 import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.databinding.FragmentMovieDetailsBinding
 
@@ -20,13 +21,14 @@ class MovieDetailsFragment : Fragment() {
         get() = _binding ?: throw RuntimeException("FragmentMovieDetailsBinding == null")
 
     private lateinit var movie: MovieDto
+    private lateinit var description: DescriptionDto
 
-    private val viewModelFactory by lazy {
-        MovieDetailsViewModelFactory(requireActivity().application, movie)
-    }
-    private val viewModel by lazy {
-        ViewModelProvider(this, viewModelFactory)[MovieDetailsViewModel::class.java]
-    }
+//    private val viewModelFactory by lazy {
+//        MovieDetailsViewModelFactory(requireActivity().application, movie, description)
+//    }
+//    private val viewModel by lazy {
+//        ViewModelProvider(this, viewModelFactory)[MovieDetailsViewModel::class.java]
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,9 +65,10 @@ class MovieDetailsFragment : Fragment() {
 
         binding.tvName.text = movie.name.toString()
 
-        viewModel.description.observe(viewLifecycleOwner) {
-            binding.tvDescription.text = it.description.toString()
-        }
+//        viewModel.description.observe(viewLifecycleOwner) {
+//            binding.tvDescription.text = it.description.toString()
+//        }
+        binding.tvDescription.text = description.description
         binding.tvGenres.text = movie.genres.joinToString(", ") { it.genre }
             .replaceFirstChar { it.uppercase() }
         binding.tvCountry.text = movie.countries.joinToString(", ") { it.country }
@@ -87,6 +90,21 @@ class MovieDetailsFragment : Fragment() {
         }?.let {
             movie = it
         }
+
+        if (!args.containsKey(EXTRA_DESCRIPTION)) {
+            throw RuntimeException("Param description is absent")
+        }
+        when {
+            SDK_INT >= 33 -> args.getParcelable(
+                EXTRA_DESCRIPTION,
+                DescriptionDto::class.java
+            )
+
+            else -> args.getParcelable<DescriptionDto>(EXTRA_DESCRIPTION)
+        }?.let {
+            description = it
+        }
+
     }
 
     override fun onDestroyView() {
@@ -95,12 +113,14 @@ class MovieDetailsFragment : Fragment() {
     }
 
     companion object {
-        private const val EXTRA_MOVIE = "extra movie"
+        private const val EXTRA_MOVIE = "extra_movie"
+        private const val EXTRA_DESCRIPTION = "extra_description"
 
-        fun newInstance(movie: MovieDto): MovieDetailsFragment {
+        fun newInstance(movie: MovieDto, description: DescriptionDto): MovieDetailsFragment {
             return MovieDetailsFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(EXTRA_MOVIE, movie)
+                    putParcelable(EXTRA_DESCRIPTION, description)
                 }
             }
         }

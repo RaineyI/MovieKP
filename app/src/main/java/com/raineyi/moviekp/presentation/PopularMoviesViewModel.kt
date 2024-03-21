@@ -10,6 +10,7 @@ import com.raineyi.moviekp.data.database.MovieDatabase
 import com.raineyi.moviekp.data.mapper.DescriptionMapper
 import com.raineyi.moviekp.data.mapper.MovieMapper
 import com.raineyi.moviekp.data.network.ApiFactory
+import com.raineyi.moviekp.data.network.model.DescriptionDto
 import com.raineyi.moviekp.data.network.model.MovieDto
 import kotlinx.coroutines.launch
 
@@ -25,6 +26,10 @@ class PopularMoviesViewModel(application: Application) : AndroidViewModel(applic
     private var _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean>
         get() = _isLoading
+
+    private var _description = MutableLiveData<DescriptionDto>()
+    val description: LiveData<DescriptionDto>
+        get() = _description
 
     init {
         loadMovies()
@@ -69,6 +74,19 @@ class PopularMoviesViewModel(application: Application) : AndroidViewModel(applic
                 movieDao.removeMovieDescription(movieDto.movieId)
             } catch (e: Exception) {
                 throw RuntimeException("Can't removed description: ${e.message}")
+            }
+        }
+    }
+
+    fun loadDescription(movie: MovieDto) {
+        viewModelScope.launch {
+            try {
+                movie.movieId.let {
+                    val loadingDescription = ApiFactory.apiService.getDescription(it)
+                    _description.value = loadingDescription
+                }
+            } catch (e: Exception) {
+                Log.d("TEST_API", e.message.toString())
             }
         }
     }

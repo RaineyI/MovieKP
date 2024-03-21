@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.raineyi.moviekp.R
+import com.raineyi.moviekp.data.network.model.DescriptionDto
 import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.databinding.FragmentPopularMoviesBinding
 import com.raineyi.moviekp.presentation.adapters.MoviesAdapter
@@ -67,7 +68,7 @@ class PopularMoviesFragment : Fragment() {
     }
 
 
-    private fun launchDetailsFragment(movie: MovieDto) {
+    private fun launchDetailsFragment(movie: MovieDto, description: DescriptionDto) {
 //        val container = if(isOnePaneMode()) {
 //            R.id.movie_details_container
 //        } else {
@@ -75,23 +76,28 @@ class PopularMoviesFragment : Fragment() {
 //        }
         requireActivity().supportFragmentManager.popBackStack()
         requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.movie_details_container, MovieDetailsFragment.newInstance(movie))
+            .replace(R.id.movie_details_container, MovieDetailsFragment.newInstance(movie, description))
             .addToBackStack(null)
             .commit()
     }
 
     private fun setupClickListener() {
         moviesAdapter.onMovieClickListener = { movie ->
-            if (isOnePaneMode()) {
-                startActivity(
-                    MovieDetailsActivity.newIntentMovieDetailsActivity(
-                        requireContext(),
-                        movie
+            viewModel.loadDescription(movie)
+            viewModel.description.observe(viewLifecycleOwner) {description ->
+                if (isOnePaneMode()) {
+                    startActivity(
+                        MovieDetailsActivity.newIntentMovieDetailsActivity(
+                            requireContext(),
+                            movie,
+                            description
+                        )
                     )
-                )
-            } else {
-                launchDetailsFragment(movie)
+                } else {
+                    launchDetailsFragment(movie, description)
+                }
             }
+
         }
     }
 

@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.raineyi.moviekp.R
+import com.raineyi.moviekp.data.database.dbmodel.DescriptionDbModel
+import com.raineyi.moviekp.data.mapper.DescriptionMapper
+import com.raineyi.moviekp.data.network.model.DescriptionDto
 import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.databinding.FragmentFavouriteMoviesBinding
 import com.raineyi.moviekp.presentation.adapters.MoviesAdapter
@@ -46,26 +49,33 @@ class FavouriteMoviesFragment : Fragment() {
         return containerDetails == null
     }
 
-    private fun launchDetailsFragment(movie: MovieDto) {
+    private fun launchDetailsFragment(movie: MovieDto, description: DescriptionDto) {
         requireActivity().supportFragmentManager.popBackStack()
         requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.movie_details_container, MovieDetailsFragment.newInstance(movie))
+            .replace(R.id.movie_details_container, MovieDetailsFragment.newInstance(movie, description))
             .addToBackStack(null)
             .commit()
     }
 
     private fun setupClickListener() {
         moviesAdapter.onMovieClickListener = { movie ->
-            if (isOnePaneMode()) {
-                startActivity(
-                    MovieDetailsActivity.newIntentMovieDetailsActivity(
-                        requireContext(),
-                        movie
+
+            viewModel.getDbDescription(movie.movieId).observe(viewLifecycleOwner) { description ->
+                val mapper = DescriptionMapper()
+                val descriptionDto = mapper.mapDbModelToDescriptionDto(description)
+                if (isOnePaneMode()) {
+                    startActivity(
+                        MovieDetailsActivity.newIntentMovieDetailsActivity(
+                            requireContext(),
+                            movie,
+                            descriptionDto
+                        )
                     )
-                )
-            } else {
-                launchDetailsFragment(movie)
+                } else {
+                    launchDetailsFragment(movie, descriptionDto)
+                }
             }
+
         }
     }
 
