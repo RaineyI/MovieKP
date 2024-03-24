@@ -10,11 +10,9 @@ import com.raineyi.moviekp.R
 import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.databinding.MovieItemBinding
 
-//private val onLoadMoreListener: OnLoadMoreListener
 class MoviesAdapter() :
     ListAdapter<MovieDto, MovieViewHolder>(MovieItemDiffCallback()) {
 
-    //TODO: onLoadMoreListener
     var onLoadMoreListener: (() -> Unit)? = null
     var onMovieLongClickListener: ((MovieDto) -> Unit)? = null
     var onMovieClickListener: ((MovieDto) -> Unit)? = null
@@ -47,11 +45,10 @@ class MoviesAdapter() :
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val movieItem = getItem(position)
         val binding = holder.binding
-        binding.tvName
 
         Glide.with(holder.poster)
             .load(movieItem.posterUrl)
-            .into(binding.imPoster)
+            .into(holder.poster)
         holder.name.text = movieItem.name
         val genres = movieItem.genres.joinToString(", ") { it.genre }
         holder.genresAndYear.text = String.format(
