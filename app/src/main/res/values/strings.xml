@@ -5,7 +5,6 @@
     <string name="movie_poster">Постер фильма</string>
     <string name="go_back">Вернуться назад</string>
     <string name="genres_and_year">%s (%s)</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="network_error_text">Произошла ошибка при загрузке данных, проверьте подключение к сети</string>
     <string name="retry">Повторить</string>

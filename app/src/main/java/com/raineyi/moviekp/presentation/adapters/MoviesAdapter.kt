@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.raineyi.moviekp.R
 import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.databinding.MovieItemBinding
+import com.squareup.picasso.Picasso
 
 class MoviesAdapter() :
     ListAdapter<MovieDto, MovieViewHolder>(MovieItemDiffCallback()) {
@@ -46,21 +47,25 @@ class MoviesAdapter() :
         val movieItem = getItem(position)
         val binding = holder.binding
 
-        Glide.with(holder.poster)
-            .load(movieItem.posterUrl)
-            .into(holder.poster)
-        holder.name.text = movieItem.name
-        val genres = movieItem.genres.joinToString(", ") { it.genre }
-        holder.genresAndYear.text = String.format(
-            holder.itemView.context.getString(R.string.genres_and_year),
-            genres.replaceFirstChar { it.uppercase() },
-            movieItem.year.toString()
-        )
-        if (movieItem.isFavourite) {
-            holder.star.visibility = View.VISIBLE
-        } else {
-            holder.star.visibility = View.GONE
+        with(holder) {
+            Picasso.get()
+                .load(movieItem.posterUrl)
+                .into(poster)
+            name.text = movieItem.name
+            val genres = movieItem.genres.joinToString(", ") { it.genre }
+            genresAndYear.text = String.format(
+                itemView.context.getString(R.string.genres_and_year),
+                genres.replaceFirstChar { it.uppercase() },
+                movieItem.year.toString()
+            )
+            if (movieItem.isFavourite) {
+                star.visibility = View.VISIBLE
+            } else {
+                star.visibility = View.GONE
+            }
         }
+
+
 
 //        when (binding) {
 //            is MovieFavouriteItemBinding -> {

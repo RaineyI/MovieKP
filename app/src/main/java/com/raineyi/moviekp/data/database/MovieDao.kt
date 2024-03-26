@@ -10,7 +10,7 @@ import com.raineyi.moviekp.data.database.dbmodel.MovieDbModel
 
 @Dao
 interface MovieDao {
-    @Query("SELECT * FROM favourite_movies")
+    @Query("SELECT * FROM favourite_movies ORDER BY name ASC")
     fun getAllFavouriteMovies() : LiveData<List<MovieDbModel>>
 
     @Query("SELECT * FROM favourite_movies WHERE movieId == :movieId LIMIT 1")

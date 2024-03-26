@@ -52,7 +52,10 @@ class FavouriteMoviesFragment : Fragment() {
     private fun launchDetailsFragment(movie: MovieDto, description: DescriptionDto) {
         requireActivity().supportFragmentManager.popBackStack()
         requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.movie_details_container, MovieDetailsFragment.newInstance(movie, description))
+            .replace(
+                R.id.movie_details_container,
+                MovieDetailsFragment.newInstance(movie, description)
+            )
             .addToBackStack(null)
             .commit()
     }
@@ -75,7 +78,6 @@ class FavouriteMoviesFragment : Fragment() {
                     launchDetailsFragment(movie, descriptionDto)
                 }
             }
-
         }
     }
 

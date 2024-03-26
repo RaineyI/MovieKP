@@ -2,15 +2,16 @@ package com.raineyi.moviekp.presentation
 
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.raineyi.moviekp.data.network.model.DescriptionDto
 import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.databinding.FragmentMovieDetailsBinding
+import com.squareup.picasso.Picasso
 
 class MovieDetailsFragment : Fragment() {
 
@@ -32,7 +33,8 @@ class MovieDetailsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        parseArgs()
+        parseParams()
+        Log.d("FRAGMENT_TEST", "MovieDetailsFragment")
     }
 
     override fun onCreateView(
@@ -42,13 +44,15 @@ class MovieDetailsFragment : Fragment() {
     ): View {
         _binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
         return binding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        settingUpViews()
+        setupViews()
         binding.backArrow.setOnClickListener {
             activity?.onBackPressedDispatcher?.onBackPressed()
+            activity?.finish()
         }
 
 //        viewModel.getFavouriteMovie(movie.movieId).observe(viewLifecycleOwner) {
@@ -58,8 +62,8 @@ class MovieDetailsFragment : Fragment() {
 //        }
     }
 
-    private fun settingUpViews() {
-        Glide.with(this)
+    private fun setupViews() {
+        Picasso.get()
             .load(movie.posterUrl)
             .into(binding.imBanner)
 
@@ -75,7 +79,7 @@ class MovieDetailsFragment : Fragment() {
             .replaceFirstChar { it.uppercase() }
     }
 
-    private fun parseArgs() {
+    private fun parseParams() {
         val args = requireArguments()
         if (!args.containsKey(EXTRA_MOVIE)) {
             throw RuntimeException("Param movie is absent")

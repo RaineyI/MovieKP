@@ -1,6 +1,7 @@
 package com.raineyi.moviekp.presentation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +24,6 @@ class PopularMoviesFragment : Fragment() {
     }
 
     private lateinit var moviesAdapter: MoviesAdapter
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,15 +68,13 @@ class PopularMoviesFragment : Fragment() {
     }
 
 
-    private fun launchDetailsFragment(movie: MovieDto, description: DescriptionDto) {
-//        val container = if(isOnePaneMode()) {
-//            R.id.movie_details_container
-//        } else {
-//            R.id.movie_list_container
-//        }
+    private fun launchDetailsFragment(container: Int, movie: MovieDto, description: DescriptionDto) {
         requireActivity().supportFragmentManager.popBackStack()
         requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.movie_details_container, MovieDetailsFragment.newInstance(movie, description))
+            .replace(
+                container,
+                MovieDetailsFragment.newInstance(movie, description)
+            )
             .addToBackStack(null)
             .commit()
     }
@@ -84,7 +82,13 @@ class PopularMoviesFragment : Fragment() {
     private fun setupClickListener() {
         moviesAdapter.onMovieClickListener = { movie ->
             viewModel.loadDescription(movie)
-            viewModel.description.observe(viewLifecycleOwner) {description ->
+            viewModel.description.observe(viewLifecycleOwner) { description ->
+                val container =
+                //                if (isOnePaneMode())
+//                    R.id.movie_list_container
+//                else
+                    R.id.movie_details_container
+
                 if (isOnePaneMode()) {
                     startActivity(
                         MovieDetailsActivity.newIntentMovieDetailsActivity(
@@ -94,10 +98,9 @@ class PopularMoviesFragment : Fragment() {
                         )
                     )
                 } else {
-                    launchDetailsFragment(movie, description)
+                    launchDetailsFragment(container, movie, description)
                 }
             }
-
         }
     }
 
