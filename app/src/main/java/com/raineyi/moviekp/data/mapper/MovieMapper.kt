@@ -26,25 +26,21 @@ class MovieMapper {
         )
     }
 
-    private fun mapCountryDtoToDbModel(country: CountryDto): CountryDbModel {
-        return CountryDbModel(
-            country = country.country
+    private fun mapCountryDtoToDbModel(country: CountryDto?) = CountryDbModel(
+            country = country?.country
         )
-    }
 
-    private fun mapCountryListDtoToCountryListDb(countryList: List<CountryDto>) =
-        countryList.map {
+    private fun mapCountryListDtoToCountryListDb(countryList: List<CountryDto>?) =
+        countryList?.map {
             mapCountryDtoToDbModel(it)
         }
 
 
-    private fun mapGenreDtoToGenreDbModel(genre: GenreDto): GenreDbModel {
-        return GenreDbModel(
-            genre = genre.genre
+    private fun mapGenreDtoToGenreDbModel(genre: GenreDto?) = GenreDbModel(
+            genre = genre?.genre
         )
-    }
 
-    private fun mapGenreDtoListToGenreDbModelList(genreList: List<GenreDto>) = genreList.map {
+    private fun mapGenreDtoListToGenreDbModelList(genreList: List<GenreDto>?) = genreList?.map {
         mapGenreDtoToGenreDbModel(it)
     }
 
@@ -63,25 +59,21 @@ class MovieMapper {
         )
     }
 
-    private fun mapCountryDtoToCountry(country: CountryDto): Country {
-        return Country(
-            country = country.country
+    private fun mapCountryDtoToCountry(country: CountryDto?) = Country(
+            country = country?.country
         )
-    }
 
-    private fun mapCountryListDtoToCountryList(countryList: List<CountryDto>) =
-        countryList.map {
+    private fun mapCountryListDtoToCountryList(countryList: List<CountryDto>?) =
+        countryList?.map {
             mapCountryDtoToCountry(it)
         }
 
 
-    private fun mapGenreDtoToGenre(genre: GenreDto): Genre {
-        return Genre(
-            genre = genre.genre
+    private fun mapGenreDtoToGenre(genre: GenreDto?) = Genre(
+            genre = genre?.genre
         )
-    }
 
-    private fun mapGenreDtoListToGenreList(genreList: List<GenreDto>) = genreList.map {
+    private fun mapGenreDtoListToGenreList(genreList: List<GenreDto>?) = genreList?.map {
         mapGenreDtoToGenre(it)
     }
 
@@ -99,25 +91,22 @@ class MovieMapper {
         )
     }
 
-    private fun mapCountryDbModelToCountry(country: CountryDbModel): Country {
-        return Country(
-            country = country.country
+    private fun mapCountryDbModelToCountry(country: CountryDbModel?) = Country(
+            country = country?.country
         )
-    }
 
-    private fun mapCountryListDbModelToCountryList(countryList: List<CountryDbModel>) =
-        countryList.map {
+    private fun mapCountryListDbModelToCountryList(countryList: List<CountryDbModel>?) =
+        countryList?.map {
             mapCountryDbModelToCountry(it)
         }
 
 
-    private fun mapGenreDbModelToGenre(genre: GenreDbModel): Genre {
-        return Genre(
-            genre = genre.genre
+    private fun mapGenreDbModelToGenre(genre: GenreDbModel?) = Genre(
+            genre = genre?.genre
         )
-    }
 
-    private fun mapGenreDbModelListToGenreList(genreList: List<GenreDbModel>) = genreList.map {
+    private fun mapGenreDbModelListToGenreList(genreList: List<GenreDbModel>?) =
+        genreList?.map {
         mapGenreDbModelToGenre(it)
     }
 
@@ -133,25 +122,52 @@ class MovieMapper {
         )
     }
 
-    private fun mapCountryDbModelToCountryDto(country: CountryDbModel): CountryDto {
-        return CountryDto(
-            country = country.country
+    private fun mapCountryDbModelToCountryDto(country: CountryDbModel?) = CountryDto(
+            country = country?.country
         )
-    }
 
-    private fun mapCountryListDbModelToCountryListDto(countryList: List<CountryDbModel>) =
-        countryList.map {
+    private fun mapCountryListDbModelToCountryListDto(countryList: List<CountryDbModel>?) =
+        countryList?.map {
             mapCountryDbModelToCountryDto(it)
         }
 
 
-    private fun mapGenreDbModelToGenreDto(genre: GenreDbModel): GenreDto {
-        return GenreDto(
-            genre = genre.genre
+    private fun mapGenreDbModelToGenreDto(genre: GenreDbModel?) = GenreDto(
+            genre = genre?.genre
+        )
+
+    private fun mapGenreDbModelListToGenreListDto(genreList: List<GenreDbModel>?) = genreList?.map {
+        mapGenreDbModelToGenreDto(it)
+    }
+
+
+    fun mapMovieToMovieDbModel(movie: Movie): MovieDbModel {
+        return MovieDbModel(
+            movieId = movie.movieId,
+            name = movie.name,
+            year = movie.year,
+            posterUrl = movie.posterUrl,
+            countries = mapCountryListDbModelToCountryListDbModel(movie.countries),
+            genres = mapGenreListToGenreListDbModel(movie.genres),
+            isFavourite = movie.isFavourite
         )
     }
 
-    private fun mapGenreDbModelListToGenreListDto(genreList: List<GenreDbModel>) = genreList.map {
-        mapGenreDbModelToGenreDto(it)
+    private fun mapCountryToCountryDbModel(country: Country?) = CountryDbModel(
+        country = country?.country
+    )
+
+    private fun mapCountryListDbModelToCountryListDbModel(countryList: List<Country>?) =
+        countryList?.map {
+            mapCountryToCountryDbModel(it)
+        }
+
+
+    private fun mapGenreToGenreDbModel(genre: Genre?) = GenreDbModel(
+        genre = genre?.genre
+    )
+
+    private fun mapGenreListToGenreListDbModel(genreList: List<Genre>?) = genreList?.map {
+        mapGenreToGenreDbModel(it)
     }
 }

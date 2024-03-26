@@ -5,18 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import com.bumptech.glide.Glide
 import com.raineyi.moviekp.R
 import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.databinding.MovieItemBinding
+import com.raineyi.moviekp.domain.entities.Movie
 import com.squareup.picasso.Picasso
 
 class MoviesAdapter() :
-    ListAdapter<MovieDto, MovieViewHolder>(MovieItemDiffCallback()) {
+    ListAdapter<Movie, MovieViewHolder>(MovieItemDiffCallback()) {
 
     var onLoadMoreListener: (() -> Unit)? = null
-    var onMovieLongClickListener: ((MovieDto) -> Unit)? = null
-    var onMovieClickListener: ((MovieDto) -> Unit)? = null
+    var onMovieLongClickListener: ((Movie) -> Unit)? = null
+    var onMovieClickListener: ((Movie) -> Unit)? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
 //        val binding = when (viewType) {
 //            VIEW_TYPE_FAVOURITE ->
@@ -52,10 +52,11 @@ class MoviesAdapter() :
                 .load(movieItem.posterUrl)
                 .into(poster)
             name.text = movieItem.name
-            val genres = movieItem.genres.joinToString(", ") { it.genre }
+            val genres = movieItem.genres?.joinToString(", ")
+            //{ it.genre }
             genresAndYear.text = String.format(
                 itemView.context.getString(R.string.genres_and_year),
-                genres.replaceFirstChar { it.uppercase() },
+                genres?.replaceFirstChar { it.uppercase() },
                 movieItem.year.toString()
             )
             if (movieItem.isFavourite) {

@@ -1,6 +1,7 @@
 package com.raineyi.moviekp.data.repository
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.raineyi.moviekp.data.database.MovieDatabase
@@ -16,44 +17,62 @@ class MovieRepositoryImpl(
 ) : MovieRepository {
 
     private val moviesDao = MovieDatabase.getInstance(application).moviesDao()
-    private val mapper = MovieMapper()
+    private val moviesMapper = MovieMapper()
     private val descriptionMapper = DescriptionMapper()
     private val apiService = ApiFactory.apiService
-    override fun insertMovieToDb(movie: Movie) {
-        val oldMovie = getMovie(movie.movieId)
-//...
-    }
+
 
     override fun getMovieList(): LiveData<List<Movie>> {
-        val movieList = moviesDao.getAllFavouriteMovies()
-        return movieList.map {
+        return moviesDao.getAllFavouriteMovies().map {
             it.map { movieDbModel ->
-                mapper.mapDbModelToMovie(movieDbModel)
+                moviesMapper.mapDbModelToMovie(movieDbModel)
             }
         }
     }
 
-    override fun getMovie(movieId: Int): LiveData<Movie> {
-        val movie = moviesDao.getFavouriteMovie(movieId)
-        return movie.map{
-            mapper.mapDbModelToMovie(it)
-        }
-    }
-
     override fun getDescription(movieId: Int): LiveData<Description> {
-        val description = moviesDao.getFavouriteMovieDescription(movieId)
-        return description.map {
+        return moviesDao.getFavouriteMovieDescription(movieId).map {
             descriptionMapper.mapDbModelToDescription(it)
         }
     }
 
     override suspend fun loadMovies(page: Int): List<Movie>? {
-        val movieResponseDto = ApiFactory.apiService.getMovieResponse(page = page)
-        return movieResponseDto.movies?.map { mapper.mapDtoToMovie(it) }
+        return try {
+            val movieResponseDto = apiService.getMovieResponse(page = page)
+            movieResponseDto.movies?.map { moviesMapper.mapDtoToMovie(it) }
+        } catch (e: Exception) {
+            Log.d("TEST_API", e.message.toString())
+            null
         }
+    }
 
-    override suspend fun loadDescription(movieId: Int): Description{
-        val descriptionDto = ApiFactory.apiService.getDescription(movieId)
-        return descriptionMapper.mapDtoToDescription(descriptionDto)
+    override suspend fun loadDescription(movieId: Int): Description? {
+        return try {
+            val descriptionDto = apiService.getDescription(movieId)
+             descriptionMapper.mapDtoToDescription(descriptionDto)
+        } catch (e: Exception) {
+            Log.d("TEST_API", e.message.toString())
+            null
+        }
+    }
+
+    override suspend fun insertMovieToDb(movie: Movie, description: Description) {
+        try {
+            val movieDbModel = moviesMapper.mapMovieToMovieDbModel(movie)
+            moviesDao.insertMovieToDb(movieDbModel)
+            val descriptionDbModel = descriptionMapper.mapDescriptionToDescriptionDbModel(description)
+            moviesDao.insertDescription(descriptionDbModel)
+        } catch (e: Exception) {
+            Log.d("TEST_DB", e.message.toString())
+        }
+    }
+
+    override suspend fun deleteMovieFromDb(movie: Movie, description: Description) {
+        try {
+            movie.movieId?.let { moviesDao.removeMovie(it) }
+            movie.movieId?.let { moviesDao.removeMovieDescription(it) }
+        } catch (e: Exception) {
+            Log.d("TEST_DB", e.message.toString())
+        }
     }
 }

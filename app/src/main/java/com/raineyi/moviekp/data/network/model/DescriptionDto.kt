@@ -12,9 +12,9 @@ data class DescriptionDto(
 
     @SerializedName("filmId")
     @Expose
-    var movieId: Int,
+    var movieId: Int?,
 
     @SerializedName("description")
     @Expose
-    val description: String,
+    val description: String? = null,
 ): Parcelable

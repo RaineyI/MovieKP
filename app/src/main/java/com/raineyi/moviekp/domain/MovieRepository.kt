@@ -6,14 +6,15 @@ import com.raineyi.moviekp.domain.entities.Movie
 
 interface MovieRepository {
 
-    fun insertMovieToDb(movie: Movie)
     fun getMovieList(): LiveData<List<Movie>>
-
-    fun getMovie(movieId: Int): LiveData<Movie>
 
     fun getDescription(movieId: Int): LiveData<Description>
 
     suspend fun loadMovies(page: Int): List<Movie>?
 
-    suspend fun loadDescription(movieId: Int): Description
+    suspend fun loadDescription(movieId: Int): Description?
+
+    suspend fun insertMovieToDb(movie: Movie, description: Description)
+
+    suspend fun deleteMovieFromDb(movie: Movie, description: Description)
 }
