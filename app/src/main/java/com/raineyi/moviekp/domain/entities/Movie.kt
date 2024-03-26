@@ -2,11 +2,11 @@ package com.raineyi.moviekp.domain.entities
 
 
 data class Movie(
-    val movieId: Int,
-    val name: String,
-    val year: Int,
-    val countries: List<Country>,
-    val genres: List<Genre>,
-    val posterUrl: String,
+    val movieId: Int?,
+    val name: String? = null,
+    val year: Int? = null,
+    val countries: List<Country>? = null,
+    val genres: List<Genre>? = null,
+    val posterUrl: String? = null,
     var isFavourite: Boolean = false
 )

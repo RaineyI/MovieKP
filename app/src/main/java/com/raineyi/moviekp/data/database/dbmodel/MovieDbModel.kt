@@ -7,11 +7,11 @@ import androidx.room.PrimaryKey
 data class MovieDbModel(
 
     @PrimaryKey
-    val movieId: Int,
-    val name: String,
-    val year: Int,
-    val countries: List<CountryDbModel>,
-    val genres: List<GenreDbModel>,
-    val posterUrl: String,
+    val movieId: Int?,
+    val name: String? = null,
+    val year: Int? = null,
+    val countries: List<CountryDbModel>? = null,
+    val genres: List<GenreDbModel>? = null,
+    val posterUrl: String? = null,
     var isFavourite: Boolean = false
 )

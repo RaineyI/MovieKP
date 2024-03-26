@@ -33,4 +33,11 @@ class DescriptionMapper {
             description = descriptionDbModel.description
         )
     }
+
+    fun mapDescriptionToDescriptionDbModel(description: Description): DescriptionDbModel {
+        return DescriptionDbModel(
+            movieId = description.movieId,
+            description = description.description
+        )
+    }
 }

@@ -9,5 +9,5 @@ import kotlinx.parcelize.Parcelize
 data class GenreDto (
     @SerializedName("genre")
     @Expose
-    var genre: String
+    var genre: String? = null
 ): Parcelable

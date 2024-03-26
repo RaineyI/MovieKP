@@ -9,7 +9,9 @@ class DataConverter {
 
     @TypeConverter
     fun fromCountriesList(countries: List<CountryDbModel>?): String? {
-        return countries?.joinToString(", ") { it.country }
+        return countries?.map {it.country}?.joinToString(", ")
+
+//        return countries?.joinToString(", ") { it.country } ?: ""
     }
 
     @TypeConverter
@@ -19,7 +21,8 @@ class DataConverter {
 
     @TypeConverter
     fun fromGenreList(genres: List<GenreDbModel>?): String? {
-        return genres?.joinToString(", ") { it.genre }
+        return genres?.map {it.genre}?.joinToString(", ")
+//        return genres?.joinToString(", ") { it.genre }
     }
 
     @TypeConverter
