@@ -52,10 +52,10 @@ class PopularMoviesFragment : Fragment() {
     private fun setupLongClickListener() {
         moviesAdapter.onMovieLongClickListener = { movie ->
             if (movie.isFavourite) {
-                viewModel.removeMovie(movie)
+//                viewModel.removeMovie(movie)
 //                viewModel.removeMovieDescription(movie.movieId)
             } else {
-                viewModel.insertMovie(movie)
+//                viewModel.insertMovie(movie)
 //                viewModel.insertMovieDescription(movie)
             }
             //TODO: Если нет описания, вылетает с ошибкой.
@@ -81,7 +81,7 @@ class PopularMoviesFragment : Fragment() {
 
     private fun setupClickListener() {
         moviesAdapter.onMovieClickListener = { movie ->
-            viewModel.loadDescription(movie)
+//            viewModel.loadDescription(movie)
             viewModel.description.observe(viewLifecycleOwner) { description ->
                 val container =
                 //                if (isOnePaneMode())

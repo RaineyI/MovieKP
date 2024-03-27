@@ -6,17 +6,11 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.raineyi.moviekp.data.database.MovieDatabase
-import com.raineyi.moviekp.data.mapper.DescriptionMapper
-import com.raineyi.moviekp.data.mapper.MovieMapper
-import com.raineyi.moviekp.data.network.ApiFactory
-import com.raineyi.moviekp.data.network.model.DescriptionDto
-import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.data.repository.MovieRepositoryImpl
-import com.raineyi.moviekp.domain.DeleteMovieFromDbUseCase
 import com.raineyi.moviekp.domain.InsertMovieToDbUseCase
 import com.raineyi.moviekp.domain.LoadDescriptionUseCase
 import com.raineyi.moviekp.domain.LoadMoviesUseCase
+import com.raineyi.moviekp.domain.RemoveMovieFromDbUseCase
 import com.raineyi.moviekp.domain.entities.Description
 import com.raineyi.moviekp.domain.entities.Movie
 import kotlinx.coroutines.launch
@@ -28,7 +22,7 @@ class PopularMoviesViewModel(application: Application) : AndroidViewModel(applic
     private val loadMoviesUseCase = LoadMoviesUseCase(repository)
     private val loadDescriptionUseCase = LoadDescriptionUseCase(repository)
     private val insertMovieToDbUseCase = InsertMovieToDbUseCase(repository)
-    private val deleteMovieFromDbUseCase = DeleteMovieFromDbUseCase(repository)
+    private val removeMovieFromDbUseCase = RemoveMovieFromDbUseCase(repository)
 
 
 //    private val movieDao = MovieDatabase.getInstance(application).moviesDao()
@@ -41,8 +35,8 @@ class PopularMoviesViewModel(application: Application) : AndroidViewModel(applic
     val isLoading: LiveData<Boolean>
         get() = _isLoading
 
-    private var _description = MutableLiveData<Description>()
-    val description: LiveData<Description>
+    private var _description = MutableLiveData<Description?>()
+    val description: LiveData<Description?>
         get() = _description
 
     init {
@@ -50,6 +44,35 @@ class PopularMoviesViewModel(application: Application) : AndroidViewModel(applic
 //        viewModelScope.launch {
 //            loadMoviesUseCase(page)
 //        }
+    }
+
+    fun insertMovie(movie: Movie, description: Description) {
+        movie.isFavourite = true
+        //TODO: ???
+        viewModelScope.launch {
+            insertMovieToDbUseCase(movie, description)
+        }
+    }
+
+    fun removeMovie(movie: Movie, description: Description) {
+        movie.isFavourite = false
+        //TODO: ???
+        viewModelScope.launch {
+            removeMovieFromDbUseCase(movie, description)
+        }
+    }
+
+    fun loadDescription(movie: Movie) {
+        viewModelScope.launch {
+            try {
+                movie.movieId?.let {
+                    val loadingDescription = loadDescriptionUseCase(movie.movieId)
+                    _description.value = loadingDescription
+                }
+            } catch (e: Exception) {
+                Log.d("TEST_API", e.message.toString())
+            }
+        }
     }
 
     fun loadMovies() {
@@ -83,20 +106,6 @@ class PopularMoviesViewModel(application: Application) : AndroidViewModel(applic
                 _isLoading.value = false
             }
 
-//
-//                if (loadedMovies != null) {
-//                    movies?.let {
-//                        loadedMovies.addAll(it)
-//                        loadedMovies.let {
-//                            _listOfMovies.value = it
-//                        }
-//                    }
-//                } else {
-//                    movies?.let {
-//                        _listOfMovies.value = it
-//                    }
-//                }
-//
 
 //    fun changeState(movieDto: MovieDto) {
 //        val newMovie = movieDto.copy(isFavourite = !movieDto.isFavourite)
@@ -141,19 +150,6 @@ class PopularMoviesViewModel(application: Application) : AndroidViewModel(applic
 //        }
 //    }
 
-//    fun loadDescription(movie: MovieDto) {
-//        viewModelScope.launch {
-//            try {
-//                movie.movieId.let {
-//                    val loadingDescription = ApiFactory.apiService.getDescription(it)
-//                    _description.value = loadingDescription
-//                }
-//            } catch (e: Exception) {
-//                Log.d("TEST_API", e.message.toString())
-//            }
-//        }
-//    }
-
 
 //    fun loadMovies() {
 //        val loading = isLoading.value
@@ -190,3 +186,4 @@ class PopularMoviesViewModel(application: Application) : AndroidViewModel(applic
 //    }
         }
     }
+}

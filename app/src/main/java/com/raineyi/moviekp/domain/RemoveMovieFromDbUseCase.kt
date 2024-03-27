@@ -3,9 +3,9 @@ package com.raineyi.moviekp.domain
 import com.raineyi.moviekp.domain.entities.Description
 import com.raineyi.moviekp.domain.entities.Movie
 
-class DeleteMovieFromDbUseCase(
+class RemoveMovieFromDbUseCase(
     private val repository: MovieRepository
 ) {
     suspend operator fun invoke(movie: Movie, description: Description) =
-        repository.deleteMovieFromDb(movie, description)
+        repository.removeMovieFromDb(movie, description)
 }

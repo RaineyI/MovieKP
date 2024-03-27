@@ -49,7 +49,7 @@ class MovieRepositoryImpl(
     override suspend fun loadDescription(movieId: Int): Description? {
         return try {
             val descriptionDto = apiService.getDescription(movieId)
-             descriptionMapper.mapDtoToDescription(descriptionDto)
+            descriptionMapper.mapDtoToDescription(descriptionDto)
         } catch (e: Exception) {
             Log.d("TEST_API", e.message.toString())
             null
@@ -60,19 +60,30 @@ class MovieRepositoryImpl(
         try {
             val movieDbModel = moviesMapper.mapMovieToMovieDbModel(movie)
             moviesDao.insertMovieToDb(movieDbModel)
-            val descriptionDbModel = descriptionMapper.mapDescriptionToDescriptionDbModel(description)
+        } catch (e: Exception) {
+            Log.d("TEST_DB", "Can't insert movie: ${e.message}")
+        }
+
+        try {
+            val descriptionDbModel =
+                descriptionMapper.mapDescriptionToDescriptionDbModel(description)
             moviesDao.insertDescription(descriptionDbModel)
         } catch (e: Exception) {
-            Log.d("TEST_DB", e.message.toString())
+            Log.d("TEST_DB", "Can't insert description: ${e.message}")
         }
     }
 
-    override suspend fun deleteMovieFromDb(movie: Movie, description: Description) {
+    override suspend fun removeMovieFromDb(movie: Movie, description: Description) {
         try {
             movie.movieId?.let { moviesDao.removeMovie(it) }
+        } catch (e: Exception) {
+            Log.d("TEST_DB", "Can't remove movie: ${e.message}")
+        }
+
+        try {
             movie.movieId?.let { moviesDao.removeMovieDescription(it) }
         } catch (e: Exception) {
-            Log.d("TEST_DB", e.message.toString())
+            Log.d("TEST_DB", "Can't remove description: ${e.message}")
         }
     }
 }
