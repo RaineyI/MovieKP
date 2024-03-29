@@ -6,9 +6,4 @@ import com.raineyi.moviekp.databinding.MovieItemBinding
 
 class MovieViewHolder(
     val binding : MovieItemBinding
-): RecyclerView.ViewHolder(binding.root) {
-    val name = binding.tvName
-    val poster = binding.imPoster
-    val genresAndYear = binding.tvGenresAndYear
-    val star = binding.imStar
-}
+): RecyclerView.ViewHolder(binding.root)

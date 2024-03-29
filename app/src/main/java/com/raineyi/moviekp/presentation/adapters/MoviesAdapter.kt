@@ -12,7 +12,7 @@ import com.raineyi.moviekp.domain.entities.Movie
 import com.squareup.picasso.Picasso
 
 class MoviesAdapter() :
-    ListAdapter<Movie, MovieViewHolder>(MovieItemDiffCallback()) {
+    ListAdapter<Movie, MovieViewHolder>(MovieItemDiffCallback) {
 
     var onLoadMoreListener: (() -> Unit)? = null
     var onMovieLongClickListener: ((Movie) -> Unit)? = null
@@ -47,25 +47,25 @@ class MoviesAdapter() :
         val movieItem = getItem(position)
         val binding = holder.binding
 
-        with(holder) {
+        with(holder.binding) {
             Picasso.get()
                 .load(movieItem.posterUrl)
-                .into(poster)
-            name.text = movieItem.name
+                .into(imPoster)
+            tvName.text = movieItem.name
 
             val genres = movieItem.genres?.map { it.genre }?.joinToString(", ")
                 ?.replaceFirstChar { it.uppercase() }
 //            val genres = movieItem.genres?.joinToString(", ")
 //            //{ it.genre }
-            genresAndYear.text = String.format(
-                itemView.context.getString(R.string.genres_and_year),
+            tvGenresAndYear.text = String.format(
+                root.context.getString(R.string.genres_and_year),
                 genres?.replaceFirstChar { it.uppercase() },
                 movieItem.year.toString()
             )
             if (movieItem.isFavourite) {
-                star.visibility = View.VISIBLE
+                imStar.visibility = View.VISIBLE
             } else {
-                star.visibility = View.GONE
+                imStar.visibility = View.GONE
             }
         }
 
