@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import com.raineyi.moviekp.data.network.model.DescriptionDto
 import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.databinding.FragmentMovieDetailsBinding
+import com.raineyi.moviekp.domain.entities.Description
+import com.raineyi.moviekp.domain.entities.Movie
 import com.squareup.picasso.Picasso
 
 class MovieDetailsFragment : Fragment() {
@@ -20,8 +22,8 @@ class MovieDetailsFragment : Fragment() {
     private val binding: FragmentMovieDetailsBinding
         get() = _binding ?: throw RuntimeException("FragmentMovieDetailsBinding == null")
 
-    private lateinit var movie: MovieDto
-    private lateinit var description: DescriptionDto
+    private lateinit var movie: Movie
+    private lateinit var description: Description
 
 //    private val viewModelFactory by lazy {
 //        MovieDetailsViewModelFactory(requireActivity().application, movie, description)
@@ -72,10 +74,15 @@ class MovieDetailsFragment : Fragment() {
 //            binding.tvDescription.text = it.description.toString()
 //        }
         binding.tvDescription.text = description.description
-        binding.tvGenres.text = movie.genres.joinToString(", ") { it.genre }
-            .replaceFirstChar { it.uppercase() }
-        binding.tvCountry.text = movie.countries.joinToString(", ") { it.country }
-            .replaceFirstChar { it.uppercase() }
+        binding.tvGenres.text = movie.genres?.map { it.genre }?.joinToString(", ")
+            ?.replaceFirstChar { it.uppercase() }
+        binding.tvCountry.text = movie.countries?.map { it.country }?.joinToString(", ")
+            ?.replaceFirstChar { it.uppercase() }
+
+//        binding.tvGenres.text = movie.genres.joinToString(", ") { it.genre }
+//            .replaceFirstChar { it.uppercase() }
+//        binding.tvCountry.text = movie.countries.joinToString(", ") { it.country }
+//            .replaceFirstChar { it.uppercase() }
     }
 
     private fun parseParams() {
@@ -86,10 +93,10 @@ class MovieDetailsFragment : Fragment() {
         when {
             SDK_INT >= 33 -> args.getParcelable(
                 EXTRA_MOVIE,
-                MovieDto::class.java
+                Movie::class.java
             )
 
-            else -> args.getParcelable<MovieDto>(EXTRA_MOVIE)
+            else -> args.getParcelable<Movie>(EXTRA_MOVIE)
         }?.let {
             movie = it
         }
@@ -100,10 +107,10 @@ class MovieDetailsFragment : Fragment() {
         when {
             SDK_INT >= 33 -> args.getParcelable(
                 EXTRA_DESCRIPTION,
-                DescriptionDto::class.java
+                Description::class.java
             )
 
-            else -> args.getParcelable<DescriptionDto>(EXTRA_DESCRIPTION)
+            else -> args.getParcelable<Description>(EXTRA_DESCRIPTION)
         }?.let {
             description = it
         }
@@ -119,7 +126,7 @@ class MovieDetailsFragment : Fragment() {
         private const val EXTRA_MOVIE = "extra_movie"
         private const val EXTRA_DESCRIPTION = "extra_description"
 
-        fun newInstance(movie: MovieDto, description: DescriptionDto): MovieDetailsFragment {
+        fun newInstance(movie: Movie, description: Description): MovieDetailsFragment {
             return MovieDetailsFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(EXTRA_MOVIE, movie)

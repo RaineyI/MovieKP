@@ -8,7 +8,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
-@Parcelize
+
 @Entity(tableName = "favourite_movies")
 data class MovieDto (
 
@@ -40,4 +40,4 @@ data class MovieDto (
     val posterUrl: String? = null,
 
     var isFavourite: Boolean = false
-) : Parcelable
+)

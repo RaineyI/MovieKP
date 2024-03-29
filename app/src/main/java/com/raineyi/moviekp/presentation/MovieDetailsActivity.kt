@@ -9,11 +9,13 @@ import android.util.Log
 import com.raineyi.moviekp.R
 import com.raineyi.moviekp.data.network.model.DescriptionDto
 import com.raineyi.moviekp.data.network.model.MovieDto
+import com.raineyi.moviekp.domain.entities.Description
+import com.raineyi.moviekp.domain.entities.Movie
 
 class MovieDetailsActivity : AppCompatActivity() {
 
-    private lateinit var movie: MovieDto
-    private lateinit var description: DescriptionDto
+    private lateinit var movie: Movie
+    private lateinit var description: Description
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_details)
@@ -33,10 +35,10 @@ class MovieDetailsActivity : AppCompatActivity() {
         when {
             Build.VERSION.SDK_INT >= 33 -> intent.getParcelableExtra(
                 EXTRA_MOVIE,
-                MovieDto::class.java
+                Movie::class.java
             )
 
-            else -> intent.getParcelableExtra<MovieDto>(EXTRA_MOVIE)
+            else -> intent.getParcelableExtra<Movie>(EXTRA_MOVIE)
         }?.let {
             movie = it
         }
@@ -44,10 +46,10 @@ class MovieDetailsActivity : AppCompatActivity() {
         when {
             Build.VERSION.SDK_INT >= 33 -> intent.getParcelableExtra(
                 EXTRA_DESCRIPTION,
-                DescriptionDto::class.java
+                Description::class.java
             )
 
-            else -> intent.getParcelableExtra<DescriptionDto>(EXTRA_MOVIE)
+            else -> intent.getParcelableExtra<Description>(EXTRA_MOVIE)
         }?.let {
             description = it
         }
@@ -67,8 +69,8 @@ class MovieDetailsActivity : AppCompatActivity() {
         private const val EXTRA_DESCRIPTION = "extra_description"
         fun newIntentMovieDetailsActivity(
             context: Context,
-            movie: MovieDto,
-            description: DescriptionDto
+            movie: Movie,
+            description: Description
         ): Intent {
             val intent = Intent(context, MovieDetailsActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP

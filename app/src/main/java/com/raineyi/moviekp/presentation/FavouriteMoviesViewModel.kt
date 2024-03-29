@@ -9,66 +9,68 @@ import com.raineyi.moviekp.data.database.MovieDatabase
 import com.raineyi.moviekp.data.database.dbmodel.DescriptionDbModel
 import com.raineyi.moviekp.data.mapper.MovieMapper
 import com.raineyi.moviekp.data.network.model.MovieDto
+import com.raineyi.moviekp.data.repository.MovieRepositoryImpl
+import com.raineyi.moviekp.domain.GetDescriptionUseCase
+import com.raineyi.moviekp.domain.GetMovieListUseCase
+import com.raineyi.moviekp.domain.LoadMoviesUseCase
+import com.raineyi.moviekp.domain.RemoveMovieFromDbUseCase
+import com.raineyi.moviekp.domain.entities.Description
+import com.raineyi.moviekp.domain.entities.Movie
 import kotlinx.coroutines.launch
 
 class FavouriteMoviesViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val movieDao = MovieDatabase.getInstance(application).moviesDao()
+    private val repository = MovieRepositoryImpl(application)
+    private val getMovies = GetMovieListUseCase(repository)
+    private val getDescription = GetDescriptionUseCase(repository)
+    private val removeMovieFromDbUseCase = RemoveMovieFromDbUseCase(repository)
 
-    fun getFavouriteMovies(): LiveData<List<MovieDto>> {
-        val mapper = MovieMapper()
-        return movieDao.getAllFavouriteMovies()
-            .map { it -> it.map { mapper.mapDbModelToMovieDto(it) } }
+
+//    private val movieDao = MovieDatabase.getInstance(application).moviesDao()
+
+    fun getFavouriteMovies(): LiveData<List<Movie>> {
+     return getMovies()
     }
 
-//    fun insertMovie(movieDto: MovieDto) {
-//        movieDto.isFavourite = true
-//        viewModelScope.launch {
-//            val mapper = MovieMapper()
-//            try {
-//                movieDao.insertMovieToDb(mapper.mapDtoToDbModel(movieDto))
-//            } catch (e: Exception) {throw RuntimeException("Can't insert movie: ${e.message}")}
-//
-//            try {
-//                val descriptionMapper = DescriptionMapper()
-//                val description = ApiFactory.apiService.getDescription(movieDto.movieId)
-//                description.movieId = movieDto.movieId
-//                movieDao.insertDescription(descriptionMapper.mapDtoToDbModel(description))
-//            } catch (e: Exception) {throw RuntimeException("Can't insert description: ${e.message}")}
-//        }
+
+//    fun getFavouriteMovies(): LiveData<List<Movie>> {
+//        val mapper = MovieMapper()
+//        return movieDao.getAllFavouriteMovies()
+//            .map { it -> it.map { mapper.mapDbModelToMovieDto(it) } }
 //    }
 
-    fun removeMovie(movieDto: MovieDto) {
-        movieDto.isFavourite = false
+    fun removeMovie(movie: Movie, description: Description) {
+        movie.isFavourite = false
         viewModelScope.launch {
-            try {
-                movieDao.removeMovie(movieDto.movieId)
-            } catch (e: Exception) {
-                throw RuntimeException("Can't remove movie: ${e.message}")
-            }
-
-            try {
-                movieDao.removeMovieDescription(movieDto.movieId)
-            } catch (e: Exception) {
-                throw RuntimeException("Can't removed description: ${e.message}")
-            }
+            removeMovieFromDbUseCase(movie, description)
         }
     }
 
-    fun getDbDescription(movieId: Int): LiveData<DescriptionDbModel> {
-        return movieDao.getFavouriteMovieDescription(movieId)
-    }
-
-//    fun insertMovieDescription(movie: MovieDto) {
+//    fun removeMovie(movieDto: MovieDto) {
+//        movieDto.isFavourite = false
 //        viewModelScope.launch {
 //            try {
-//                val mapper = DescriptionMapper()
-//                val description = ApiFactory.apiService.getDescription(movie.movieId)
-//                description.movieId = movie.movieId
-//                movieDao.insertDescription(mapper.mapDtoToDbModel(description))
-//            } catch (e: Exception) {throw RuntimeException("Can't insert description: ${e.message}")}
+//                movieDao.removeMovie(movieDto.movieId)
+//            } catch (e: Exception) {
+//                throw RuntimeException("Can't remove movie: ${e.message}")
+//            }
+//
+//            try {
+//                movieDao.removeMovieDescription(movieDto.movieId)
+//            } catch (e: Exception) {
+//                throw RuntimeException("Can't removed description: ${e.message}")
+//            }
 //        }
 //    }
+
+    fun getDbDescription(movieId: Int): LiveData<Description> {
+        return getDescription(movieId)
+    }
+
+//    fun getDbDescription(movieId: Int): LiveData<DescriptionDbModel> {
+//        return movieDao.getFavouriteMovieDescription(movieId)
+//    }
+
 
 //    fun removeMovieDescription(movieId: Int) {
 //        viewModelScope.launch {

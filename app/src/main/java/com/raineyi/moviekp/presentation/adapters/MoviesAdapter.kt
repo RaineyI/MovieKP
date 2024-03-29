@@ -52,8 +52,11 @@ class MoviesAdapter() :
                 .load(movieItem.posterUrl)
                 .into(poster)
             name.text = movieItem.name
-            val genres = movieItem.genres?.joinToString(", ")
-            //{ it.genre }
+
+            val genres = movieItem.genres?.map { it.genre }?.joinToString(", ")
+                ?.replaceFirstChar { it.uppercase() }
+//            val genres = movieItem.genres?.joinToString(", ")
+//            //{ it.genre }
             genresAndYear.text = String.format(
                 itemView.context.getString(R.string.genres_and_year),
                 genres?.replaceFirstChar { it.uppercase() },

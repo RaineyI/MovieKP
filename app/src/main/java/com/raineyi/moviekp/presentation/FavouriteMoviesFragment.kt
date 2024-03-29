@@ -12,6 +12,8 @@ import com.raineyi.moviekp.data.mapper.DescriptionMapper
 import com.raineyi.moviekp.data.network.model.DescriptionDto
 import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.databinding.FragmentFavouriteMoviesBinding
+import com.raineyi.moviekp.domain.entities.Description
+import com.raineyi.moviekp.domain.entities.Movie
 import com.raineyi.moviekp.presentation.adapters.MoviesAdapter
 
 class FavouriteMoviesFragment : Fragment() {
@@ -40,7 +42,11 @@ class FavouriteMoviesFragment : Fragment() {
 
     private fun setupLongClickListener() {
         moviesAdapter.onMovieLongClickListener = { movie ->
-            viewModel.removeMovie(movie)
+            movie.movieId?.let {
+                viewModel.getDbDescription(movie.movieId).observe(viewLifecycleOwner) {description ->
+                    viewModel.removeMovie(movie, description)
+                }
+            }
         }
     }
 
@@ -49,7 +55,7 @@ class FavouriteMoviesFragment : Fragment() {
         return containerDetails == null
     }
 
-    private fun launchDetailsFragment(movie: MovieDto, description: DescriptionDto) {
+    private fun launchDetailsFragment(movie: Movie, description: Description) {
         requireActivity().supportFragmentManager.popBackStack()
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(
@@ -62,22 +68,23 @@ class FavouriteMoviesFragment : Fragment() {
 
     private fun setupClickListener() {
         moviesAdapter.onMovieClickListener = { movie ->
-
-            viewModel.getDbDescription(movie.movieId).observe(viewLifecycleOwner) { description ->
-                val mapper = DescriptionMapper()
-                val descriptionDto = mapper.mapDbModelToDescriptionDto(description)
-                if (isOnePaneMode()) {
-                    startActivity(
-                        MovieDetailsActivity.newIntentMovieDetailsActivity(
-                            requireContext(),
-                            movie,
-                            descriptionDto
-                        )
-                    )
-                } else {
-                    launchDetailsFragment(movie, descriptionDto)
-                }
+            movie.movieId?.let {
+                viewModel.getDbDescription(movie.movieId)
+                    .observe(viewLifecycleOwner) { description ->
+                        if (isOnePaneMode()) {
+                            startActivity(
+                                MovieDetailsActivity.newIntentMovieDetailsActivity(
+                                    requireContext(),
+                                    movie,
+                                    description
+                                )
+                            )
+                        } else {
+                            launchDetailsFragment(movie, description)
+                        }
+                    }
             }
+
         }
     }
 

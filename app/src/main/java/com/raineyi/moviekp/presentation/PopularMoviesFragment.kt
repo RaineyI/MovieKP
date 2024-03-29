@@ -11,6 +11,8 @@ import com.raineyi.moviekp.R
 import com.raineyi.moviekp.data.network.model.DescriptionDto
 import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.databinding.FragmentPopularMoviesBinding
+import com.raineyi.moviekp.domain.entities.Description
+import com.raineyi.moviekp.domain.entities.Movie
 import com.raineyi.moviekp.presentation.adapters.MoviesAdapter
 
 class PopularMoviesFragment : Fragment() {
@@ -51,12 +53,18 @@ class PopularMoviesFragment : Fragment() {
 
     private fun setupLongClickListener() {
         moviesAdapter.onMovieLongClickListener = { movie ->
-            if (movie.isFavourite) {
-//                viewModel.removeMovie(movie)
+            movie.movieId?.let {
+                viewModel.description.observe(viewLifecycleOwner) { description ->
+                    description?.let {
+                        if (movie.isFavourite) {
+                            viewModel.removeMovie(movie, description)
 //                viewModel.removeMovieDescription(movie.movieId)
-            } else {
-//                viewModel.insertMovie(movie)
+                        } else {
+                            viewModel.insertMovie(movie, description)
 //                viewModel.insertMovieDescription(movie)
+                        }
+                    }
+                }
             }
             //TODO: Если нет описания, вылетает с ошибкой.
         }
@@ -68,7 +76,7 @@ class PopularMoviesFragment : Fragment() {
     }
 
 
-    private fun launchDetailsFragment(container: Int, movie: MovieDto, description: DescriptionDto) {
+    private fun launchDetailsFragment(container: Int, movie: Movie, description: Description) {
         requireActivity().supportFragmentManager.popBackStack()
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(
@@ -83,23 +91,26 @@ class PopularMoviesFragment : Fragment() {
         moviesAdapter.onMovieClickListener = { movie ->
 //            viewModel.loadDescription(movie)
             viewModel.description.observe(viewLifecycleOwner) { description ->
-                val container =
-                //                if (isOnePaneMode())
+                description?.let {
+                    val container =
+                    //                if (isOnePaneMode())
 //                    R.id.movie_list_container
 //                else
-                    R.id.movie_details_container
+                        R.id.movie_details_container
 
-                if (isOnePaneMode()) {
-                    startActivity(
-                        MovieDetailsActivity.newIntentMovieDetailsActivity(
-                            requireContext(),
-                            movie,
-                            description
+                    if (isOnePaneMode()) {
+                        startActivity(
+                            MovieDetailsActivity.newIntentMovieDetailsActivity(
+                                requireContext(),
+                                movie,
+                                description
+                            )
                         )
-                    )
-                } else {
-                    launchDetailsFragment(container, movie, description)
+                    } else {
+                        launchDetailsFragment(container, movie, description)
+                    }
                 }
+
             }
         }
     }
