@@ -41,6 +41,11 @@ class PopularMoviesFragment : Fragment() {
         observeIsLoading()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
     private fun observeIsLoading() {
         viewModel.isLoading.observe(viewLifecycleOwner) {
             if (it) {

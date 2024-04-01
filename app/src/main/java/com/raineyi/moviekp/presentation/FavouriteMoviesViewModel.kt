@@ -3,16 +3,11 @@ package com.raineyi.moviekp.presentation
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.raineyi.moviekp.data.database.MovieDatabase
-import com.raineyi.moviekp.data.database.dbmodel.DescriptionDbModel
-import com.raineyi.moviekp.data.mapper.MovieMapper
-import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.data.repository.MovieRepositoryImpl
 import com.raineyi.moviekp.domain.GetDescriptionUseCase
 import com.raineyi.moviekp.domain.GetMovieListUseCase
-import com.raineyi.moviekp.domain.LoadMoviesUseCase
 import com.raineyi.moviekp.domain.RemoveMovieFromDbUseCase
 import com.raineyi.moviekp.domain.entities.Description
 import com.raineyi.moviekp.domain.entities.Movie
@@ -25,13 +20,25 @@ class FavouriteMoviesViewModel(application: Application) : AndroidViewModel(appl
     private val getDescription = GetDescriptionUseCase(repository)
     private val removeMovieFromDbUseCase = RemoveMovieFromDbUseCase(repository)
 
+    private var _listOfMovies = MutableLiveData<List<Movie>>()
+    val listOfMovies: LiveData<List<Movie>>
+        get() = _listOfMovies
 
 //    private val movieDao = MovieDatabase.getInstance(application).moviesDao()
 
-    fun getFavouriteMovies(): LiveData<List<Movie>> {
-     return getMovies()
+//    fun getFavouriteMovies(): LiveData<List<Movie>> {
+//     return getMovies()
+//    }
+
+    init {
+        getMovies()
     }
 
+    private fun getFavouriteMovies(){
+        viewModelScope.launch {
+            _listOfMovies.value = getMovies().value
+        }
+    }
 
 //    fun getFavouriteMovies(): LiveData<List<Movie>> {
 //        val mapper = MovieMapper()

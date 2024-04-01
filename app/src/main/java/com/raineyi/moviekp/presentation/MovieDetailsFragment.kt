@@ -45,7 +45,6 @@ class MovieDetailsFragment : Fragment() {
     ): View {
         _binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,6 +60,11 @@ class MovieDetailsFragment : Fragment() {
 //
 //            }
 //        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     private fun setupViews() {

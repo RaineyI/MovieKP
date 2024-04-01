@@ -40,6 +40,11 @@ class FavouriteMoviesFragment : Fragment() {
         setupRecyclerView()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
     private fun setupLongClickListener() {
         moviesAdapter.onMovieLongClickListener = { movie ->
             movie.movieId?.let {
@@ -91,7 +96,7 @@ class FavouriteMoviesFragment : Fragment() {
     private fun setupRecyclerView() {
         moviesAdapter = MoviesAdapter()
         binding.rvFavouriteMovieList.adapter = moviesAdapter
-        viewModel.getFavouriteMovies().observe(viewLifecycleOwner) {
+        viewModel.listOfMovies.observe(viewLifecycleOwner) {
             moviesAdapter.submitList(it)
         }
         setupClickListener()
