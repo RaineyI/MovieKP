@@ -3,8 +3,9 @@ package com.raineyi.moviekp.data.mapper
 import com.raineyi.moviekp.data.database.dbmodel.DescriptionDbModel
 import com.raineyi.moviekp.data.network.model.DescriptionDto
 import com.raineyi.moviekp.domain.entities.Description
+import javax.inject.Inject
 
-class DescriptionMapper {
+class DescriptionMapper @Inject constructor() {
 
     fun mapDtoToDbModel(descriptionDto: DescriptionDto): DescriptionDbModel {
         return DescriptionDbModel(

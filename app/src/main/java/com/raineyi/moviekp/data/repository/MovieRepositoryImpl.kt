@@ -4,26 +4,30 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
-import com.raineyi.moviekp.data.database.MovieDatabase
+import com.raineyi.moviekp.data.database.MovieDao
 import com.raineyi.moviekp.data.mapper.DescriptionMapper
 import com.raineyi.moviekp.data.mapper.MovieMapper
 import com.raineyi.moviekp.data.network.ApiFactory
+import com.raineyi.moviekp.data.network.ApiService
 import com.raineyi.moviekp.domain.MovieRepository
 import com.raineyi.moviekp.domain.entities.Description
 import com.raineyi.moviekp.domain.entities.Movie
+import javax.inject.Inject
 
-class MovieRepositoryImpl(
-    private val application: Application
+class MovieRepositoryImpl @Inject constructor(
+    private val application: Application,
+    private val moviesMapper: MovieMapper,
+    private val descriptionMapper: DescriptionMapper,
+    private val movieDao: MovieDao,
+
 ) : MovieRepository {
 
-    private val moviesDao = MovieDatabase.getInstance(application).moviesDao()
-    private val moviesMapper = MovieMapper()
-    private val descriptionMapper = DescriptionMapper()
+//    private val moviesDao = MovieDatabase.getInstance(application).moviesDao()
+    //    private val apiService: ApiService (в конструктор)
     private val apiService = ApiFactory.apiService
 
-
     override fun getMovieList(): LiveData<List<Movie>> {
-        return moviesDao.getAllFavouriteMovies().map {
+        return movieDao.getAllFavouriteMovies().map {
             it.map { movieDbModel ->
                 moviesMapper.mapDbModelToMovie(movieDbModel)
             }
@@ -31,7 +35,7 @@ class MovieRepositoryImpl(
     }
 
     override fun getDescription(movieId: Int): LiveData<Description> {
-        return moviesDao.getFavouriteMovieDescription(movieId).map {
+        return movieDao.getFavouriteMovieDescription(movieId).map {
             descriptionMapper.mapDbModelToDescription(it)
         }
     }
@@ -59,7 +63,7 @@ class MovieRepositoryImpl(
     override suspend fun insertMovieToDb(movie: Movie, description: Description) {
         try {
             val movieDbModel = moviesMapper.mapMovieToMovieDbModel(movie)
-            moviesDao.insertMovieToDb(movieDbModel)
+            movieDao.insertMovieToDb(movieDbModel)
         } catch (e: Exception) {
             Log.d("TEST_DB", "Can't insert movie: ${e.message}")
         }
@@ -67,7 +71,7 @@ class MovieRepositoryImpl(
         try {
             val descriptionDbModel =
                 descriptionMapper.mapDescriptionToDescriptionDbModel(description)
-            moviesDao.insertDescription(descriptionDbModel)
+            movieDao.insertDescription(descriptionDbModel)
         } catch (e: Exception) {
             Log.d("TEST_DB", "Can't insert description: ${e.message}")
         }
@@ -75,13 +79,13 @@ class MovieRepositoryImpl(
 
     override suspend fun removeMovieFromDb(movie: Movie, description: Description) {
         try {
-            movie.movieId?.let { moviesDao.removeMovie(it) }
+            movie.movieId?.let { movieDao.removeMovie(it) }
         } catch (e: Exception) {
             Log.d("TEST_DB", "Can't remove movie: ${e.message}")
         }
 
         try {
-            movie.movieId?.let { moviesDao.removeMovieDescription(it) }
+            movie.movieId?.let { movieDao.removeMovieDescription(it) }
         } catch (e: Exception) {
             Log.d("TEST_DB", "Can't remove description: ${e.message}")
         }

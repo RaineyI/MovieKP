@@ -1,12 +1,10 @@
 package com.raineyi.moviekp.presentation
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.raineyi.moviekp.data.repository.MovieRepositoryImpl
 import com.raineyi.moviekp.domain.InsertMovieToDbUseCase
 import com.raineyi.moviekp.domain.LoadDescriptionUseCase
 import com.raineyi.moviekp.domain.LoadMoviesUseCase
@@ -14,15 +12,17 @@ import com.raineyi.moviekp.domain.RemoveMovieFromDbUseCase
 import com.raineyi.moviekp.domain.entities.Description
 import com.raineyi.moviekp.domain.entities.Movie
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class PopularMoviesViewModel(application: Application) : AndroidViewModel(application) {
+class PopularMoviesViewModel @Inject constructor(
+    private val loadMoviesUseCase: LoadMoviesUseCase,
+    private val loadDescriptionUseCase: LoadDescriptionUseCase,
+    private val insertMovieToDbUseCase: InsertMovieToDbUseCase,
+    private val removeMovieFromDbUseCase: RemoveMovieFromDbUseCase,
+) : ViewModel() {
 
     private var page = 1
-    private val repository = MovieRepositoryImpl(application)
-    private val loadMoviesUseCase = LoadMoviesUseCase(repository)
-    private val loadDescriptionUseCase = LoadDescriptionUseCase(repository)
-    private val insertMovieToDbUseCase = InsertMovieToDbUseCase(repository)
-    private val removeMovieFromDbUseCase = RemoveMovieFromDbUseCase(repository)
+//    private val repository = MovieRepositoryImpl(application)
 
 
 //    private val movieDao = MovieDatabase.getInstance(application).moviesDao()

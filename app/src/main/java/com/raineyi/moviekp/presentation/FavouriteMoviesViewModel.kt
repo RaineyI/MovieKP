@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raineyi.moviekp.data.repository.MovieRepositoryImpl
 import com.raineyi.moviekp.domain.GetDescriptionUseCase
@@ -12,13 +13,16 @@ import com.raineyi.moviekp.domain.RemoveMovieFromDbUseCase
 import com.raineyi.moviekp.domain.entities.Description
 import com.raineyi.moviekp.domain.entities.Movie
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FavouriteMoviesViewModel(application: Application) : AndroidViewModel(application) {
+class FavouriteMoviesViewModel @Inject constructor(
+    private val getMovies: GetMovieListUseCase,
+    private val getDescription: GetDescriptionUseCase,
+    private val removeMovieFromDbUseCase: RemoveMovieFromDbUseCase,
+) : ViewModel() {
 
-    private val repository = MovieRepositoryImpl(application)
-    private val getMovies = GetMovieListUseCase(repository)
-    private val getDescription = GetDescriptionUseCase(repository)
-    private val removeMovieFromDbUseCase = RemoveMovieFromDbUseCase(repository)
+//    private val repository = MovieRepositoryImpl(application)
+
 
     private var _listOfMovies = MutableLiveData<List<Movie>>()
     val listOfMovies: LiveData<List<Movie>>

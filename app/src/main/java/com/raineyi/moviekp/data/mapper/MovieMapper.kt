@@ -9,9 +9,10 @@ import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.domain.entities.Country
 import com.raineyi.moviekp.domain.entities.Genre
 import com.raineyi.moviekp.domain.entities.Movie
+import javax.inject.Inject
 
 
-class MovieMapper {
+class MovieMapper @Inject constructor() {
     fun mapDtoToDbModel(dto: MovieDto): MovieDbModel {
 
         return MovieDbModel(
