@@ -15,16 +15,15 @@ import com.raineyi.moviekp.domain.entities.Movie
 import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(
-    private val application: Application,
     private val moviesMapper: MovieMapper,
     private val descriptionMapper: DescriptionMapper,
     private val movieDao: MovieDao,
-
+    private val apiService: ApiService
 ) : MovieRepository {
 
 //    private val moviesDao = MovieDatabase.getInstance(application).moviesDao()
-    //    private val apiService: ApiService (в конструктор)
-    private val apiService = ApiFactory.apiService
+    //     (в конструктор)
+//    private val apiService = ApiFactory.apiService
 
     override fun getMovieList(): LiveData<List<Movie>> {
         return movieDao.getAllFavouriteMovies().map {

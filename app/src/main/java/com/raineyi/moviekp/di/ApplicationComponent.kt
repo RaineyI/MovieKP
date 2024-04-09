@@ -7,7 +7,7 @@ import com.raineyi.moviekp.presentation.PopularMoviesFragment
 import dagger.BindsInstance
 import dagger.Component
 
-
+@ApplicationScope
 @Component(
     modules = [
         DataModule::class,
