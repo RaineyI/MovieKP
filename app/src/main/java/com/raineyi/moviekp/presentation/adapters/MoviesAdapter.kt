@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.raineyi.moviekp.R
+import com.raineyi.moviekp.data.mapper.MovieMapper
 import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.databinding.MovieItemBinding
 import com.raineyi.moviekp.domain.entities.Movie
 import com.squareup.picasso.Picasso
 
-class MoviesAdapter() :
-    ListAdapter<Movie, MovieViewHolder>(MovieItemDiffCallback) {
+class MoviesAdapter() : ListAdapter<Movie, MovieViewHolder>(MovieItemDiffCallback) {
 
     var onLoadMoreListener: (() -> Unit)? = null
     var onMovieLongClickListener: ((Movie) -> Unit)? = null
@@ -53,15 +53,23 @@ class MoviesAdapter() :
                 .into(imPoster)
             tvName.text = movieItem.name
 
-            val genres = movieItem.genres?.map { it.genre }?.joinToString(", ")
-                ?.replaceFirstChar { it.uppercase() }
-//            val genres = movieItem.genres?.joinToString(", ")
-//            //{ it.genre }
             tvGenresAndYear.text = String.format(
                 root.context.getString(R.string.genres_and_year),
-                genres?.replaceFirstChar { it.uppercase() },
+                movieItem.genres,
                 movieItem.year.toString()
             )
+
+
+
+//            val genres = movieItem.genres?.map { it.genre }?.joinToString(", ")
+//                ?.replaceFirstChar { it.uppercase() }
+////            val genres = movieItem.genres?.joinToString(", ")
+////            //{ it.genre }
+//            tvGenresAndYear.text = String.format(
+//                root.context.getString(R.string.genres_and_year),
+//                genres?.replaceFirstChar { it.uppercase() },
+//                movieItem.year.toString()
+//            )
             if (movieItem.isFavourite) {
                 imStar.visibility = View.VISIBLE
             } else {

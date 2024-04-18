@@ -8,8 +8,8 @@ data class Movie(
     val movieId: Int?,
     val name: String? = null,
     val year: Int? = null,
-    val countries: List<Country>? = null,
-    val genres: List<Genre>? = null,
+    val countries: String? = null,
+    val genres: String? = null,
     val posterUrl: String? = null,
     var isFavourite: Boolean = false
 ): Parcelable

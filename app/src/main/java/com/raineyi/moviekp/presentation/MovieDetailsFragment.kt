@@ -72,16 +72,14 @@ class MovieDetailsFragment : Fragment() {
             .load(movie.posterUrl)
             .into(binding.imBanner)
 
-        binding.tvName.text = movie.name.toString()
+        binding.tvName.text = movie.name
 
 //        viewModel.description.observe(viewLifecycleOwner) {
 //            binding.tvDescription.text = it.description.toString()
 //        }
         binding.tvDescription.text = description.description
-        binding.tvGenres.text = movie.genres?.map { it.genre }?.joinToString(", ")
-            ?.replaceFirstChar { it.uppercase() }
-        binding.tvCountry.text = movie.countries?.map { it.country }?.joinToString(", ")
-            ?.replaceFirstChar { it.uppercase() }
+        binding.tvGenres.text = movie.genres
+        binding.tvCountry.text = movie.countries
 
 //        binding.tvGenres.text = movie.genres.joinToString(", ") { it.genre }
 //            .replaceFirstChar { it.uppercase() }
