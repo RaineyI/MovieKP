@@ -69,11 +69,11 @@ class MovieMapper @Inject constructor() {
 
     private fun mapListCountryDtoToString(countries: List<CountryDto>?) =
         countries?.map { it.country }?.joinToString(", ")
-            ?.replaceFirstChar { it.uppercase() }
+            ?.replaceFirstChar { it.uppercase() } ?: ""
 
     private fun mapListGenresDtoToString(genres: List<GenreDto>?) =
         genres?.map { it.genre }?.joinToString(", ")
-            ?.replaceFirstChar { it.uppercase() }
+            ?.replaceFirstChar { it.uppercase() } ?: ""
 
 
 //    private fun mapGenreDtoToGenre(genre: GenreDto?) = Genre(
@@ -100,11 +100,11 @@ class MovieMapper @Inject constructor() {
 
     private fun mapListCountryDbModelToString(countries: List<CountryDbModel>?) =
         countries?.map { it.country }?.joinToString(", ")
-            ?.replaceFirstChar { it.uppercase() }
+            ?.replaceFirstChar { it.uppercase() } ?: ""
 
     private fun mapListGenresDbModelToString(genres: List<GenreDbModel>?) =
         genres?.map { it.genre }?.joinToString(", ")
-            ?.replaceFirstChar { it.uppercase() }
+            ?.replaceFirstChar { it.uppercase() } ?: ""
 
 //    private fun mapCountryDbModelToCountry(country: CountryDbModel?) = Country(
 //            country = country?.country

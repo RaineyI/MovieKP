@@ -1,13 +1,11 @@
 package com.raineyi.moviekp.data.repository
 
-import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.raineyi.moviekp.data.database.MovieDao
 import com.raineyi.moviekp.data.mapper.DescriptionMapper
 import com.raineyi.moviekp.data.mapper.MovieMapper
-import com.raineyi.moviekp.data.network.ApiFactory
 import com.raineyi.moviekp.data.network.ApiService
 import com.raineyi.moviekp.domain.MovieRepository
 import com.raineyi.moviekp.domain.entities.Description
@@ -21,10 +19,6 @@ class MovieRepositoryImpl @Inject constructor(
     private val apiService: ApiService
 ) : MovieRepository {
 
-//    private val moviesDao = MovieDatabase.getInstance(application).moviesDao()
-    //     (в конструктор)
-//    private val apiService = ApiFactory.apiService
-
     override fun getMovieList(): LiveData<List<Movie>> {
         return movieDao.getAllFavouriteMovies().map {
             it.map { movieDbModel ->
@@ -32,6 +26,11 @@ class MovieRepositoryImpl @Inject constructor(
             }
         }
     }
+
+//    override fun getMovieList(): LiveData<List<Movie>> {
+//        return movieDao.getAllFavouriteMovies()
+//            .map { it -> it.map { moviesMapper.mapDbModelToMovie(it) } }
+//        }
 
     override fun getDescription(movieId: Int): LiveData<Description> {
         return movieDao.getFavouriteMovieDescription(movieId).map {

@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.raineyi.moviekp.domain.GetMovieListUseCase
 import com.raineyi.moviekp.domain.InsertMovieToDbUseCase
 import com.raineyi.moviekp.domain.LoadDescriptionUseCase
 import com.raineyi.moviekp.domain.LoadMoviesUseCase
@@ -19,7 +20,9 @@ class PopularMoviesViewModel @Inject constructor(
     private val loadDescriptionUseCase: LoadDescriptionUseCase,
     private val insertMovieToDbUseCase: InsertMovieToDbUseCase,
     private val removeMovieFromDbUseCase: RemoveMovieFromDbUseCase,
+
 ) : ViewModel() {
+
 
     private var page = 1
 //    private val repository = MovieRepositoryImpl(application)

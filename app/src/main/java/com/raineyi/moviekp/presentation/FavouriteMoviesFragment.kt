@@ -2,12 +2,14 @@ package com.raineyi.moviekp.presentation
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.raineyi.moviekp.R
+import com.raineyi.moviekp.data.database.MovieDatabase
 import com.raineyi.moviekp.data.database.dbmodel.DescriptionDbModel
 import com.raineyi.moviekp.data.mapper.DescriptionMapper
 import com.raineyi.moviekp.data.network.model.DescriptionDto
@@ -18,7 +20,7 @@ import com.raineyi.moviekp.domain.entities.Movie
 import com.raineyi.moviekp.presentation.adapters.MoviesAdapter
 import javax.inject.Inject
 
-class FavouriteMoviesFragment: Fragment() {
+class FavouriteMoviesFragment : Fragment() {
 
     private var _binding: FragmentFavouriteMoviesBinding? = null
     private val binding: FragmentFavouriteMoviesBinding
@@ -42,19 +44,24 @@ class FavouriteMoviesFragment: Fragment() {
     override fun onAttach(context: Context) {
         component.inject(this)
         super.onAttach(context)
+//        Log.d("TEST_DB", "onAttach")
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFavouriteMoviesBinding.inflate(inflater, container, false)
+//        Log.d("TEST_DB", "onCreateView")
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("TEST_DB", "onViewCreated")
         viewModel = ViewModelProvider(this, viewModelFactory)[FavouriteMoviesViewModel::class.java]
         setupRecyclerView()
+
     }
 
     override fun onDestroy() {
@@ -112,10 +119,24 @@ class FavouriteMoviesFragment: Fragment() {
     }
 
     private fun setupRecyclerView() {
+        Log.d("TEST_DB", "setupRecyclerView")
         moviesAdapter = MoviesAdapter()
         binding.rvFavouriteMovieList.adapter = moviesAdapter
+
+//        viewModel.getMovieList.observe(viewLifecycleOwner) {
+//            moviesAdapter.submitList(it)
+//        }
+
         viewModel.listOfMovies.observe(viewLifecycleOwner) {
-            moviesAdapter.submitList(it)
+            Log.d("TEST_DB", "observe")
+            try {
+                moviesAdapter.submitList(it)
+                Log.d("TEST_DB", it.toString())
+                //NullPointerException, DB возвращает null
+            } catch (e: Exception) {
+                Log.d("TEST_DB", e.toString())
+            }
+
         }
         setupClickListener()
         setupLongClickListener()

@@ -17,14 +17,14 @@ class DescriptionMapper @Inject constructor() {
     fun mapDtoToDescription(descriptionDto: DescriptionDto): Description {
         return Description(
             movieId = descriptionDto.movieId,
-            description = descriptionDto.description
+            description = descriptionDto.description ?: ""
         )
     }
 
     fun mapDbModelToDescription(descriptionDbModel: DescriptionDbModel): Description {
         return Description(
             movieId = descriptionDbModel.movieId,
-            description = descriptionDbModel.description
+            description = descriptionDbModel.description ?: ""
         )
     }
 

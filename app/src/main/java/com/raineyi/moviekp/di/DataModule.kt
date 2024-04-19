@@ -25,7 +25,7 @@ interface DataModule {
         fun provideMovieDao(
             application: Application
         ): MovieDao {
-            return MovieDatabase.getInstance(application).moviesDao()
+            return MovieDatabase.getInstance(application).movieDao()
         }
 
         @Provides

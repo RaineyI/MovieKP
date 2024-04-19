@@ -6,5 +6,5 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Description (
     val movieId: Int?,
-    val description: String? = null
+    val description: String
 ): Parcelable

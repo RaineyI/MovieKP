@@ -59,17 +59,6 @@ class MoviesAdapter() : ListAdapter<Movie, MovieViewHolder>(MovieItemDiffCallbac
                 movieItem.year.toString()
             )
 
-
-
-//            val genres = movieItem.genres?.map { it.genre }?.joinToString(", ")
-//                ?.replaceFirstChar { it.uppercase() }
-////            val genres = movieItem.genres?.joinToString(", ")
-////            //{ it.genre }
-//            tvGenresAndYear.text = String.format(
-//                root.context.getString(R.string.genres_and_year),
-//                genres?.replaceFirstChar { it.uppercase() },
-//                movieItem.year.toString()
-//            )
             if (movieItem.isFavourite) {
                 imStar.visibility = View.VISIBLE
             } else {
