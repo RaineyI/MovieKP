@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Description (
-    val movieId: Int?,
+data class Description(
+    val movieId: Int,
     val description: String
-): Parcelable
+) : Parcelable

@@ -9,11 +9,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.raineyi.moviekp.R
-import com.raineyi.moviekp.data.database.MovieDatabase
-import com.raineyi.moviekp.data.database.dbmodel.DescriptionDbModel
-import com.raineyi.moviekp.data.mapper.DescriptionMapper
-import com.raineyi.moviekp.data.network.model.DescriptionDto
-import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.databinding.FragmentFavouriteMoviesBinding
 import com.raineyi.moviekp.domain.entities.Description
 import com.raineyi.moviekp.domain.entities.Movie
@@ -26,14 +21,16 @@ class FavouriteMoviesFragment : Fragment() {
     private val binding: FragmentFavouriteMoviesBinding
         get() = _binding ?: throw RuntimeException("FragmentPopularMoviesBinding == null")
 
-//    private val viewModel: FavouriteMoviesViewModel by lazy {
-//        ViewModelProvider(this)[FavouriteMoviesViewModel::class.java]
-//    }
+
 
     private lateinit var viewModel: FavouriteMoviesViewModel
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
+
+//    private val viewModel: FavouriteMoviesViewModel by lazy {
+//        ViewModelProvider(this, viewModelFactory)[FavouriteMoviesViewModel::class.java]
+//    }
 
     private lateinit var moviesAdapter: MoviesAdapter
 
@@ -61,7 +58,6 @@ class FavouriteMoviesFragment : Fragment() {
         Log.d("TEST_DB", "onViewCreated")
         viewModel = ViewModelProvider(this, viewModelFactory)[FavouriteMoviesViewModel::class.java]
         setupRecyclerView()
-
     }
 
     override fun onDestroy() {
@@ -71,7 +67,8 @@ class FavouriteMoviesFragment : Fragment() {
 
     private fun setupLongClickListener() {
         moviesAdapter.onMovieLongClickListener = { movie ->
-            movie.movieId?.let {
+            Log.d("TEST_DB", "LongClick")
+            movie.movieId.let {
                 viewModel.getDbDescription(movie.movieId)
                     .observe(viewLifecycleOwner) { description ->
                         viewModel.removeMovie(movie, description)
@@ -98,7 +95,8 @@ class FavouriteMoviesFragment : Fragment() {
 
     private fun setupClickListener() {
         moviesAdapter.onMovieClickListener = { movie ->
-            movie.movieId?.let {
+            Log.d("TEST_DB", "Click")
+            movie.movieId.let {
                 viewModel.getDbDescription(movie.movieId)
                     .observe(viewLifecycleOwner) { description ->
                         if (isOnePaneMode()) {
@@ -123,23 +121,50 @@ class FavouriteMoviesFragment : Fragment() {
         moviesAdapter = MoviesAdapter()
         binding.rvFavouriteMovieList.adapter = moviesAdapter
 
+//        try {
+//            viewModel.getMovieList.observe(viewLifecycleOwner) {
+//                Log.d("TEST_DB", it.toString())
+//            }
+//        } catch (e: Exception) {
+//
+//        }
+
+            viewModel.listOfMovies.observe(viewLifecycleOwner) {
+                Log.d("TEST_DB", it.toString())
+            }
+
+//        try {
+//            viewModel.getFavouriteMovies().observe(viewLifecycleOwner) {
+//                Log.d("TEST_DB", it.toString())
+//            }
+//        } catch (e: Exception) {
+//
+//        }
+
+
+
 //        viewModel.getMovieList.observe(viewLifecycleOwner) {
 //            moviesAdapter.submitList(it)
 //        }
 
-        viewModel.listOfMovies.observe(viewLifecycleOwner) {
-            Log.d("TEST_DB", "observe")
-            try {
-                moviesAdapter.submitList(it)
-                Log.d("TEST_DB", it.toString())
-                //NullPointerException, DB возвращает null
-            } catch (e: Exception) {
-                Log.d("TEST_DB", e.toString())
-            }
+//        viewModel.listOfMovies.observe(viewLifecycleOwner) {
+//            Log.d("TEST_DB", "observe")
+//            try {
+//                moviesAdapter.submitList(it)
+//                Log.d("TEST_DB", it.toString())
+//                //NullPointerException, DB возвращает null
+//            } catch (e: Exception) {
+//                Log.d("TEST_DB", e.toString())
+//            }
 
-        }
-        setupClickListener()
-        setupLongClickListener()
+//        viewModel.getFavouriteMovies().observe(viewLifecycleOwner) {
+//            moviesAdapter.submitList(it)
+//        }
+
+
+
+//        setupClickListener()
+//        setupLongClickListener()
     }
 
     companion object {

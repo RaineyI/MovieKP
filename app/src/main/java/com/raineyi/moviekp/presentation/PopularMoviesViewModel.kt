@@ -5,6 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.raineyi.moviekp.data.database.MovieDao
+import com.raineyi.moviekp.data.mapper.DescriptionMapper
+import com.raineyi.moviekp.data.mapper.MovieMapper
+import com.raineyi.moviekp.data.network.ApiFactory
+import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.domain.GetMovieListUseCase
 import com.raineyi.moviekp.domain.InsertMovieToDbUseCase
 import com.raineyi.moviekp.domain.LoadDescriptionUseCase
@@ -20,15 +25,11 @@ class PopularMoviesViewModel @Inject constructor(
     private val loadDescriptionUseCase: LoadDescriptionUseCase,
     private val insertMovieToDbUseCase: InsertMovieToDbUseCase,
     private val removeMovieFromDbUseCase: RemoveMovieFromDbUseCase,
-
+    private val movieDao: MovieDao,
 ) : ViewModel() {
 
 
     private var page = 1
-//    private val repository = MovieRepositoryImpl(application)
-
-
-//    private val movieDao = MovieDatabase.getInstance(application).moviesDao()
 
     private var _listOfMovies = MutableLiveData<List<Movie>>()
     val listOfMovies: LiveData<List<Movie>>
@@ -49,26 +50,65 @@ class PopularMoviesViewModel @Inject constructor(
 //        }
     }
 
-    fun insertMovie(movie: Movie, description: Description) {
+    fun insertMovie(movie: Movie) {
         movie.isFavourite = true
-        //TODO: ???
         viewModelScope.launch {
-            insertMovieToDbUseCase(movie, description)
+            val mapper = MovieMapper()
+            try {
+                movieDao.insertMovieToDb(mapper.mapMovieToMovieDbModel(movie))
+            } catch (e: Exception) {
+                throw RuntimeException("Can't insert movie: ${e.message}")
+            }
+
+            try {
+                val descriptionMapper = DescriptionMapper()
+                val description = ApiFactory.apiService.getDescription(movie.movieId)
+                description.movieId = movie.movieId
+                movieDao.insertDescription(descriptionMapper.mapDtoToDbModel(description))
+            } catch (e: Exception) {
+                throw RuntimeException("Can't insert description: ${e.message}")
+            }
         }
     }
 
-    fun removeMovie(movie: Movie, description: Description) {
+//    fun insertMovie(movie: Movie, description: Description) {
+//        movie.isFavourite = true
+//        //TODO: ???
+//        viewModelScope.launch {
+//            insertMovieToDbUseCase(movie, description)
+//        }
+//    }
+
+    fun removeMovie(movie: Movie) {
         movie.isFavourite = false
-        //TODO: ???
         viewModelScope.launch {
-            removeMovieFromDbUseCase(movie, description)
+            try {
+                movieDao.removeMovie(movie.movieId)
+            } catch (e: Exception) {
+                throw RuntimeException("Can't remove movie: ${e.message}")
+            }
+
+            try {
+                movieDao.removeMovieDescription(movie.movieId)
+            } catch (e: Exception) {
+                throw RuntimeException("Can't removed description: ${e.message}")
+            }
         }
     }
+
+//
+//    fun removeMovie(movie: Movie, description: Description) {
+//        movie.isFavourite = false
+//        //TODO: ???
+//        viewModelScope.launch {
+//            removeMovieFromDbUseCase(movie, description)
+//        }
+//    }
 
     fun loadDescription(movie: Movie) {
         viewModelScope.launch {
             try {
-                movie.movieId?.let {
+                movie.movieId.let {
                     val loadingDescription = loadDescriptionUseCase(movie.movieId)
                     _description.value = loadingDescription
                 }
@@ -77,6 +117,7 @@ class PopularMoviesViewModel @Inject constructor(
             }
         }
     }
+
 
     fun loadMovies() {
         val loading = isLoading.value
@@ -115,43 +156,6 @@ class PopularMoviesViewModel @Inject constructor(
 //        editShopItemUseCase.editShopItem(newItem)
 //    }
 
-//    fun insertMovie(movieDto: MovieDto) {
-//        movieDto.isFavourite = true
-//        viewModelScope.launch {
-//            val mapper = MovieMapper()
-//            try {
-//                movieDao.insertMovieToDb(mapper.mapDtoToDbModel(movieDto))
-//            } catch (e: Exception) {
-//                throw RuntimeException("Can't insert movie: ${e.message}")
-//            }
-//
-//            try {
-//                val descriptionMapper = DescriptionMapper()
-//                val description = ApiFactory.apiService.getDescription(movieDto.movieId)
-//                description.movieId = movieDto.movieId
-//                movieDao.insertDescription(descriptionMapper.mapDtoToDbModel(description))
-//            } catch (e: Exception) {
-//                throw RuntimeException("Can't insert description: ${e.message}")
-//            }
-//        }
-//    }
-//
-//    fun removeMovie(movieDto: MovieDto) {
-//        movieDto.isFavourite = false
-//        viewModelScope.launch {
-//            try {
-//                movieDao.removeMovie(movieDto.movieId)
-//            } catch (e: Exception) {
-//                throw RuntimeException("Can't remove movie: ${e.message}")
-//            }
-//
-//            try {
-//                movieDao.removeMovieDescription(movieDto.movieId)
-//            } catch (e: Exception) {
-//                throw RuntimeException("Can't removed description: ${e.message}")
-//            }
-//        }
-//    }
 
 
 //    fun loadMovies() {

@@ -25,7 +25,7 @@ class PopularMoviesFragment @Inject constructor() : Fragment() {
     private val binding: FragmentPopularMoviesBinding
         get() = _binding ?: throw RuntimeException("FragmentPopularMoviesBinding == null")
 
-//    private val viewModel: PopularMoviesViewModel by lazy {
+    //    private val viewModel: PopularMoviesViewModel by lazy {
 //        ViewModelProvider(this)[PopularMoviesViewModel::class.java]
 //    }
     private lateinit var viewModel: PopularMoviesViewModel
@@ -43,6 +43,7 @@ class PopularMoviesFragment @Inject constructor() : Fragment() {
         component.inject(this)
         super.onAttach(context)
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -75,19 +76,28 @@ class PopularMoviesFragment @Inject constructor() : Fragment() {
 
     private fun setupLongClickListener() {
         moviesAdapter.onMovieLongClickListener = { movie ->
-            movie.movieId?.let {
-                viewModel.description.observe(viewLifecycleOwner) { description ->
-                    description?.let {
-                        if (movie.isFavourite) {
-                            viewModel.removeMovie(movie, description)
-//                viewModel.removeMovieDescription(movie.movieId)
-                        } else {
-                            viewModel.insertMovie(movie, description)
-//                viewModel.insertMovieDescription(movie)
-                        }
-                    }
+
+            Log.d("TEST_API", "LongClick")
+
+                if(movie.isFavourite) {
+                    viewModel.removeMovie(movie)
+                } else {
+                    viewModel.insertMovie(movie)
                 }
-            }
+
+
+
+//            movie.movieId.let {
+//                viewModel.description.observe(viewLifecycleOwner) { description ->
+//                    description?.let {
+//                        if (movie.isFavourite) {
+//                            viewModel.removeMovie(movie)
+//                        } else {
+//                            viewModel.insertMovie(movie)
+//                        }
+//                    }
+//                }
+//            }
             //TODO: Если нет описания, вылетает с ошибкой.
         }
     }
@@ -97,12 +107,11 @@ class PopularMoviesFragment @Inject constructor() : Fragment() {
         return containerDetails == null
     }
 
-
-    private fun launchDetailsFragment(container: Int, movie: Movie, description: Description) {
+    private fun launchDetailsFragment(movie: Movie, description: Description) {
         requireActivity().supportFragmentManager.popBackStack()
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(
-                container,
+                R.id.movie_details_container,
                 MovieDetailsFragment.newInstance(movie, description)
             )
             .addToBackStack(null)
@@ -111,15 +120,10 @@ class PopularMoviesFragment @Inject constructor() : Fragment() {
 
     private fun setupClickListener() {
         moviesAdapter.onMovieClickListener = { movie ->
-//            viewModel.loadDescription(movie)
+            Log.d("TEST_API", "Click")
+            viewModel.loadDescription(movie)
             viewModel.description.observe(viewLifecycleOwner) { description ->
                 description?.let {
-                    val container =
-                    //                if (isOnePaneMode())
-//                    R.id.movie_list_container
-//                else
-                        R.id.movie_details_container
-
                     if (isOnePaneMode()) {
                         startActivity(
                             MovieDetailsActivity.newIntentMovieDetailsActivity(
@@ -129,10 +133,9 @@ class PopularMoviesFragment @Inject constructor() : Fragment() {
                             )
                         )
                     } else {
-                        launchDetailsFragment(container, movie, description)
+                        launchDetailsFragment(movie, description)
                     }
                 }
-
             }
         }
     }

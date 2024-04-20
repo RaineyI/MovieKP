@@ -1,42 +1,38 @@
 package com.raineyi.moviekp.data.network.model
 
-import android.os.Parcelable
 import androidx.room.Embedded
-import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
 
 
-@Entity(tableName = "favourite_movies")
-data class MovieDto (
+//@Entity(tableName = "favourite_movies")
+data class MovieDto(
 
     @PrimaryKey
     @SerializedName("filmId")
-    @Expose
-    val movieId: Int?,
+//    @Expose
+    val movieId: Int,
 
     @SerializedName("nameRu")
-    @Expose
+//    @Expose
     val name: String? = null,
 
     @SerializedName("year")
-    @Expose
+//    @Expose
     val year: Int? = null,
 
     @SerializedName("countries")
-    @Expose
+//    @Expose
     @Embedded
     val countries: List<CountryDto>? = null,
 
     @SerializedName("genres")
-    @Expose
+//    @Expose
     @Embedded
     val genres: List<GenreDto>? = null,
 
     @SerializedName("posterUrl")
-    @Expose
+//    @Expose
     val posterUrl: String? = null,
 
     var isFavourite: Boolean = false

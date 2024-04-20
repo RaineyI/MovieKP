@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 data class MovieDbModel(
 
     @PrimaryKey
-    val movieId: Int?,
+    val movieId: Int,
     val name: String? = null,
     val year: Int? = null,
     val countries: List<CountryDbModel>? = null,

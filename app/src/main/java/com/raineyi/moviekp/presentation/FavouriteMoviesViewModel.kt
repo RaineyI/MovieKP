@@ -3,7 +3,10 @@ package com.raineyi.moviekp.presentation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.raineyi.moviekp.data.database.MovieDao
+import com.raineyi.moviekp.data.mapper.MovieMapper
 import com.raineyi.moviekp.domain.GetDescriptionUseCase
 import com.raineyi.moviekp.domain.GetMovieListUseCase
 import com.raineyi.moviekp.domain.RemoveMovieFromDbUseCase
@@ -16,6 +19,7 @@ class FavouriteMoviesViewModel @Inject constructor(
     private val getMovieListUseCase: GetMovieListUseCase,
     private val getDescriptionUseCase: GetDescriptionUseCase,
     private val removeMovieFromDbUseCase: RemoveMovieFromDbUseCase,
+    private val movieDao: MovieDao,
 ) : ViewModel() {
 
     val getMovieList = getMovieListUseCase() //вылетает
@@ -26,9 +30,6 @@ class FavouriteMoviesViewModel @Inject constructor(
 
 //    private val movieDao = MovieDatabase.getInstance(application).moviesDao()
 
-//    fun getFavouriteMovies(): LiveData<List<Movie>> {
-//     return getMovies()
-//    }
 
     init {
         getFavouriteMovies()
@@ -43,7 +44,7 @@ class FavouriteMoviesViewModel @Inject constructor(
 //    fun getFavouriteMovies(): LiveData<List<Movie>> {
 //        val mapper = MovieMapper()
 //        return movieDao.getAllFavouriteMovies()
-//            .map { it -> it.map { mapper.mapDbModelToMovieDto(it) } }
+//            .map { it -> it.map { mapper.mapDbModelToMovie(it) } }
 //    }
 
     fun removeMovie(movie: Movie, description: Description) {

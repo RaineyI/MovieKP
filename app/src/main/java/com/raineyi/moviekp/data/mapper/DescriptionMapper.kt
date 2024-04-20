@@ -7,12 +7,12 @@ import javax.inject.Inject
 
 class DescriptionMapper @Inject constructor() {
 
-//    fun mapDtoToDbModel(descriptionDto: DescriptionDto): DescriptionDbModel {
-//        return DescriptionDbModel(
-//            movieId = descriptionDto.movieId,
-//            description = descriptionDto.description
-//        )
-//    }
+    fun mapDtoToDbModel(descriptionDto: DescriptionDto): DescriptionDbModel {
+        return DescriptionDbModel(
+            movieId = descriptionDto.movieId,
+            description = descriptionDto.description
+        )
+    }
 
     fun mapDtoToDescription(descriptionDto: DescriptionDto): Description {
         return Description(
@@ -27,13 +27,6 @@ class DescriptionMapper @Inject constructor() {
             description = descriptionDbModel.description ?: ""
         )
     }
-
-//    fun mapDbModelToDescriptionDto(descriptionDbModel: DescriptionDbModel): DescriptionDto {
-//        return DescriptionDto(
-//            movieId = descriptionDbModel.movieId,
-//            description = descriptionDbModel.description
-//        )
-//    }
 
     fun mapDescriptionToDescriptionDbModel(description: Description): DescriptionDbModel {
         return DescriptionDbModel(

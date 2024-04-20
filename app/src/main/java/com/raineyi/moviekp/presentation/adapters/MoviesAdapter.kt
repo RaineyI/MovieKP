@@ -6,11 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.raineyi.moviekp.R
-import com.raineyi.moviekp.data.mapper.MovieMapper
-import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.databinding.MovieItemBinding
 import com.raineyi.moviekp.domain.entities.Movie
 import com.squareup.picasso.Picasso
+import javax.inject.Inject
 
 class MoviesAdapter() : ListAdapter<Movie, MovieViewHolder>(MovieItemDiffCallback) {
 
@@ -65,7 +64,6 @@ class MoviesAdapter() : ListAdapter<Movie, MovieViewHolder>(MovieItemDiffCallbac
                 imStar.visibility = View.GONE
             }
         }
-
 
 
 //        when (binding) {
