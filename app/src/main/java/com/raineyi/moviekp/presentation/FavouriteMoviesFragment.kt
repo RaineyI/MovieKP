@@ -22,7 +22,6 @@ class FavouriteMoviesFragment : Fragment() {
         get() = _binding ?: throw RuntimeException("FragmentPopularMoviesBinding == null")
 
 
-
     private lateinit var viewModel: FavouriteMoviesViewModel
 
     @Inject
@@ -55,7 +54,7 @@ class FavouriteMoviesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("TEST_DB", "onViewCreated")
+//        Log.d("TEST_DB", "onViewCreated")
         viewModel = ViewModelProvider(this, viewModelFactory)[FavouriteMoviesViewModel::class.java]
         setupRecyclerView()
     }
@@ -117,54 +116,14 @@ class FavouriteMoviesFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        Log.d("TEST_DB", "setupRecyclerView")
+//        Log.d("TEST_DB", "setupRecyclerView")
         moviesAdapter = MoviesAdapter()
         binding.rvFavouriteMovieList.adapter = moviesAdapter
-
-//        try {
-//            viewModel.getMovieList.observe(viewLifecycleOwner) {
-//                Log.d("TEST_DB", it.toString())
-//            }
-//        } catch (e: Exception) {
-//
-//        }
-
-            viewModel.listOfMovies.observe(viewLifecycleOwner) {
-                Log.d("TEST_DB", it.toString())
-            }
-
-//        try {
-//            viewModel.getFavouriteMovies().observe(viewLifecycleOwner) {
-//                Log.d("TEST_DB", it.toString())
-//            }
-//        } catch (e: Exception) {
-//
-//        }
-
-
-
-//        viewModel.getMovieList.observe(viewLifecycleOwner) {
-//            moviesAdapter.submitList(it)
-//        }
-
-//        viewModel.listOfMovies.observe(viewLifecycleOwner) {
-//            Log.d("TEST_DB", "observe")
-//            try {
-//                moviesAdapter.submitList(it)
-//                Log.d("TEST_DB", it.toString())
-//                //NullPointerException, DB возвращает null
-//            } catch (e: Exception) {
-//                Log.d("TEST_DB", e.toString())
-//            }
-
-//        viewModel.getFavouriteMovies().observe(viewLifecycleOwner) {
-//            moviesAdapter.submitList(it)
-//        }
-
-
-
-//        setupClickListener()
-//        setupLongClickListener()
+        viewModel.getMovieList.observe(viewLifecycleOwner) {
+                moviesAdapter.submitList(it)
+        }
+        setupClickListener()
+        setupLongClickListener()
     }
 
     companion object {

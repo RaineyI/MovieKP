@@ -27,11 +27,6 @@ class MovieRepositoryImpl @Inject constructor(
         }
     }
 
-//    override fun getMovieList(): LiveData<List<Movie>> {
-//        return movieDao.getAllFavouriteMovies()
-//            .map { it -> it.map { moviesMapper.mapDbModelToMovie(it) } }
-//        }
-
     override fun getDescription(movieId: Int): LiveData<Description> {
         return movieDao.getFavouriteMovieDescription(movieId).map {
             descriptionMapper.mapDbModelToDescription(it)
@@ -60,30 +55,45 @@ class MovieRepositoryImpl @Inject constructor(
 
     override suspend fun insertMovieToDb(movie: Movie, description: Description) {
         try {
-            val movieDbModel = moviesMapper.mapMovieToMovieDbModel(movie)
-            movieDao.insertMovieToDb(movieDbModel)
+            movieDao.insertMovieToDb(moviesMapper.mapMovieToMovieDbModel(movie))
         } catch (e: Exception) {
             Log.d("TEST_DB", "Can't insert movie: ${e.message}")
         }
-
         try {
-            val descriptionDbModel =
+            movieDao.insertDescription(
                 descriptionMapper.mapDescriptionToDescriptionDbModel(description)
-            movieDao.insertDescription(descriptionDbModel)
+            )
         } catch (e: Exception) {
             Log.d("TEST_DB", "Can't insert description: ${e.message}")
         }
+        
+
+//                (movie: Movie, description: Description) {
+//        try {
+//            val movieDbModel = moviesMapper.mapMovieToMovieDbModel(movie)
+//            movieDao.insertMovieToDb(movieDbModel)
+//        } catch (e: Exception) {
+//            Log.d("TEST_DB", "Can't insert movie: ${e.message}")
+//        }
+//
+//        try {
+//            val descriptionDbModel =
+//                descriptionMapper.mapDescriptionToDescriptionDbModel(description)
+//            movieDao.insertDescription(descriptionDbModel)
+//        } catch (e: Exception) {
+//            Log.d("TEST_DB", "Can't insert description: ${e.message}")
+//        }
     }
 
     override suspend fun removeMovieFromDb(movie: Movie, description: Description) {
         try {
-            movie.movieId?.let { movieDao.removeMovie(it) }
+            movie.movieId.let { movieDao.removeMovie(it) }
         } catch (e: Exception) {
             Log.d("TEST_DB", "Can't remove movie: ${e.message}")
         }
 
         try {
-            movie.movieId?.let { movieDao.removeMovieDescription(it) }
+            movie.movieId.let { movieDao.removeMovieDescription(it) }
         } catch (e: Exception) {
             Log.d("TEST_DB", "Can't remove description: ${e.message}")
         }

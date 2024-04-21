@@ -45,9 +45,6 @@ class PopularMoviesViewModel @Inject constructor(
 
     init {
         loadMovies()
-//        viewModelScope.launch {
-//            loadMoviesUseCase(page)
-//        }
     }
 
     fun insertMovie(movie: Movie) {
@@ -68,6 +65,13 @@ class PopularMoviesViewModel @Inject constructor(
             } catch (e: Exception) {
                 throw RuntimeException("Can't insert description: ${e.message}")
             }
+        }
+    }
+
+    fun insertMovie(movie: Movie, description: Description) {
+        movie.isFavourite = true
+        viewModelScope.launch {
+            insertMovieToDbUseCase(movie, description)
         }
     }
 

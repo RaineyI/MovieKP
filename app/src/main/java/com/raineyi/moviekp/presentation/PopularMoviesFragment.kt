@@ -77,14 +77,27 @@ class PopularMoviesFragment @Inject constructor() : Fragment() {
     private fun setupLongClickListener() {
         moviesAdapter.onMovieLongClickListener = { movie ->
 
-            Log.d("TEST_API", "LongClick")
-
-                if(movie.isFavourite) {
-                    viewModel.removeMovie(movie)
+            Log.d("TEST_DB", "LongClick")
+            Log.d("TEST_DB", movie.toString())
+//
+//                if(movie.isFavourite) {
+//                    viewModel.removeMovie(movie)
+//                } else {
+//                    viewModel.insertMovie(movie)
+//                }
+            viewModel.description.observe(viewLifecycleOwner) { description ->
+                Log.d("TEST_DB", description.toString())
+                if (movie.isFavourite) {
+                    Log.d("TEST_DB", "Movie is Favourite")
+                    description?.let {
+                        viewModel.insertMovie(movie, description)
+                    }
                 } else {
-                    viewModel.insertMovie(movie)
+                    description?.let {
+                        viewModel.removeMovie(movie)
+                    }
                 }
-
+            }
 
 
 //            movie.movieId.let {

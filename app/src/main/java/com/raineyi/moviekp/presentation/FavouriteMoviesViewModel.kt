@@ -22,24 +22,24 @@ class FavouriteMoviesViewModel @Inject constructor(
     private val movieDao: MovieDao,
 ) : ViewModel() {
 
-    val getMovieList = getMovieListUseCase() //вылетает
+    val getMovieList = getMovieListUseCase()
 
-    private var _listOfMovies = MutableLiveData<List<Movie>>()
-    val listOfMovies: LiveData<List<Movie>>
-        get() = _listOfMovies
+//    private var _listOfMovies = MutableLiveData<List<Movie>>()
+//    val listOfMovies: LiveData<List<Movie>>
+//        get() = _listOfMovies
 
 //    private val movieDao = MovieDatabase.getInstance(application).moviesDao()
 
 
-    init {
-        getFavouriteMovies()
-    }
+//    init {
+//        getFavouriteMovies()
+//    }
 
 
 
-    private fun getFavouriteMovies(){
-      _listOfMovies.value = getMovieListUseCase().value
-    }
+//    private fun getFavouriteMovies(){
+//      _listOfMovies.value = getMovieListUseCase().value
+//    }
 
 //    fun getFavouriteMovies(): LiveData<List<Movie>> {
 //        val mapper = MovieMapper()
@@ -48,7 +48,6 @@ class FavouriteMoviesViewModel @Inject constructor(
 //    }
 
     fun removeMovie(movie: Movie, description: Description) {
-        movie.isFavourite = false
         viewModelScope.launch {
             removeMovieFromDbUseCase(movie, description)
         }
