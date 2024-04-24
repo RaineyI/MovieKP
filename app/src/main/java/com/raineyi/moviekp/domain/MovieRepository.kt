@@ -7,6 +7,7 @@ import com.raineyi.moviekp.domain.entities.Movie
 interface MovieRepository {
 
     fun getMovieList(): LiveData<List<Movie>>
+//    fun getFavouriteMovie(movieId: Int): LiveData<Movie>
 
     fun getDescription(movieId: Int): LiveData<Description>
 

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.raineyi.moviekp.R
@@ -25,13 +26,12 @@ class PopularMoviesFragment @Inject constructor() : Fragment() {
     private val binding: FragmentPopularMoviesBinding
         get() = _binding ?: throw RuntimeException("FragmentPopularMoviesBinding == null")
 
-    //    private val viewModel: PopularMoviesViewModel by lazy {
-//        ViewModelProvider(this)[PopularMoviesViewModel::class.java]
-//    }
-    private lateinit var viewModel: PopularMoviesViewModel
-
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
+
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[PopularMoviesViewModel::class.java]
+    }
 
     private lateinit var moviesAdapter: MoviesAdapter
 
@@ -54,7 +54,6 @@ class PopularMoviesFragment @Inject constructor() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this, viewModelFactory)[PopularMoviesViewModel::class.java]
         setupRecyclerView()
         observeIsLoading()
     }
@@ -75,29 +74,89 @@ class PopularMoviesFragment @Inject constructor() : Fragment() {
     }
 
     private fun setupLongClickListener() {
-        moviesAdapter.onMovieLongClickListener = { movie ->
+        val movieId = 817167
+//        viewModel.getFavouriteMovie(movieId).observe(viewLifecycleOwner) { movie ->
+//            Log.d("TEST_DB", "${movie.name}")
+//        }
 
-            Log.d("TEST_DB", "LongClick")
-            Log.d("TEST_DB", movie.toString())
+        //Проблемы с null ??
+
+//        moviesAdapter.onMovieLongClickListener = { movie ->
+//            Log.d("TEST_DB", "Click")
+//            Log.d("TEST_DB", "${movie.name}")
+//            try {
+//                viewModel.getFavouriteMovie(movie.movieId).observe(viewLifecycleOwner) { movieFromDb ->
+//                    try {
+//                        if (movieFromDb == null) {
+//                            Log.d("TEST_DB", "null")
+//                        } else {
+//                            Log.d("TEST_DB", "not null")
+//                        }
+//                    } catch (e: Exception) {
+//                        Log.e("TEST_DB", "Error while processing movie data: ${e.message}")
+//                        // Дополнительная обработка ошибки, если не удалось обработать данные о фильме
+//                    }
+//                }
+//            } catch (e: Exception) {
+//                Log.e("TEST_DB", "Error while getting favorite movie data: ${e.message}")
+//                // Дополнительная обработка ошибки, если возникла ошибка при получении данных о фильме из базы данных
+//            }
+    }
+
+
+//    private fun setupLongClickListener() {
+//        Log.d("TEST_DB", "Click")
+//        moviesAdapter.onMovieLongClickListener = { movie ->
+//
+//            viewModel.getFavouriteMovie(movie.movieId).observe(viewLifecycleOwner) { movieFromDb ->
+//                if (movieFromDb == null) {
+//                    Log.d("TEST_DB", "null")
+//                } else {
+//                    Log.d("TEST_DB", "not null")
+//                }
+//
+//            }
+//        }
+//    }
+
+//        moviesAdapter.onMovieLongClickListener = { movie ->
+//            Log.d("TEST_DB", "LongClick")
+//            Log.d("TEST_DB", movie.toString())
+//            viewModel.loadDescription(movie).observe(viewLifecycleOwner) { description ->
+//                Log.d("TEST_DB", description.toString())
+//                description?.let {
+//                    viewModel.getFavouriteMovie(movie.movieId)
+//                        .observe(viewLifecycleOwner) { movieFromDb ->
+//                            Log.d("TEST_DB", "observe FavouriteMovie")
+//                            if (movieFromDb == null) {
+//                                Log.d("TEST_DB", "getFavouriteMovie return null")
+//                                viewModel.insertMovie(movie, description)
+//                            } else {
+//                                Log.d("TEST_DB", "getFavouriteMovie return movie")
+//                                viewModel.removeMovie(movie, description)
+//                            }
+//
+//                        }
+//                }
+//            }
+//        }
+
 //
 //                if(movie.isFavourite) {
 //                    viewModel.removeMovie(movie)
 //                } else {
 //                    viewModel.insertMovie(movie)
 //                }
-            viewModel.description.observe(viewLifecycleOwner) { description ->
-                Log.d("TEST_DB", description.toString())
-                if (movie.isFavourite) {
-                    Log.d("TEST_DB", "Movie is Favourite")
-                    description?.let {
-                        viewModel.insertMovie(movie, description)
-                    }
-                } else {
-                    description?.let {
-                        viewModel.removeMovie(movie)
-                    }
-                }
-            }
+//            viewModel.loadDescription(movie).observe(viewLifecycleOwner) { description ->
+//                Log.d("TEST_DB", description.toString())
+//                description?.let {
+//                    if (movie.isFavourite) {
+//
+//                    } else {
+//
+//                    }
+//                }
+//            }
 
 
 //            movie.movieId.let {
@@ -111,9 +170,9 @@ class PopularMoviesFragment @Inject constructor() : Fragment() {
 //                    }
 //                }
 //            }
-            //TODO: Если нет описания, вылетает с ошибкой.
-        }
-    }
+    //TODO: Если нет описания, вылетает с ошибкой.
+//        }
+//    }
 
     private fun isOnePaneMode(): Boolean {
         val containerDetails = requireActivity().findViewById<View>(R.id.movie_details_container)
@@ -133,9 +192,11 @@ class PopularMoviesFragment @Inject constructor() : Fragment() {
 
     private fun setupClickListener() {
         moviesAdapter.onMovieClickListener = { movie ->
-            Log.d("TEST_API", "Click")
-            viewModel.loadDescription(movie)
-            viewModel.description.observe(viewLifecycleOwner) { description ->
+//            Log.d("TEST_API", "Click")
+//            Log.d("TEST_API", "${movie.name}")
+
+            viewModel.loadDescription(movie).observe(viewLifecycleOwner) { description ->
+//                Log.d("TEST_API", "observe: ${description.toString()}")
                 description?.let {
                     if (isOnePaneMode()) {
                         startActivity(
@@ -152,6 +213,7 @@ class PopularMoviesFragment @Inject constructor() : Fragment() {
             }
         }
     }
+
 
     private fun setupRecyclerView() {
         moviesAdapter = MoviesAdapter()

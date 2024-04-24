@@ -19,7 +19,6 @@ class FavouriteMoviesViewModel @Inject constructor(
     private val getMovieListUseCase: GetMovieListUseCase,
     private val getDescriptionUseCase: GetDescriptionUseCase,
     private val removeMovieFromDbUseCase: RemoveMovieFromDbUseCase,
-    private val movieDao: MovieDao,
 ) : ViewModel() {
 
     val getMovieList = getMovieListUseCase()
@@ -29,13 +28,6 @@ class FavouriteMoviesViewModel @Inject constructor(
 //        get() = _listOfMovies
 
 //    private val movieDao = MovieDatabase.getInstance(application).moviesDao()
-
-
-//    init {
-//        getFavouriteMovies()
-//    }
-
-
 
 //    private fun getFavouriteMovies(){
 //      _listOfMovies.value = getMovieListUseCase().value

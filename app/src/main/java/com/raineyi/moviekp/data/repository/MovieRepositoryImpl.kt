@@ -27,6 +27,12 @@ class MovieRepositoryImpl @Inject constructor(
         }
     }
 
+//    override fun getFavouriteMovie(movieId: Int): LiveData<Movie> {
+//        return movieDao.getFavouriteMovie(movieId).map {
+//            moviesMapper.mapDbModelToMovie(it)
+//        }
+//    }
+
     override fun getDescription(movieId: Int): LiveData<Description> {
         return movieDao.getFavouriteMovieDescription(movieId).map {
             descriptionMapper.mapDbModelToDescription(it)
@@ -54,8 +60,10 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun insertMovieToDb(movie: Movie, description: Description) {
+        description.movieId = movie.movieId
         try {
             movieDao.insertMovieToDb(moviesMapper.mapMovieToMovieDbModel(movie))
+            Log.d("TEST_DB", "insert in repository ${movie.name}")
         } catch (e: Exception) {
             Log.d("TEST_DB", "Can't insert movie: ${e.message}")
         }
@@ -66,7 +74,7 @@ class MovieRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Log.d("TEST_DB", "Can't insert description: ${e.message}")
         }
-        
+
 
 //                (movie: Movie, description: Description) {
 //        try {

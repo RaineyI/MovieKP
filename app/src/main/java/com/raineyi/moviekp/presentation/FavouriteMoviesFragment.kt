@@ -21,11 +21,12 @@ class FavouriteMoviesFragment : Fragment() {
     private val binding: FragmentFavouriteMoviesBinding
         get() = _binding ?: throw RuntimeException("FragmentPopularMoviesBinding == null")
 
-
-    private lateinit var viewModel: FavouriteMoviesViewModel
-
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
+
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[FavouriteMoviesViewModel::class.java]
+    }
 
 //    private val viewModel: FavouriteMoviesViewModel by lazy {
 //        ViewModelProvider(this, viewModelFactory)[FavouriteMoviesViewModel::class.java]
@@ -55,7 +56,6 @@ class FavouriteMoviesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 //        Log.d("TEST_DB", "onViewCreated")
-        viewModel = ViewModelProvider(this, viewModelFactory)[FavouriteMoviesViewModel::class.java]
         setupRecyclerView()
     }
 
@@ -66,13 +66,12 @@ class FavouriteMoviesFragment : Fragment() {
 
     private fun setupLongClickListener() {
         moviesAdapter.onMovieLongClickListener = { movie ->
-            Log.d("TEST_DB", "LongClick")
-            movie.movieId.let {
-                viewModel.getDbDescription(movie.movieId)
-                    .observe(viewLifecycleOwner) { description ->
-                        viewModel.removeMovie(movie, description)
-                    }
-            }
+            Log.d("TEST_DB", "LongClick ${movie.movieId}")
+            viewModel.getDbDescription(movie.movieId)
+                .observe(viewLifecycleOwner) { description ->
+                    Log.d("TEST_DB", "LongClick ${description.description}")
+                    viewModel.removeMovie(movie, description)
+                }
         }
     }
 
@@ -120,7 +119,7 @@ class FavouriteMoviesFragment : Fragment() {
         moviesAdapter = MoviesAdapter()
         binding.rvFavouriteMovieList.adapter = moviesAdapter
         viewModel.getMovieList.observe(viewLifecycleOwner) {
-                moviesAdapter.submitList(it)
+            moviesAdapter.submitList(it)
         }
         setupClickListener()
         setupLongClickListener()

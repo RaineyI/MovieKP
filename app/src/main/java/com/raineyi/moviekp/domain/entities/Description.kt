@@ -5,6 +5,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Description(
-    val movieId: Int,
+    var movieId: Int,
     val description: String
 ) : Parcelable
