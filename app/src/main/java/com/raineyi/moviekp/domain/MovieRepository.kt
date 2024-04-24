@@ -7,7 +7,7 @@ import com.raineyi.moviekp.domain.entities.Movie
 interface MovieRepository {
 
     fun getMovieList(): LiveData<List<Movie>>
-//    fun getFavouriteMovie(movieId: Int): LiveData<Movie>
+    fun getFavouriteMovie(movieId: Int): LiveData<Movie?>
 
     fun getDescription(movieId: Int): LiveData<Description>
 
@@ -17,5 +17,5 @@ interface MovieRepository {
 
     suspend fun insertMovieToDb(movie: Movie, description: Description)
 
-    suspend fun removeMovieFromDb(movie: Movie, description: Description)
+    suspend fun removeMovieFromDb(movie: Movie)
 }

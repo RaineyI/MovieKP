@@ -14,7 +14,7 @@ interface MovieDao {
     fun getAllFavouriteMovies() : LiveData<List<MovieDbModel>>
 
     @Query("SELECT * FROM favourite_movies WHERE movieId == :movieId LIMIT 1")
-    fun getFavouriteMovie(movieId: Int) : LiveData<MovieDbModel>
+    fun getFavouriteMovie(movieId: Int) : LiveData<MovieDbModel?>
 
     @Query("SELECT * FROM movie_description WHERE movieId == :movieId LIMIT 1")
     fun getFavouriteMovieDescription(movieId: Int) : LiveData<DescriptionDbModel>

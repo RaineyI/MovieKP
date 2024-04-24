@@ -11,37 +11,37 @@ import javax.inject.Inject
 
 
 class MovieMapper @Inject constructor() {
-    fun mapDtoToDbModel(dto: MovieDto): MovieDbModel {
-
-        return MovieDbModel(
-            movieId = dto.movieId,
-            name = dto.name,
-            year = dto.year,
-            posterUrl = dto.posterUrl,
-            countries = mapCountryListDtoToCountryListDb(dto.countries),
-            genres = mapGenreDtoListToGenreDbModelList(dto.genres),
-            isFavourite = dto.isFavourite
-
-        )
-    }
-
-    private fun mapCountryDtoToDbModel(country: CountryDto?) = CountryDbModel(
-            country = country?.country
-        )
-
-    private fun mapCountryListDtoToCountryListDb(countryList: List<CountryDto>?) =
-        countryList?.map {
-            mapCountryDtoToDbModel(it)
-        }
-
-
-    private fun mapGenreDtoToGenreDbModel(genre: GenreDto?) = GenreDbModel(
-            genre = genre?.genre
-        )
-
-    private fun mapGenreDtoListToGenreDbModelList(genreList: List<GenreDto>?) = genreList?.map {
-        mapGenreDtoToGenreDbModel(it)
-    }
+//    fun mapDtoToDbModel(dto: MovieDto): MovieDbModel {
+//
+//        return MovieDbModel(
+//            movieId = dto.movieId,
+//            name = dto.name,
+//            year = dto.year,
+//            posterUrl = dto.posterUrl,
+//            countries = mapCountryListDtoToCountryListDb(dto.countries),
+//            genres = mapGenreDtoListToGenreDbModelList(dto.genres),
+//            isFavourite = dto.isFavourite
+//
+//        )
+//    }
+//
+//    private fun mapCountryDtoToDbModel(country: CountryDto?) = CountryDbModel(
+//            country = country?.country
+//        )
+//
+//    private fun mapCountryListDtoToCountryListDb(countryList: List<CountryDto>?) =
+//        countryList?.map {
+//            mapCountryDtoToDbModel(it)
+//        }
+//
+//
+//    private fun mapGenreDtoToGenreDbModel(genre: GenreDto?) = GenreDbModel(
+//            genre = genre?.genre
+//        )
+//
+//    private fun mapGenreDtoListToGenreDbModelList(genreList: List<GenreDto>?) = genreList?.map {
+//        mapGenreDtoToGenreDbModel(it)
+//    }
 
 
     fun mapDtoToMovie(dto: MovieDto): Movie {
@@ -106,6 +106,30 @@ class MovieMapper @Inject constructor() {
         genres?.map { it.genre }?.joinToString(", ")
             ?.replaceFirstChar { it.uppercase() } ?: ""
 
+
+    fun mapNullableDbModelToMovie(dbModel: MovieDbModel?): Movie? {
+        dbModel?.let {
+            return Movie(
+                movieId = dbModel.movieId,
+                name = dbModel.name,
+                year = dbModel.year,
+                posterUrl = dbModel.posterUrl,
+                countries = mapNullableListCountryDbModelToString(dbModel.countries),
+                genres = mapNullableListGenresDbModelToString(dbModel.genres),
+                isFavourite = false
+            )
+        }
+         return null
+    }
+
+    private fun mapNullableListCountryDbModelToString(countries: List<CountryDbModel>?) =
+        countries?.map { it.country }?.joinToString(", ")
+            ?.replaceFirstChar { it.uppercase() } ?: ""
+
+    private fun mapNullableListGenresDbModelToString(genres: List<GenreDbModel>?) =
+        genres?.map { it.genre }?.joinToString(", ")
+            ?.replaceFirstChar { it.uppercase() } ?: ""
+
 //    private fun mapCountryDbModelToCountry(country: CountryDbModel?) = Country(
 //            country = country?.country
 //        )
@@ -137,6 +161,7 @@ class MovieMapper @Inject constructor() {
             isFavourite = movie.isFavourite
         )
     }
+
     private fun mapListCountryToList(countries: String?) =
         countries?.split(", ")?.map { CountryDbModel(it) }
 

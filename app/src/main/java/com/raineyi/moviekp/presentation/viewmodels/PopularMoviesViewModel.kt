@@ -1,10 +1,12 @@
-package com.raineyi.moviekp.presentation
+package com.raineyi.moviekp.presentation.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.raineyi.moviekp.domain.GetDescriptionUseCase
+import com.raineyi.moviekp.domain.GetFavouriteMovieUseCase
 import com.raineyi.moviekp.domain.InsertMovieToDbUseCase
 import com.raineyi.moviekp.domain.LoadDescriptionUseCase
 import com.raineyi.moviekp.domain.LoadMoviesUseCase
@@ -19,7 +21,7 @@ class PopularMoviesViewModel @Inject constructor(
     private val loadDescriptionUseCase: LoadDescriptionUseCase,
     private val insertMovieToDbUseCase: InsertMovieToDbUseCase,
     private val removeMovieFromDbUseCase: RemoveMovieFromDbUseCase,
-//    private val getFavouriteMovieUseCase: GetFavouriteMovieUseCase,
+    private val getFavouriteMovieUseCase: GetFavouriteMovieUseCase,
 ) : ViewModel() {
 
 
@@ -38,9 +40,10 @@ class PopularMoviesViewModel @Inject constructor(
         loadMovies()
     }
 
-//    fun getFavouriteMovie(movieId: Int) : LiveData<Movie> {
-//        return getFavouriteMovieUseCase(movieId)
-//    }
+    fun getFavouriteMovie(movieId: Int) : LiveData<Movie?> {
+        return getFavouriteMovieUseCase(movieId)
+    }
+
 
 //    fun insertMovie(movie: Movie) {
 //        movie.isFavourite = true
@@ -64,19 +67,12 @@ class PopularMoviesViewModel @Inject constructor(
 //    }
 
     fun insertMovie(movie: Movie, description: Description) {
-        movie.isFavourite = true
+//        movie.isFavourite = true
         viewModelScope.launch {
             insertMovieToDbUseCase(movie, description)
         }
     }
 
-//    fun insertMovie(movie: Movie, description: Description) {
-//        movie.isFavourite = true
-//        //TODO: ???
-//        viewModelScope.launch {
-//            insertMovieToDbUseCase(movie, description)
-//        }
-//    }
 
 //    fun removeMovie(movie: Movie) {
 //        movie.isFavourite = false
@@ -96,9 +92,9 @@ class PopularMoviesViewModel @Inject constructor(
 //    }
 
 //
-    fun removeMovie(movie: Movie, description: Description) {
+    fun removeMovie(movie: Movie) {
         viewModelScope.launch {
-            removeMovieFromDbUseCase(movie, description)
+            removeMovieFromDbUseCase(movie)
         }
     }
 

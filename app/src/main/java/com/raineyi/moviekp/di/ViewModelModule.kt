@@ -2,8 +2,8 @@ package com.raineyi.moviekp.di
 
 
 import androidx.lifecycle.ViewModel
-import com.raineyi.moviekp.presentation.FavouriteMoviesViewModel
-import com.raineyi.moviekp.presentation.PopularMoviesViewModel
+import com.raineyi.moviekp.presentation.viewmodels.FavouriteMoviesViewModel
+import com.raineyi.moviekp.presentation.viewmodels.PopularMoviesViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

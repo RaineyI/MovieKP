@@ -13,6 +13,7 @@ import com.raineyi.moviekp.databinding.FragmentFavouriteMoviesBinding
 import com.raineyi.moviekp.domain.entities.Description
 import com.raineyi.moviekp.domain.entities.Movie
 import com.raineyi.moviekp.presentation.adapters.MoviesAdapter
+import com.raineyi.moviekp.presentation.viewmodels.FavouriteMoviesViewModel
 import javax.inject.Inject
 
 class FavouriteMoviesFragment : Fragment() {
@@ -67,11 +68,12 @@ class FavouriteMoviesFragment : Fragment() {
     private fun setupLongClickListener() {
         moviesAdapter.onMovieLongClickListener = { movie ->
             Log.d("TEST_DB", "LongClick ${movie.movieId}")
-            viewModel.getDbDescription(movie.movieId)
-                .observe(viewLifecycleOwner) { description ->
-                    Log.d("TEST_DB", "LongClick ${description.description}")
-                    viewModel.removeMovie(movie, description)
-                }
+            viewModel.removeMovie(movie)
+//            viewModel.getDbDescription(movie.movieId)
+//                .observe(viewLifecycleOwner) { description ->
+//                    Log.d("TEST_DB", "LongClick ${description.description}")
+//
+//                }
         }
     }
 

@@ -27,11 +27,11 @@ class MovieRepositoryImpl @Inject constructor(
         }
     }
 
-//    override fun getFavouriteMovie(movieId: Int): LiveData<Movie> {
-//        return movieDao.getFavouriteMovie(movieId).map {
-//            moviesMapper.mapDbModelToMovie(it)
-//        }
-//    }
+    override fun getFavouriteMovie(movieId: Int): LiveData<Movie?> {
+        return movieDao.getFavouriteMovie(movieId).map {
+            moviesMapper.mapNullableDbModelToMovie(it)
+        }
+    }
 
     override fun getDescription(movieId: Int): LiveData<Description> {
         return movieDao.getFavouriteMovieDescription(movieId).map {
@@ -93,9 +93,10 @@ class MovieRepositoryImpl @Inject constructor(
 //        }
     }
 
-    override suspend fun removeMovieFromDb(movie: Movie, description: Description) {
+    override suspend fun removeMovieFromDb(movie: Movie) {
         try {
             movie.movieId.let { movieDao.removeMovie(it) }
+            Log.d("TEST_DB", "remove fom repository ${movie.name}")
         } catch (e: Exception) {
             Log.d("TEST_DB", "Can't remove movie: ${e.message}")
         }

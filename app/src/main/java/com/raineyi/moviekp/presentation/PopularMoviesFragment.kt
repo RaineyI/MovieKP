@@ -7,17 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.raineyi.moviekp.R
-import com.raineyi.moviekp.data.network.model.DescriptionDto
-import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.databinding.FragmentPopularMoviesBinding
-import com.raineyi.moviekp.di.ApplicationComponent
 import com.raineyi.moviekp.domain.entities.Description
 import com.raineyi.moviekp.domain.entities.Movie
 import com.raineyi.moviekp.presentation.adapters.MoviesAdapter
+import com.raineyi.moviekp.presentation.viewmodels.PopularMoviesViewModel
+import com.raineyi.moviekp.presentation.viewmodels.observeOnce
 import javax.inject.Inject
 
 class PopularMoviesFragment @Inject constructor() : Fragment() {
@@ -74,105 +71,28 @@ class PopularMoviesFragment @Inject constructor() : Fragment() {
     }
 
     private fun setupLongClickListener() {
-        val movieId = 817167
-//        viewModel.getFavouriteMovie(movieId).observe(viewLifecycleOwner) { movie ->
-//            Log.d("TEST_DB", "${movie.name}")
-//        }
+        moviesAdapter.onMovieLongClickListener = { movie ->
+            Log.d("TEST_DB", "Click")
+            Log.d("TEST_DB", "${movie.name}")
 
-        //Проблемы с null ??
-
-//        moviesAdapter.onMovieLongClickListener = { movie ->
-//            Log.d("TEST_DB", "Click")
-//            Log.d("TEST_DB", "${movie.name}")
-//            try {
-//                viewModel.getFavouriteMovie(movie.movieId).observe(viewLifecycleOwner) { movieFromDb ->
-//                    try {
-//                        if (movieFromDb == null) {
-//                            Log.d("TEST_DB", "null")
-//                        } else {
-//                            Log.d("TEST_DB", "not null")
-//                        }
-//                    } catch (e: Exception) {
-//                        Log.e("TEST_DB", "Error while processing movie data: ${e.message}")
-//                        // Дополнительная обработка ошибки, если не удалось обработать данные о фильме
-//                    }
-//                }
-//            } catch (e: Exception) {
-//                Log.e("TEST_DB", "Error while getting favorite movie data: ${e.message}")
-//                // Дополнительная обработка ошибки, если возникла ошибка при получении данных о фильме из базы данных
-//            }
+            viewModel.getFavouriteMovie(movie.movieId)
+                .observeOnce(viewLifecycleOwner) { movieFromDb ->
+                    Log.d("TEST_DB", "name: ${movieFromDb?.name}")
+                    if (movieFromDb == null) {
+                        Log.d("TEST_DB", "null")
+                        viewModel.loadDescription(movie)
+                            .observe(viewLifecycleOwner) { description ->
+                                description?.let {
+                                    viewModel.insertMovie(movie, description)
+                                }
+                            }
+                    } else {
+                        Log.d("TEST_DB", "not null")
+                        viewModel.removeMovie(movie)
+                    }
+                }
+        }
     }
-
-
-//    private fun setupLongClickListener() {
-//        Log.d("TEST_DB", "Click")
-//        moviesAdapter.onMovieLongClickListener = { movie ->
-//
-//            viewModel.getFavouriteMovie(movie.movieId).observe(viewLifecycleOwner) { movieFromDb ->
-//                if (movieFromDb == null) {
-//                    Log.d("TEST_DB", "null")
-//                } else {
-//                    Log.d("TEST_DB", "not null")
-//                }
-//
-//            }
-//        }
-//    }
-
-//        moviesAdapter.onMovieLongClickListener = { movie ->
-//            Log.d("TEST_DB", "LongClick")
-//            Log.d("TEST_DB", movie.toString())
-//            viewModel.loadDescription(movie).observe(viewLifecycleOwner) { description ->
-//                Log.d("TEST_DB", description.toString())
-//                description?.let {
-//                    viewModel.getFavouriteMovie(movie.movieId)
-//                        .observe(viewLifecycleOwner) { movieFromDb ->
-//                            Log.d("TEST_DB", "observe FavouriteMovie")
-//                            if (movieFromDb == null) {
-//                                Log.d("TEST_DB", "getFavouriteMovie return null")
-//                                viewModel.insertMovie(movie, description)
-//                            } else {
-//                                Log.d("TEST_DB", "getFavouriteMovie return movie")
-//                                viewModel.removeMovie(movie, description)
-//                            }
-//
-//                        }
-//                }
-//            }
-//        }
-
-//
-//                if(movie.isFavourite) {
-//                    viewModel.removeMovie(movie)
-//                } else {
-//                    viewModel.insertMovie(movie)
-//                }
-//            viewModel.loadDescription(movie).observe(viewLifecycleOwner) { description ->
-//                Log.d("TEST_DB", description.toString())
-//                description?.let {
-//                    if (movie.isFavourite) {
-//
-//                    } else {
-//
-//                    }
-//                }
-//            }
-
-
-//            movie.movieId.let {
-//                viewModel.description.observe(viewLifecycleOwner) { description ->
-//                    description?.let {
-//                        if (movie.isFavourite) {
-//                            viewModel.removeMovie(movie)
-//                        } else {
-//                            viewModel.insertMovie(movie)
-//                        }
-//                    }
-//                }
-//            }
-    //TODO: Если нет описания, вылетает с ошибкой.
-//        }
-//    }
 
     private fun isOnePaneMode(): Boolean {
         val containerDetails = requireActivity().findViewById<View>(R.id.movie_details_container)

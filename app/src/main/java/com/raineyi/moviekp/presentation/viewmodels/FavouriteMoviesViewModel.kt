@@ -1,4 +1,4 @@
-package com.raineyi.moviekp.presentation
+package com.raineyi.moviekp.presentation.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -39,9 +39,9 @@ class FavouriteMoviesViewModel @Inject constructor(
 //            .map { it -> it.map { mapper.mapDbModelToMovie(it) } }
 //    }
 
-    fun removeMovie(movie: Movie, description: Description) {
+    fun removeMovie(movie: Movie) {
         viewModelScope.launch {
-            removeMovieFromDbUseCase(movie, description)
+            removeMovieFromDbUseCase(movie)
         }
     }
 
@@ -65,10 +65,6 @@ class FavouriteMoviesViewModel @Inject constructor(
     fun getDbDescription(movieId: Int): LiveData<Description> {
         return getDescriptionUseCase(movieId)
     }
-
-//    fun getDbDescription(movieId: Int): LiveData<DescriptionDbModel> {
-//        return movieDao.getFavouriteMovieDescription(movieId)
-//    }
 
 
 //    fun removeMovieDescription(movieId: Int) {
