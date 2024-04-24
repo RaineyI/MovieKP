@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.raineyi.moviekp.domain.GetDescriptionUseCase
 import com.raineyi.moviekp.domain.GetFavouriteMovieUseCase
+import com.raineyi.moviekp.domain.GetMovieListUseCase
 import com.raineyi.moviekp.domain.InsertMovieToDbUseCase
 import com.raineyi.moviekp.domain.LoadDescriptionUseCase
 import com.raineyi.moviekp.domain.LoadMoviesUseCase
@@ -22,6 +22,7 @@ class PopularMoviesViewModel @Inject constructor(
     private val insertMovieToDbUseCase: InsertMovieToDbUseCase,
     private val removeMovieFromDbUseCase: RemoveMovieFromDbUseCase,
     private val getFavouriteMovieUseCase: GetFavouriteMovieUseCase,
+    private val getMovieListUseCase: GetMovieListUseCase,
 ) : ViewModel() {
 
 
@@ -35,12 +36,13 @@ class PopularMoviesViewModel @Inject constructor(
     val isLoading: LiveData<Boolean>
         get() = _isLoading
 
+    val getMovieList = getMovieListUseCase()
 
     init {
         loadMovies()
     }
 
-    fun getFavouriteMovie(movieId: Int) : LiveData<Movie?> {
+    fun getFavouriteMovie(movieId: Int): LiveData<Movie?> {
         return getFavouriteMovieUseCase(movieId)
     }
 
@@ -67,7 +69,6 @@ class PopularMoviesViewModel @Inject constructor(
 //    }
 
     fun insertMovie(movie: Movie, description: Description) {
-//        movie.isFavourite = true
         viewModelScope.launch {
             insertMovieToDbUseCase(movie, description)
         }
@@ -91,7 +92,7 @@ class PopularMoviesViewModel @Inject constructor(
 //        }
 //    }
 
-//
+    //
     fun removeMovie(movie: Movie) {
         viewModelScope.launch {
             removeMovieFromDbUseCase(movie)

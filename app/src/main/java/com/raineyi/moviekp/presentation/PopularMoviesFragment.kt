@@ -14,6 +14,7 @@ import com.raineyi.moviekp.domain.entities.Description
 import com.raineyi.moviekp.domain.entities.Movie
 import com.raineyi.moviekp.presentation.adapters.MoviesAdapter
 import com.raineyi.moviekp.presentation.viewmodels.PopularMoviesViewModel
+import com.raineyi.moviekp.presentation.viewmodels.ViewModelFactory
 import com.raineyi.moviekp.presentation.viewmodels.observeOnce
 import javax.inject.Inject
 
@@ -72,14 +73,14 @@ class PopularMoviesFragment @Inject constructor() : Fragment() {
 
     private fun setupLongClickListener() {
         moviesAdapter.onMovieLongClickListener = { movie ->
-            Log.d("TEST_DB", "Click")
-            Log.d("TEST_DB", "${movie.name}")
+//            Log.d("TEST_DB", "Click")
+//            Log.d("TEST_DB", "${movie.name}")
 
             viewModel.getFavouriteMovie(movie.movieId)
                 .observeOnce(viewLifecycleOwner) { movieFromDb ->
-                    Log.d("TEST_DB", "name: ${movieFromDb?.name}")
+//                    Log.d("TEST_DB", "name: ${movieFromDb?.name}")
                     if (movieFromDb == null) {
-                        Log.d("TEST_DB", "null")
+//                        Log.d("TEST_DB", "null")
                         viewModel.loadDescription(movie)
                             .observe(viewLifecycleOwner) { description ->
                                 description?.let {
@@ -87,7 +88,7 @@ class PopularMoviesFragment @Inject constructor() : Fragment() {
                                 }
                             }
                     } else {
-                        Log.d("TEST_DB", "not null")
+//                        Log.d("TEST_DB", "not null")
                         viewModel.removeMovie(movie)
                     }
                 }
@@ -141,8 +142,15 @@ class PopularMoviesFragment @Inject constructor() : Fragment() {
             viewModel.loadMovies()
         }
         binding.rvMovieList.adapter = moviesAdapter
-        viewModel.listOfMovies.observe(viewLifecycleOwner) {
-            moviesAdapter.submitList(it)
+
+        viewModel.listOfMovies.observe(viewLifecycleOwner) { movies ->
+                movies.forEach { movie ->
+                    viewModel.getFavouriteMovie(movie.movieId)
+                        .observe(viewLifecycleOwner) { movieFromDb ->
+                            movie.isFavourite = movieFromDb != null
+                        }
+                }
+            moviesAdapter.submitList(movies)
         }
         setupClickListener()
         setupLongClickListener()

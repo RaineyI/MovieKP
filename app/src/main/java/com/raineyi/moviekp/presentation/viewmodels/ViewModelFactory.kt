@@ -1,8 +1,7 @@
-package com.raineyi.moviekp.presentation
+package com.raineyi.moviekp.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.raineyi.moviekp.di.ApplicationScope
 import javax.inject.Inject
 import javax.inject.Provider
 

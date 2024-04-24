@@ -60,10 +60,11 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun insertMovieToDb(movie: Movie, description: Description) {
+        movie.isFavourite = true
         description.movieId = movie.movieId
         try {
             movieDao.insertMovieToDb(moviesMapper.mapMovieToMovieDbModel(movie))
-            Log.d("TEST_DB", "insert in repository ${movie.name}")
+//            Log.d("TEST_DB", "insert in repository ${movie.name}")
         } catch (e: Exception) {
             Log.d("TEST_DB", "Can't insert movie: ${e.message}")
         }
@@ -96,7 +97,7 @@ class MovieRepositoryImpl @Inject constructor(
     override suspend fun removeMovieFromDb(movie: Movie) {
         try {
             movie.movieId.let { movieDao.removeMovie(it) }
-            Log.d("TEST_DB", "remove fom repository ${movie.name}")
+//            Log.d("TEST_DB", "remove fom repository ${movie.name}")
         } catch (e: Exception) {
             Log.d("TEST_DB", "Can't remove movie: ${e.message}")
         }

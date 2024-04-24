@@ -14,6 +14,7 @@ import com.raineyi.moviekp.domain.entities.Description
 import com.raineyi.moviekp.domain.entities.Movie
 import com.raineyi.moviekp.presentation.adapters.MoviesAdapter
 import com.raineyi.moviekp.presentation.viewmodels.FavouriteMoviesViewModel
+import com.raineyi.moviekp.presentation.viewmodels.ViewModelFactory
 import javax.inject.Inject
 
 class FavouriteMoviesFragment : Fragment() {

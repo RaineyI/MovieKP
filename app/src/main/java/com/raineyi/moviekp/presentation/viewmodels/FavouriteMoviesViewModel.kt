@@ -1,12 +1,8 @@
 package com.raineyi.moviekp.presentation.viewmodels
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.raineyi.moviekp.data.database.MovieDao
-import com.raineyi.moviekp.data.mapper.MovieMapper
 import com.raineyi.moviekp.domain.GetDescriptionUseCase
 import com.raineyi.moviekp.domain.GetMovieListUseCase
 import com.raineyi.moviekp.domain.RemoveMovieFromDbUseCase
