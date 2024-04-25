@@ -19,3 +19,4 @@ The app uses the [Kinopoisk Unofficial API](https://kinopoiskapiunofficial.tech/
 * Clean Architecture.
 
 ### Application:
+![Movie KP](https://github.com/RaineyI/MovieKP/blob/master/movieKp_app_.png)
