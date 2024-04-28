@@ -28,15 +28,15 @@ class PopularMoviesViewModel @Inject constructor(
 
     private var page = 1
 
-    private var _listOfMovies = MutableLiveData<List<Movie>>()
-    val listOfMovies: LiveData<List<Movie>>
-        get() = _listOfMovies
+    private var _listOfPopularMovies = MutableLiveData<List<Movie>>()
+    val listOfPopularMovies: LiveData<List<Movie>>
+        get() = _listOfPopularMovies
 
     private var _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean>
         get() = _isLoading
 
-    val getMovieList = getMovieListUseCase()
+    val getFavouriteMovieList = getMovieListUseCase()
 
     init {
         loadMovies()
@@ -46,6 +46,20 @@ class PopularMoviesViewModel @Inject constructor(
         return getFavouriteMovieUseCase(movieId)
     }
 
+//    fun updateIsFavouriteStatus(movie: Movie) {
+//
+//    }
+//    override fun updateIsFavouriteStatus(movie: Movie) {
+//        val movieFromDb = movieDao.getMovieById(movie.id).value
+//
+//        if (movieFromDb != null) {
+//            movieDao.insertMovie(movie.copy(isFavourite = true))
+//        } else {
+//            movieDao.insertMovie(movie.copy(isFavourite = false))
+//        }
+//    }
+//}
+//}
 
 //    fun insertMovie(movie: Movie) {
 //        movie.isFavourite = true
@@ -126,17 +140,17 @@ class PopularMoviesViewModel @Inject constructor(
             _isLoading.value = true
             try {
                 val movies = loadMoviesUseCase(page = page)
-                val loadedMovies = _listOfMovies.value?.toMutableList()
+                val loadedMovies = _listOfPopularMovies.value?.toMutableList()
                 if (loadedMovies != null) {
                     movies?.let {
                         loadedMovies.addAll(it)
                         loadedMovies.let {
-                            _listOfMovies.value = it
+                            _listOfPopularMovies.value = it
                         }
                     }
                 } else {
                     movies?.let {
-                        _listOfMovies.value = it
+                        _listOfPopularMovies.value = it
 
                     }
                 }

@@ -74,11 +74,11 @@
             android:id="@+id/im_star"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/im_star"
             android:contentDescription="@string/favorites"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_name"
-            />
+            tool:src="@drawable/im_star" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

@@ -18,4 +18,6 @@ interface MovieRepository {
     suspend fun insertMovieToDb(movie: Movie, description: Description)
 
     suspend fun removeMovieFromDb(movie: Movie)
+
+//    fun updateIsFavouriteStatus(movie: Movie)
 }
