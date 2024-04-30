@@ -64,7 +64,6 @@ class MovieRepositoryImpl @Inject constructor(
         description.movieId = movie.movieId
         try {
             movieDao.insertMovieToDb(moviesMapper.mapMovieToMovieDbModel(movie))
-//            Log.d("TEST_DB", "insert in repository ${movie.name}")
         } catch (e: Exception) {
             Log.d("TEST_DB", "Can't insert movie: ${e.message}")
         }
@@ -75,29 +74,11 @@ class MovieRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Log.d("TEST_DB", "Can't insert description: ${e.message}")
         }
-
-
-//                (movie: Movie, description: Description) {
-//        try {
-//            val movieDbModel = moviesMapper.mapMovieToMovieDbModel(movie)
-//            movieDao.insertMovieToDb(movieDbModel)
-//        } catch (e: Exception) {
-//            Log.d("TEST_DB", "Can't insert movie: ${e.message}")
-//        }
-//
-//        try {
-//            val descriptionDbModel =
-//                descriptionMapper.mapDescriptionToDescriptionDbModel(description)
-//            movieDao.insertDescription(descriptionDbModel)
-//        } catch (e: Exception) {
-//            Log.d("TEST_DB", "Can't insert description: ${e.message}")
-//        }
     }
 
     override suspend fun removeMovieFromDb(movie: Movie) {
         try {
             movie.movieId.let { movieDao.removeMovie(it) }
-//            Log.d("TEST_DB", "remove fom repository ${movie.name}")
         } catch (e: Exception) {
             Log.d("TEST_DB", "Can't remove movie: ${e.message}")
         }

@@ -19,5 +19,4 @@ interface MovieRepository {
 
     suspend fun removeMovieFromDb(movie: Movie)
 
-//    fun updateIsFavouriteStatus(movie: Movie)
 }

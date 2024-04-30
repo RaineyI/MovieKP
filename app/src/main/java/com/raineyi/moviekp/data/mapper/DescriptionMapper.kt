@@ -7,13 +7,6 @@ import javax.inject.Inject
 
 class DescriptionMapper @Inject constructor() {
 
-    fun mapDtoToDbModel(descriptionDto: DescriptionDto): DescriptionDbModel {
-        return DescriptionDbModel(
-            movieId = descriptionDto.movieId,
-            description = descriptionDto.description
-        )
-    }
-
     fun mapDtoToDescription(descriptionDto: DescriptionDto): Description {
         return Description(
             movieId = descriptionDto.movieId,

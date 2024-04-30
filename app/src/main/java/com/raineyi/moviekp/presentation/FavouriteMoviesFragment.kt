@@ -2,7 +2,6 @@ package com.raineyi.moviekp.presentation
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,10 +29,6 @@ class FavouriteMoviesFragment : Fragment() {
         ViewModelProvider(this, viewModelFactory)[FavouriteMoviesViewModel::class.java]
     }
 
-//    private val viewModel: FavouriteMoviesViewModel by lazy {
-//        ViewModelProvider(this, viewModelFactory)[FavouriteMoviesViewModel::class.java]
-//    }
-
     private lateinit var moviesAdapter: MoviesAdapter
 
     private val component by lazy {
@@ -43,7 +38,6 @@ class FavouriteMoviesFragment : Fragment() {
     override fun onAttach(context: Context) {
         component.inject(this)
         super.onAttach(context)
-//        Log.d("TEST_DB", "onAttach")
     }
 
     override fun onCreateView(
@@ -51,13 +45,11 @@ class FavouriteMoviesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFavouriteMoviesBinding.inflate(inflater, container, false)
-//        Log.d("TEST_DB", "onCreateView")
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        Log.d("TEST_DB", "onViewCreated")
         setupRecyclerView()
     }
 
@@ -68,13 +60,7 @@ class FavouriteMoviesFragment : Fragment() {
 
     private fun setupLongClickListener() {
         moviesAdapter.onMovieLongClickListener = { movie ->
-            Log.d("TEST_DB", "LongClick ${movie.movieId}")
             viewModel.removeMovie(movie)
-//            viewModel.getDbDescription(movie.movieId)
-//                .observe(viewLifecycleOwner) { description ->
-//                    Log.d("TEST_DB", "LongClick ${description.description}")
-//
-//                }
         }
     }
 
@@ -96,7 +82,6 @@ class FavouriteMoviesFragment : Fragment() {
 
     private fun setupClickListener() {
         moviesAdapter.onMovieClickListener = { movie ->
-            Log.d("TEST_DB", "Click")
             movie.movieId.let {
                 viewModel.getDbDescription(movie.movieId)
                     .observe(viewLifecycleOwner) { description ->
@@ -118,7 +103,6 @@ class FavouriteMoviesFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-//        Log.d("TEST_DB", "setupRecyclerView")
         moviesAdapter = MoviesAdapter()
         binding.rvFavouriteMovieList.adapter = moviesAdapter
         viewModel.getMovieList.observe(viewLifecycleOwner) {

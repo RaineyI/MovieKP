@@ -3,12 +3,9 @@ package com.raineyi.moviekp.presentation
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import com.raineyi.moviekp.R
-import com.raineyi.moviekp.data.network.model.DescriptionDto
-import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.domain.entities.Description
 import com.raineyi.moviekp.domain.entities.Movie
 
@@ -20,15 +17,9 @@ class MovieDetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_details)
         parseParams()
-        Log.d("FRAGMENT_TEST", "MovieDetailsActivity")
         if (savedInstanceState == null) {
             launchFragment()
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("FRAGMENT_TEST","Activity: onDestroy")
     }
 
     private fun parseParams() {

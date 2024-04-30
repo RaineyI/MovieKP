@@ -1,5 +1,5 @@
 package com.raineyi.moviekp.data.database.dbmodel
 
-data class GenreDbModel (
+data class GenreDbModel(
     val genre: String? = null
 )

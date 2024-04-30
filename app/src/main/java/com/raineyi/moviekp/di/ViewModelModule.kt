@@ -15,6 +15,7 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(PopularMoviesViewModel::class)
     fun bindPopularMoviesViewModel(viewModel: PopularMoviesViewModel): ViewModel
+
     @Binds
     @IntoMap
     @ViewModelKey(FavouriteMoviesViewModel::class)

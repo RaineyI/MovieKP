@@ -19,56 +19,13 @@ class FavouriteMoviesViewModel @Inject constructor(
 
     val getMovieList = getMovieListUseCase()
 
-//    private var _listOfMovies = MutableLiveData<List<Movie>>()
-//    val listOfMovies: LiveData<List<Movie>>
-//        get() = _listOfMovies
-
-//    private val movieDao = MovieDatabase.getInstance(application).moviesDao()
-
-//    private fun getFavouriteMovies(){
-//      _listOfMovies.value = getMovieListUseCase().value
-//    }
-
-//    fun getFavouriteMovies(): LiveData<List<Movie>> {
-//        val mapper = MovieMapper()
-//        return movieDao.getAllFavouriteMovies()
-//            .map { it -> it.map { mapper.mapDbModelToMovie(it) } }
-//    }
-
     fun removeMovie(movie: Movie) {
         viewModelScope.launch {
             removeMovieFromDbUseCase(movie)
         }
     }
 
-//    fun removeMovie(movieDto: MovieDto) {
-//        movieDto.isFavourite = false
-//        viewModelScope.launch {
-//            try {
-//                movieDao.removeMovie(movieDto.movieId)
-//            } catch (e: Exception) {
-//                throw RuntimeException("Can't remove movie: ${e.message}")
-//            }
-//
-//            try {
-//                movieDao.removeMovieDescription(movieDto.movieId)
-//            } catch (e: Exception) {
-//                throw RuntimeException("Can't removed description: ${e.message}")
-//            }
-//        }
-//    }
-
     fun getDbDescription(movieId: Int): LiveData<Description> {
         return getDescriptionUseCase(movieId)
     }
-
-
-//    fun removeMovieDescription(movieId: Int) {
-//        viewModelScope.launch {
-//            try {
-//                movieDao.removeMovieDescription(movieId)
-//                movieDao.removeMovieDescription(0)
-//            } catch (e: Exception) {throw RuntimeException("Can't removed description: ${e.message}")}
-//        }
-//    }
 }

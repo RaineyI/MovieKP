@@ -10,8 +10,6 @@ class DataConverter {
     @TypeConverter
     fun fromCountriesList(countries: List<CountryDbModel>?): String? {
         return countries?.map { it.country }?.joinToString(", ")
-
-//        return countries?.joinToString(", ") { it.country } ?: ""
     }
 
     @TypeConverter

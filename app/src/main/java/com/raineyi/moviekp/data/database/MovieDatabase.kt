@@ -8,7 +8,11 @@ import androidx.room.TypeConverters
 import com.raineyi.moviekp.data.database.dbmodel.DescriptionDbModel
 import com.raineyi.moviekp.data.database.dbmodel.MovieDbModel
 
-@Database(entities = [MovieDbModel::class, DescriptionDbModel::class], version = 1, exportSchema = false)
+@Database(
+    entities = [MovieDbModel::class, DescriptionDbModel::class],
+    version = 1,
+    exportSchema = false
+)
 @TypeConverters(DataConverter::class)
 abstract class MovieDatabase : RoomDatabase() {
 
@@ -31,5 +35,6 @@ abstract class MovieDatabase : RoomDatabase() {
             }
         }
     }
+
     abstract fun movieDao(): MovieDao
 }

@@ -11,13 +11,13 @@ import com.raineyi.moviekp.data.database.dbmodel.MovieDbModel
 @Dao
 interface MovieDao {
     @Query("SELECT * FROM favourite_movies ORDER BY name ASC")
-    fun getAllFavouriteMovies() : LiveData<List<MovieDbModel>>
+    fun getAllFavouriteMovies(): LiveData<List<MovieDbModel>>
 
     @Query("SELECT * FROM favourite_movies WHERE movieId == :movieId LIMIT 1")
-    fun getFavouriteMovie(movieId: Int) : LiveData<MovieDbModel?>
+    fun getFavouriteMovie(movieId: Int): LiveData<MovieDbModel?>
 
     @Query("SELECT * FROM movie_description WHERE movieId == :movieId LIMIT 1")
-    fun getFavouriteMovieDescription(movieId: Int) : LiveData<DescriptionDbModel>
+    fun getFavouriteMovieDescription(movieId: Int): LiveData<DescriptionDbModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMovieToDb(movie: MovieDbModel)

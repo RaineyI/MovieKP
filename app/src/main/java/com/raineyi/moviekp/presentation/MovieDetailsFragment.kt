@@ -2,13 +2,10 @@ package com.raineyi.moviekp.presentation
 
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.raineyi.moviekp.data.network.model.DescriptionDto
-import com.raineyi.moviekp.data.network.model.MovieDto
 import com.raineyi.moviekp.databinding.FragmentMovieDetailsBinding
 import com.raineyi.moviekp.domain.entities.Description
 import com.raineyi.moviekp.domain.entities.Movie
@@ -25,17 +22,9 @@ class MovieDetailsFragment : Fragment() {
     private lateinit var movie: Movie
     private lateinit var description: Description
 
-//    private val viewModelFactory by lazy {
-//        MovieDetailsViewModelFactory(requireActivity().application, movie, description)
-//    }
-//    private val viewModel by lazy {
-//        ViewModelProvider(this, viewModelFactory)[MovieDetailsViewModel::class.java]
-//    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         parseParams()
-        Log.d("FRAGMENT_TEST", "MovieDetailsFragment")
     }
 
     override fun onCreateView(
@@ -54,12 +43,6 @@ class MovieDetailsFragment : Fragment() {
             activity?.onBackPressedDispatcher?.onBackPressed()
             activity?.finish()
         }
-
-//        viewModel.getFavouriteMovie(movie.movieId).observe(viewLifecycleOwner) {
-//            if(it == null) {
-//
-//            }
-//        }
     }
 
     override fun onDestroy() {
@@ -73,18 +56,9 @@ class MovieDetailsFragment : Fragment() {
             .into(binding.imBanner)
 
         binding.tvName.text = movie.name
-
-//        viewModel.description.observe(viewLifecycleOwner) {
-//            binding.tvDescription.text = it.description.toString()
-//        }
         binding.tvDescription.text = description.description
         binding.tvGenres.text = movie.genres
         binding.tvCountry.text = movie.countries
-
-//        binding.tvGenres.text = movie.genres.joinToString(", ") { it.genre }
-//            .replaceFirstChar { it.uppercase() }
-//        binding.tvCountry.text = movie.countries.joinToString(", ") { it.country }
-//            .replaceFirstChar { it.uppercase() }
     }
 
     private fun parseParams() {

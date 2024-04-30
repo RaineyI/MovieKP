@@ -2,18 +2,15 @@ package com.raineyi.moviekp.presentation
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DiffUtil
 import com.raineyi.moviekp.R
 import com.raineyi.moviekp.databinding.FragmentPopularMoviesBinding
 import com.raineyi.moviekp.domain.entities.Description
 import com.raineyi.moviekp.domain.entities.Movie
-import com.raineyi.moviekp.presentation.adapters.MovieDiffCallback
 import com.raineyi.moviekp.presentation.adapters.MoviesAdapter
 import com.raineyi.moviekp.presentation.viewmodels.PopularMoviesViewModel
 import com.raineyi.moviekp.presentation.viewmodels.ViewModelFactory
@@ -75,14 +72,10 @@ class PopularMoviesFragment @Inject constructor() : Fragment() {
 
     private fun setupLongClickListener() {
         moviesAdapter.onMovieLongClickListener = { movie ->
-//            Log.d("TEST_DB", "Click")
-//            Log.d("TEST_DB", "${movie.name}")
 
             viewModel.getFavouriteMovie(movie.movieId)
                 .observeOnce(viewLifecycleOwner) { movieFromDb ->
-//                    Log.d("TEST_DB", "name: ${movieFromDb?.name}")
                     if (movieFromDb == null) {
-//                        Log.d("TEST_DB", "null")
                         viewModel.loadDescription(movie)
                             .observe(viewLifecycleOwner) { description ->
                                 description?.let {
@@ -90,7 +83,6 @@ class PopularMoviesFragment @Inject constructor() : Fragment() {
                                 }
                             }
                     } else {
-//                        Log.d("TEST_DB", "not null")
                         viewModel.removeMovie(movie)
                     }
                 }
@@ -115,11 +107,8 @@ class PopularMoviesFragment @Inject constructor() : Fragment() {
 
     private fun setupClickListener() {
         moviesAdapter.onMovieClickListener = { movie ->
-//            Log.d("TEST_API", "Click")
-//            Log.d("TEST_API", "${movie.name}")
 
             viewModel.loadDescription(movie).observe(viewLifecycleOwner) { description ->
-//                Log.d("TEST_API", "observe: ${description.toString()}")
                 description?.let {
                     if (isOnePaneMode()) {
                         startActivity(
@@ -153,51 +142,15 @@ class PopularMoviesFragment @Inject constructor() : Fragment() {
                 MoviesAdapter.MAX_POOL_SIZE
             )
         }
-
-//        viewModel.listOfMovies.observe(viewLifecycleOwner) { movies ->
-//            movies.forEach { movie ->
-//                viewModel.getFavouriteMovie(movie.movieId).observe(viewLifecycleOwner) { movieFromDb ->
-//                    movie.isFavourite = movieFromDb != null
-//                }
-//            }
-//            moviesAdapter.submitList(movies)
-//        }
-
-//        viewModel.getMovieList.observe(viewLifecycleOwner) {
-//            viewModel.listOfMovies.observe(viewLifecycleOwner) { movies ->
-//                movies.forEach { movie ->
-//                    viewModel.getFavouriteMovie(movie.movieId)
-//                        .observe(viewLifecycleOwner) { movieFromDb ->
-//                            movie.isFavourite = movieFromDb != null
-//                            moviesAdapter.submitList(movies)
-//                        }
-//                }
-//            }
-//        }
-//        viewModel.listOfMovies.observe(viewLifecycleOwner) { moviesFromApi ->
-//            Log.d("TEST_RV", "Observe popular")
-//            val updatedMovies = moviesFromApi.map { movieFromApi ->
-//                val isFavourite =
-//
-//                    viewModel.getFavouriteMovie(movieFromApi.movieId)
-//                    .observe(viewLifecycleOwner) { movieFromDb ->
-//                        movieFromApi.isFavourite = movieFromDb != null
-//                    }
-//            }
-//            moviesAdapter.submitList(updatedMovies)
-//        }
-
-        //Пока самый рабочий
         viewModel.listOfPopularMovies.observe(viewLifecycleOwner) { popularMovies ->
-            if(popularMovies != null) {
-                Log.d("TEST_RV", "Observe popular")
+            if (popularMovies != null) {
 
                 viewModel.getFavouriteMovieList.observe(viewLifecycleOwner) { favouriteMovies ->
-                    if(favouriteMovies != null) {
-                        Log.d("TEST_RV", "Observe favourite")
+                    if (favouriteMovies != null) {
 
                         val updatedMovies = popularMovies.map { popularMovie ->
-                            val isFavourite = favouriteMovies.any { it.movieId == popularMovie.movieId }
+                            val isFavourite =
+                                favouriteMovies.any { it.movieId == popularMovie.movieId }
                             popularMovie.copy(isFavourite = isFavourite)
 
                         }
@@ -206,37 +159,6 @@ class PopularMoviesFragment @Inject constructor() : Fragment() {
                 }
             }
         }
-
-//        viewModel.listOfMovies.observe(viewLifecycleOwner) { moviesFromApi ->
-//            viewModel.getMovieList.observe(viewLifecycleOwner) { favouriteMoviesFromDb ->
-//                val updatedMovies = moviesFromApi.map { movieFromApi ->
-//                    val isFavourite = favouriteMoviesFromDb.any { it.movieId == movieFromApi.movieId }
-//                    movieFromApi.copy(isFavourite = isFavourite)
-//                }
-//
-//                // С помощью DiffUtil вычисляем разницу между старым и новым списком фильмов
-//                val diffResult = DiffUtil.calculateDiff(MovieItemDiffCallback(
-//                        moviesAdapter.currentList,
-//                        updatedMovies
-//                    )
-//                )
-//
-//                // Обновляем список фильмов в адаптере и применяем изменения
-//                moviesAdapter.submitList(updatedMovies)
-//                diffResult.dispatchUpdatesTo(moviesAdapter)
-//            }
-//        }
-
-//        viewModel.listOfMovies.observe(viewLifecycleOwner) { movies ->
-//            movies.forEach { movie ->
-//                viewModel.getFavouriteMovie(movie.movieId).observe(viewLifecycleOwner) { movieFromDb ->
-//                    movie.isFavourite = movieFromDb != null
-//                    moviesAdapter.submitList(movies)
-//                }
-//            }
-//        }
-
-
         setupClickListener()
         setupLongClickListener()
     }

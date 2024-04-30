@@ -15,8 +15,6 @@ class MoviesAdapter : ListAdapter<Movie, MovieViewHolder>(MovieDiffCallback) {
     var onLoadMoreListener: (() -> Unit)? = null
     var onMovieLongClickListener: ((Movie) -> Unit)? = null
     var onMovieClickListener: ((Movie) -> Unit)? = null
-
-//    var onLongClick: OnMovieItemLongClickListener? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val binding = when (viewType) {
             VIEW_TYPE_FAVOURITE ->
@@ -35,36 +33,12 @@ class MoviesAdapter : ListAdapter<Movie, MovieViewHolder>(MovieDiffCallback) {
 
             else -> throw RuntimeException("Unknown view type: $viewType")
         }
-//        val binding = MovieItemBinding.inflate(
-//            LayoutInflater.from(parent.context),
-//            parent,
-//            false
-//        )
         return MovieViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val movieItem = getItem(position)
         val binding = holder.binding
-
-//        with(holder.binding) {
-//            Picasso.get()
-//                .load(movieItem.posterUrl)
-//                .into(imPoster)
-//            tvName.text = movieItem.name
-//
-//            tvGenresAndYear.text = String.format(
-//                root.context.getString(R.string.genres_and_year),
-//                movieItem.genres,
-//                movieItem.year.toString()
-//            )
-
-//            if (movieItem.isFavourite) {
-//                imStar.visibility = View.VISIBLE
-//            } else {
-//                imStar.visibility = View.GONE
-//            }
-//        }
 
         when (binding) {
             is MovieFavouriteItemBinding -> {
@@ -100,10 +74,6 @@ class MoviesAdapter : ListAdapter<Movie, MovieViewHolder>(MovieDiffCallback) {
             onLoadMoreListener?.invoke()
         }
 
-//        binding.root.setOnClickListener {
-//            onLongClick?.onLongClick(movieItem)
-//        }
-
         binding.root.setOnLongClickListener {
             onMovieLongClickListener?.invoke(movieItem)
             true
@@ -122,14 +92,6 @@ class MoviesAdapter : ListAdapter<Movie, MovieViewHolder>(MovieDiffCallback) {
             VIEW_TYPE_NETWORK
         }
     }
-
-//    interface OnLoadMoreListener {
-//        fun onLoadMore()
-//    }
-
-//    interface OnMovieItemLongClickListener {
-//        fun onLongClick(movie: Movie)
-//    }
 
     companion object {
         const val VIEW_TYPE_NETWORK = 0

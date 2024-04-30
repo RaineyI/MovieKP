@@ -1,6 +1,5 @@
 package com.raineyi.moviekp.domain
 
-import com.raineyi.moviekp.domain.entities.Description
 import com.raineyi.moviekp.domain.entities.Movie
 import javax.inject.Inject
 

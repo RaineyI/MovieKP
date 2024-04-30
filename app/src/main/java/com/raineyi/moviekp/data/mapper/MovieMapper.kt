@@ -11,39 +11,6 @@ import javax.inject.Inject
 
 
 class MovieMapper @Inject constructor() {
-//    fun mapDtoToDbModel(dto: MovieDto): MovieDbModel {
-//
-//        return MovieDbModel(
-//            movieId = dto.movieId,
-//            name = dto.name,
-//            year = dto.year,
-//            posterUrl = dto.posterUrl,
-//            countries = mapCountryListDtoToCountryListDb(dto.countries),
-//            genres = mapGenreDtoListToGenreDbModelList(dto.genres),
-//            isFavourite = dto.isFavourite
-//
-//        )
-//    }
-//
-//    private fun mapCountryDtoToDbModel(country: CountryDto?) = CountryDbModel(
-//            country = country?.country
-//        )
-//
-//    private fun mapCountryListDtoToCountryListDb(countryList: List<CountryDto>?) =
-//        countryList?.map {
-//            mapCountryDtoToDbModel(it)
-//        }
-//
-//
-//    private fun mapGenreDtoToGenreDbModel(genre: GenreDto?) = GenreDbModel(
-//            genre = genre?.genre
-//        )
-//
-//    private fun mapGenreDtoListToGenreDbModelList(genreList: List<GenreDto>?) = genreList?.map {
-//        mapGenreDtoToGenreDbModel(it)
-//    }
-
-
     fun mapDtoToMovie(dto: MovieDto): Movie {
 
         return Movie(
@@ -58,15 +25,6 @@ class MovieMapper @Inject constructor() {
         )
     }
 
-//    private fun mapCountryDtoToCountry(country: CountryDto?) = Country(
-//            country = country?.country
-//        )
-//
-//    private fun mapCountryListDtoToCountryList(countryList: List<CountryDto>?) =
-//        countryList?.map {
-//            mapCountryDtoToCountry(it)
-//        }
-
     private fun mapListCountryDtoToString(countries: List<CountryDto>?) =
         countries?.map { it.country }?.joinToString(", ")
             ?.replaceFirstChar { it.uppercase() } ?: ""
@@ -74,15 +32,6 @@ class MovieMapper @Inject constructor() {
     private fun mapListGenresDtoToString(genres: List<GenreDto>?) =
         genres?.map { it.genre }?.joinToString(", ")
             ?.replaceFirstChar { it.uppercase() } ?: ""
-
-
-//    private fun mapGenreDtoToGenre(genre: GenreDto?) = Genre(
-//            genre = genre?.genre
-//        )
-//
-//    private fun mapGenreDtoListToGenreList(genreList: List<GenreDto>?) = genreList?.map {
-//        mapGenreDtoToGenre(it)
-//    }
 
 
     fun mapDbModelToMovie(dbModel: MovieDbModel): Movie {
@@ -119,7 +68,7 @@ class MovieMapper @Inject constructor() {
                 isFavourite = false
             )
         }
-         return null
+        return null
     }
 
     private fun mapNullableListCountryDbModelToString(countries: List<CountryDbModel>?) =
@@ -129,26 +78,6 @@ class MovieMapper @Inject constructor() {
     private fun mapNullableListGenresDbModelToString(genres: List<GenreDbModel>?) =
         genres?.map { it.genre }?.joinToString(", ")
             ?.replaceFirstChar { it.uppercase() } ?: ""
-
-//    private fun mapCountryDbModelToCountry(country: CountryDbModel?) = Country(
-//            country = country?.country
-//        )
-//
-//    private fun mapCountryListDbModelToCountryList(countryList: List<CountryDbModel>?) =
-//        countryList?.map {
-//            mapCountryDbModelToCountry(it)
-//        }
-//
-//
-//    private fun mapGenreDbModelToGenre(genre: GenreDbModel?) = Genre(
-//            genre = genre?.genre
-//        )
-//
-//    private fun mapGenreDbModelListToGenreList(genreList: List<GenreDbModel>?) =
-//        genreList?.map {
-//        mapGenreDbModelToGenre(it)
-//    }
-
 
     fun mapMovieToMovieDbModel(movie: Movie): MovieDbModel {
         return MovieDbModel(
@@ -167,22 +96,4 @@ class MovieMapper @Inject constructor() {
 
     private fun mapListGenresToList(genres: String?) =
         genres?.split(", ")?.map { GenreDbModel(it) }
-
-//    private fun mapCountryToCountryDbModel(country: Country?) = CountryDbModel(
-//        country = country?.country
-//    )
-//
-//    private fun mapCountryListDbModelToCountryListDbModel(countryList: List<Country>?) =
-//        countryList?.map {
-//            mapCountryToCountryDbModel(it)
-//        }
-//
-//
-//    private fun mapGenreToGenreDbModel(genre: Genre?) = GenreDbModel(
-//        genre = genre?.genre
-//    )
-//
-//    private fun mapGenreListToGenreListDbModel(genreList: List<Genre>?) = genreList?.map {
-//        mapGenreToGenreDbModel(it)
-//    }
 }

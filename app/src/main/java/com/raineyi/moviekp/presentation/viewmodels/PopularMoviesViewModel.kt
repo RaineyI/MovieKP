@@ -46,67 +46,12 @@ class PopularMoviesViewModel @Inject constructor(
         return getFavouriteMovieUseCase(movieId)
     }
 
-//    fun updateIsFavouriteStatus(movie: Movie) {
-//
-//    }
-//    override fun updateIsFavouriteStatus(movie: Movie) {
-//        val movieFromDb = movieDao.getMovieById(movie.id).value
-//
-//        if (movieFromDb != null) {
-//            movieDao.insertMovie(movie.copy(isFavourite = true))
-//        } else {
-//            movieDao.insertMovie(movie.copy(isFavourite = false))
-//        }
-//    }
-//}
-//}
-
-//    fun insertMovie(movie: Movie) {
-//        movie.isFavourite = true
-//        viewModelScope.launch {
-//            val mapper = MovieMapper()
-//            try {
-//                movieDao.insertMovieToDb(mapper.mapMovieToMovieDbModel(movie))
-//            } catch (e: Exception) {
-//                throw RuntimeException("Can't insert movie: ${e.message}")
-//            }
-//
-//            try {
-//                val descriptionMapper = DescriptionMapper()
-//                val description = ApiFactory.apiService.getDescription(movie.movieId)
-//                description.movieId = movie.movieId
-//                movieDao.insertDescription(descriptionMapper.mapDtoToDbModel(description))
-//            } catch (e: Exception) {
-//                throw RuntimeException("Can't insert description: ${e.message}")
-//            }
-//        }
-//    }
-
     fun insertMovie(movie: Movie, description: Description) {
         viewModelScope.launch {
             insertMovieToDbUseCase(movie, description)
         }
     }
 
-
-//    fun removeMovie(movie: Movie) {
-//        movie.isFavourite = false
-//        viewModelScope.launch {
-//            try {
-//                movieDao.removeMovie(movie.movieId)
-//            } catch (e: Exception) {
-//                throw RuntimeException("Can't remove movie: ${e.message}")
-//            }
-//
-//            try {
-//                movieDao.removeMovieDescription(movie.movieId)
-//            } catch (e: Exception) {
-//                throw RuntimeException("Can't removed description: ${e.message}")
-//            }
-//        }
-//    }
-
-    //
     fun removeMovie(movie: Movie) {
         viewModelScope.launch {
             removeMovieFromDbUseCase(movie)
@@ -120,7 +65,6 @@ class PopularMoviesViewModel @Inject constructor(
             try {
                 movie.movieId.let {
                     val loadingDescription = loadDescriptionUseCase(movie.movieId)
-//                    Log.d("TEST_API", "loading: ${loadingDescription.toString()}")
                     loadedDescription.value = loadingDescription
                 }
             } catch (e: Exception) {
@@ -161,13 +105,6 @@ class PopularMoviesViewModel @Inject constructor(
             } finally {
                 _isLoading.value = false
             }
-
-
-//    fun changeState(movieDto: MovieDto) {
-//        val newMovie = movieDto.copy(isFavourite = !movieDto.isFavourite)
-//        editShopItemUseCase.editShopItem(newItem)
-//    }
-
         }
     }
 }
